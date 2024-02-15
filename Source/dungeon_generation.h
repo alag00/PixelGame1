@@ -53,31 +53,31 @@ class Room : public Rectangle
 private:
 	bool taken = false;
 	bool active = false;
-	EntryPoint entries[4];  // 0 Top, 1 Bot, 3 Left, 4 Right
 	Config config;
 public:
+	EntryPoint entries[4];  // 0 Top, 1 Bot, 3 Left, 4 Right
 	std::vector<Hallway*> neighborHalls{};
 	std::vector<Rectangle> collisionWalls{};
 
 	Room();
 	~Room();
-	virtual void Render(){};
+	virtual void Render() {};
 	virtual void FillContent();
 	void Setup(float xPos, float yPos, float l, float s);
 	void Activate() { active = true; }
 	void InActivate() { active = false; }
-	 bool GenCollisionCheck(Room* other);	
-	 void GenSetNeighbor(std::vector<Room*> &list, int index, std::vector<Hallway*>& hallList);
-	 bool GenGetAvailableEntryPoints(Room* other, EntryPoint& result);
-	 void GenPlaceBossRoom(Room* bossRoom, std::vector<Hallway*>& hallList);
-	 bool GetIsTaken() { return taken; }
-	 void SetIsTaken(bool newValue) { taken = newValue; }
-	bool GenListCollisionCheck(std::vector<Room*>& list, int ignoreIndex);
-	Room* FindFutherestRoom(std::vector<Room*>& list);
-	float GetDistance(Room* room);
+	bool GenCollisionCheck(Room* other);
+	//void GenSetNeighbor(std::vector<Room*>& list, int index, std::vector<Hallway*>& hallList); // This
+	//bool GenGetAvailableEntryPoints(Room* other, EntryPoint& result);  // This
+	//void GenPlaceBossRoom(Room* bossRoom, std::vector<Hallway*>& hallList);  // This
+	bool GetIsTaken() { return taken; }
+	void SetIsTaken(bool newValue) { taken = newValue; }
+	//bool GenListCollisionCheck(std::vector<Room*>& list, int ignoreIndex); // This
+	//Room* FindFutherestRoom(std::vector<Room*>& list);  // This
+	//float GetDistance(Room* room);   // This
 	Vector2 GetCenter();
-	void CollisionCheck(Entity* entity); // check if touching entity
-	void OnCollision(Entity* entity, Rectangle wall); // push entity back 
+	void CollisionCheck(Entity* entity); 
+	void OnCollision(Entity* entity, Rectangle wall); 
 	int GetCorrectHallway(SIDE ownerOneSide, SIDE ownerTwoSide);
 };
 class SpawnRoom : public Room
@@ -163,6 +163,13 @@ public:
 
 	//void GenSetNeighbor(int index);
 	//bool GenGetAvailableEntryPoints(Room* other, EntryPoint& result);
+
+	void GenSetNeighbor(int index); // This
+	bool GenGetAvailableEntryPoints(Room* thisRoom, Room* otherRoom, EntryPoint& result);  // This
+	void GenPlaceBossRoom(Room* lastRoom, Room* bossRoom);  // This
+	bool GenListCollisionCheck(int ignoreIndex); // This
+	Room* FindFutherestRoom(int index);  // This
+	float GetDistance(Room* roomOne, Room* roomTwo);   // This
 };
 
 

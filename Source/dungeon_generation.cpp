@@ -60,30 +60,26 @@ void DungeonManager::FixRoomPosition() // might be useless
 void DungeonManager::PlaceHallways()
 {
 
-
+	int bossIndex = static_cast<int>(roomList.size()-1);
+	int lastIndex = bossIndex - 1;
 	for (int i = 0; i < roomList.size(); i++)
 	{
-		if (i + 1 >= roomList.size())
+		if (i  >= bossIndex)
 		{
-			// Boss Room
-			// Connect to the room futherst away from spawn
 			continue;
 		}
-		if (i + 2 >= roomList.size())
+		if (i >= lastIndex)
 		{
-			roomList.at(i)->FindFutherestRoom(roomList)->GenPlaceBossRoom(roomList.back(), hallwayList);
+			GenPlaceBossRoom(FindFutherestRoom(i), roomList.back());
 			continue;
 		}
 		
 		
 		
-		roomList.at(i)->GenSetNeighbor(roomList, i, hallwayList);
+		GenSetNeighbor(i);
 	}
 
-	for (int i = 0; i < hallwayList.size(); i++)
-	{
-
-	}
+	
 
 }
 
@@ -193,11 +189,12 @@ DungeonManager::~DungeonManager()
 		hallwayList.at(i) = nullptr;
 	}
 }
-/*
+
 void DungeonManager::GenSetNeighbor(int index)
 {
 	int randNum = rand() % 2 + 1;
-	if (randNum + index >= roomList.size() - 1)
+	int limitTest = randNum + index;
+	if (limitTest >= roomList.size() - 1)
 	{
 		randNum--;
 	}
@@ -213,14 +210,14 @@ void DungeonManager::GenSetNeighbor(int index)
 		while (isSearching)
 		{
 			isSearching = false;
-			if (!GenGetAvailableEntryPoints(roomList.at(currentIndex), result))
+			if (!GenGetAvailableEntryPoints(roomList.at(index), roomList.at(currentIndex), result))
 			{
 				continue;
 			}
 			newHallway = new Hallway();
 			newHallway->Setup(result, roomList.at(index), roomList.at(currentIndex), 0);
 			// check if owner2 collides with any of the taken rooms, if oncollision, redo
-			if (roomList.at(currentIndex)->GenListCollisionCheck(roomList, currentIndex))
+			if (GenListCollisionCheck(currentIndex))
 			{
 				isSearching = true;
 				delete newHallway;
@@ -239,7 +236,135 @@ void DungeonManager::GenSetNeighbor(int index)
 	}
 
 }
-*/
+
+bool DungeonManager::GenGetAvailableEntryPoints(Room* thisRoom, Room* otherRoom, EntryPoint& result)
+{
+
+
+	if (otherRoom->GetIsTaken()
+		|| !thisRoom->entries[0].isAvailable
+		&& !thisRoom->entries[1].isAvailable
+		&& !thisRoom->entries[2].isAvailable
+		&& !thisRoom->entries[3].isAvailable
+		|| !otherRoom->entries[0].isAvailable
+		&& !otherRoom->entries[1].isAvailable
+		&& !otherRoom->entries[2].isAvailable
+		&& !otherRoom->entries[3].isAvailable
+		)
+	{
+		result.isAvailable = false;
+		return false;
+	}
+	bool isSearching = true;
+	while (isSearching)
+	{
+
+		int randNum = rand() % 4 + 1;
+		switch (randNum)
+		{
+		case 1:
+			if (thisRoom->entries[0].isAvailable && otherRoom->entries[1].isAvailable)
+			{
+				result.side = thisRoom->entries[0].side;
+				result.position = thisRoom->entries[0].position;
+				thisRoom->entries[0].isAvailable = false;
+				otherRoom->entries[1].isAvailable = false;
+				isSearching = false;
+			}
+			break;
+		case 2:
+			if (thisRoom->entries[1].isAvailable && otherRoom->entries[0].isAvailable)
+			{
+				result.side = thisRoom->entries[1].side;
+				result.position = thisRoom->entries[1].position;
+				thisRoom->entries[1].isAvailable = false;
+				otherRoom->entries[0].isAvailable = false;
+				isSearching = false;
+			}
+			break;
+		case 3:
+			if (thisRoom->entries[2].isAvailable && otherRoom->entries[3].isAvailable)
+			{
+				result.side = thisRoom->entries[2].side;
+				result.position = thisRoom->entries[2].position;
+				thisRoom->entries[2].isAvailable = false;
+				otherRoom->entries[3].isAvailable = false;
+				isSearching = false;
+			}
+			break;
+		case 4:
+			if (thisRoom->entries[3].isAvailable && otherRoom->entries[2].isAvailable)
+			{
+				result.side = thisRoom->entries[3].side;
+				result.position = thisRoom->entries[3].position;
+				thisRoom->entries[3].isAvailable = false;
+				otherRoom->entries[2].isAvailable = false;
+				isSearching = false;
+			}
+			break;
+		}
+
+	}
+	result.isAvailable = true;
+	return true;
+}
+
+void DungeonManager::GenPlaceBossRoom(Room* lastRoom, Room* bossRoom)
+{
+	EntryPoint result;
+	GenGetAvailableEntryPoints(lastRoom, bossRoom, result);
+
+	Hallway* newHallway = new Hallway();
+	newHallway->Setup(result, lastRoom, bossRoom, config.HALLWAY_LENGTH);
+	lastRoom->SetIsTaken(true);
+	bossRoom->SetIsTaken(true);
+	lastRoom->neighborHalls.push_back(newHallway);
+	bossRoom->neighborHalls.push_back(newHallway);
+	hallwayList.push_back(newHallway);
+	// Find suitable side of this room
+	// Create Hallway on the established side
+	// place bossRoom on the otherSide
+}
+
+bool DungeonManager::GenListCollisionCheck(int index)
+{
+	for (int i = 0; i < roomList.size(); i++)
+	{
+		if (i == index || !roomList.at(i)->GetIsTaken())
+		{
+			continue;
+		}
+		if (roomList.at(index)->GenCollisionCheck(roomList.at(i)))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+Room* DungeonManager::FindFutherestRoom(int index)
+{
+	short int futherestRoom = 0;
+	for (short int i = 0; i < roomList.size(); i++)
+	{
+
+		if (GetDistance(roomList.at(index), roomList.at(i)) < GetDistance(roomList.at(index), roomList.at(futherestRoom)))
+		{
+			futherestRoom = i;
+		}
+	}
+	return roomList.at(futherestRoom);
+}
+
+float DungeonManager::GetDistance(Room* roomOne, Room* roomTwo)
+{
+	float vX = roomOne->GetCenter().x - roomTwo->GetCenter().x;
+	float vY = roomOne->GetCenter().y - roomTwo->GetCenter().y;
+	return static_cast<float>(sqrt((vX * vX) + (vY * vY)));
+}
+
+
+
 // Room Stuff
 Room::Room()
 {
@@ -318,11 +443,11 @@ bool Room::GenCollisionCheck(Room* other)
 	}
 	return false;
 }
-
+/*
 void Room::GenSetNeighbor(std::vector<Room*> &list, int index, std::vector<Hallway*>& hallList)
 {
 	int randNum = rand() % 2 + 1;
-	if (randNum + index >= list.size() -1)
+	if ((randNum + index) >= list.size() -1)
 	{
 		randNum--;
 	}
@@ -475,11 +600,6 @@ float Room::GetDistance(Room* room)
 	return static_cast<float>(sqrt((vX * vX) + (vY * vY)));
 }
 
-Vector2 Room::GetCenter()
-{
-	return { (x + (width / 2.f)), (y + (height / 2.f)) };
-}
-
 bool Room::GenListCollisionCheck(std::vector<Room*>& list, int ignoreIndex)
 {
 	for (int i = 0; i < list.size(); i++)
@@ -494,6 +614,12 @@ bool Room::GenListCollisionCheck(std::vector<Room*>& list, int ignoreIndex)
 		}
 	}
 	return false;
+}
+
+*/
+Vector2 Room::GetCenter()
+{
+	return { (x + (width / 2.f)), (y + (height / 2.f)) };
 }
 
 int Room::GetCorrectHallway(SIDE ownerOneSide, SIDE ownerTwoSide)
@@ -676,6 +802,7 @@ void Room::CollisionCheck(Entity* entity)// check if touching entity
 		}
 	}
 }
+
 void Room::OnCollision(Entity* entity, Rectangle wall)// push entity back 
 {
 	// Push only in 1 axis
