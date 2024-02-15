@@ -3,7 +3,6 @@
 void DungeonManager::GenerateDungeon()
 {
 	CreateRooms();
-	//FixRoomPosition();
 	PlaceHallways();
 	AddBonusStuff();
 	FillRooms();
@@ -34,27 +33,6 @@ void DungeonManager::CreateRooms()
 	roomList.push_back(boss);
 
 	
-}
-
-void DungeonManager::FixRoomPosition() // might be useless
-{
-	// Get stuck in loop
-	bool isFixingPos = true;
-	while (isFixingPos)
-	{
-		isFixingPos = false;
-		for (int i = 0; i < roomList.size(); i++)
-		{
-			for (int j = 0; j < roomList.size(); j++)
-			{
-				if (i != j && roomList.at(i)->GenCollisionCheck(roomList.at(j)))
-				{
-					isFixingPos = true;
-					// push rooms from each other
-				}
-			}
-		}
-	}
 }
 
 void DungeonManager::PlaceHallways()
@@ -443,180 +421,7 @@ bool Room::GenCollisionCheck(Room* other)
 	}
 	return false;
 }
-/*
-void Room::GenSetNeighbor(std::vector<Room*> &list, int index, std::vector<Hallway*>& hallList)
-{
-	int randNum = rand() % 2 + 1;
-	if ((randNum + index) >= list.size() -1)
-	{
-		randNum--;
-	}
-	
-	
-	for (int i = 0; i < randNum; i++)
-	{
-		// Get entryPoint pos // hallway goes to parallel sides "Right wall goes to a Left wall"
-		EntryPoint result;
-		Hallway* newHallway = nullptr;
-		int currentIndex = index + i + 1;
-		bool isSearching = true;
-		while (isSearching)
-		{
-			isSearching = false;
-			if (!GenGetAvailableEntryPoints(list.at(currentIndex), result))
-			{
-				continue;
-			}
-			newHallway = new Hallway();
-			newHallway->Setup(result, this, list.at(currentIndex), 0);
-			// check if owner2 collides with any of the taken rooms, if oncollision, redo
-			if (list.at(currentIndex)->GenListCollisionCheck(list, currentIndex))
-			{
-				isSearching = true;
-				delete newHallway;
-				newHallway = nullptr;
-			}
-		}
-		if (newHallway == nullptr)
-		{
-			continue;
-		}
-		SetIsTaken(true);
-		list.at(currentIndex)->SetIsTaken(true);
-		neighborHalls.push_back(newHallway);
-		list.at(currentIndex)->neighborHalls.push_back(newHallway);
-		hallList.push_back(newHallway);
-	}
 
-}
-
-bool Room::GenGetAvailableEntryPoints(Room* other, EntryPoint& result)
-{
-
-	
-	if (other->GetIsTaken() 
-		|| !entries[0].isAvailable
-		&& !entries[1].isAvailable
-		&& !entries[2].isAvailable
-		&& !entries[3].isAvailable
-		|| !other->entries[0].isAvailable
-		&& !other->entries[1].isAvailable
-		&& !other->entries[2].isAvailable
-		&& !other->entries[3].isAvailable
-		)
-	{
-		result.isAvailable = false;
-		return false;
-	}
-	bool isSearching = true;
-	while (isSearching)
-	{
-
-		int randNum = rand() % 4 + 1;
-		switch (randNum)
-		{
-		case 1:
-			if (entries[0].isAvailable && other->entries[1].isAvailable)
-			{
-				result.side = entries[0].side;
-				result.position = entries[0].position;
-				entries[0].isAvailable = false;
-				other->entries[1].isAvailable = false;
-				isSearching = false;
-			}
-			break;
-		case 2:
-			if (entries[1].isAvailable && other->entries[0].isAvailable)
-			{
-				result.side = entries[1].side;
-				result.position = entries[1].position;
-				entries[1].isAvailable = false;
-				other->entries[0].isAvailable = false;
-				isSearching = false;
-			}
-			break;
-		case 3:
-			if (entries[2].isAvailable && other->entries[3].isAvailable)
-			{
-				result.side = entries[2].side;
-				result.position = entries[2].position;
-				entries[2].isAvailable = false;
-				other->entries[3].isAvailable = false;
-				isSearching = false;
-			}
-			break;
-		case 4:
-			if (entries[3].isAvailable && other->entries[2].isAvailable)
-			{
-				result.side = entries[3].side;
-				result.position = entries[3].position;
-				entries[3].isAvailable = false;
-				other->entries[2].isAvailable = false;
-				isSearching = false;
-			}
-			break;
-		}
-
-	}
-	result.isAvailable = true;
-	return true;
-}
-
-void Room::GenPlaceBossRoom(Room* bossRoom, std::vector<Hallway*>& hallList)
-{
-	EntryPoint result;
-	GenGetAvailableEntryPoints(bossRoom, result);
-
-	Hallway* newHallway = new Hallway();
-	newHallway->Setup(result, this, bossRoom, config.HALLWAY_LENGTH);
-	SetIsTaken(true);
-	bossRoom->SetIsTaken(true);
-	neighborHalls.push_back(newHallway);
-	bossRoom->neighborHalls.push_back(newHallway);
-	hallList.push_back(newHallway);
-	// Find suitable side of this room
-	// Create Hallway on the established side
-	// place bossRoom on the otherSide
-}
-
-Room* Room::FindFutherestRoom(std::vector<Room*>& list)
-{
-	short int closestRoom = 1;
-	for (short int i = 1; i < list.size(); i++)
-	{
-		
-		if (GetDistance(list.at(i)) < GetDistance(list.at(closestRoom)))
-		{
-			closestRoom = i;
-		}
-	}
-	return list.at(closestRoom);
-}
-
-float Room::GetDistance(Room* room)
-{
-	float vX = GetCenter().x - room->GetCenter().x;
-	float vY = GetCenter().y - room->GetCenter().y;
-	return static_cast<float>(sqrt((vX * vX) + (vY * vY)));
-}
-
-bool Room::GenListCollisionCheck(std::vector<Room*>& list, int ignoreIndex)
-{
-	for (int i = 0; i < list.size(); i++)
-	{
-		if (i == ignoreIndex || !list.at(i)->GetIsTaken())
-		{
-			continue;
-		}
-		if (GenCollisionCheck(list.at(i)))
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
-*/
 Vector2 Room::GetCenter()
 {
 	return { (x + (width / 2.f)), (y + (height / 2.f)) };
