@@ -9,6 +9,31 @@ void Spell::ReduceCooldown(float amount)
 	}
 }
 
+Vector2 Spell::GetNormalizedVector(float srcX, float srcY, float dstX, float dstY)
+{
+	float vectorX = srcX - dstX;
+	float vectorY = srcY - dstY;
+
+	float length = sqrt((vectorX * vectorX) + (vectorY * vectorY));
+
+	vectorX = (vectorX / length);
+	vectorY = (vectorY / length);
+
+	return Vector2{vectorX, vectorY};
+}
+
+float Spell::GetAngleFromVectors(Vector2 vec1, Vector2 vec2)
+{
+	float dot =  (vec1.x * vec2.x) + (vec1.y * vec2.y);
+	float mag1 = sqrt((vec1.x * vec1.x) + (vec1.y * vec1.y));
+	float mag2 = sqrt((vec2.x * vec2.x) + (vec2.y * vec2.y));
+	float radianAngle = acos(dot / (mag1 * mag2));
+
+	return radianAngle * (180 / PI);
+}
+
+
+
 void Bullet::Update(float deltaTime)
 {
 
@@ -20,6 +45,21 @@ void Bullet::Update(float deltaTime)
 		isAlive = false;
 	}
 
+}
+
+void Bullet::Render()
+{
+	if (txr.id == 0)
+	{
+		DrawCircle(static_cast<int>(x), static_cast<int>(y), size, ORANGE);
+		return;
+	}
+	Rectangle src = { 0.f, 0.f, static_cast<float>(txr.width), static_cast<float>(txr.height) };
+	Rectangle dst = { x, y, static_cast<float>(txr.width * config.PIXEL_SCALE), static_cast<float>(txr.height * config.PIXEL_SCALE) };
+	//Vector2 origin = { 0.f, 0.f };
+	Vector2 origin = { static_cast<float>((txr.width * config.PIXEL_SCALE) / 2.0f), static_cast<float>((txr.width * config.PIXEL_SCALE) / 2.0f) };
+
+	DrawTexturePro(txr, src, dst, origin, rotation, WHITE);
 }
 
 
@@ -66,10 +106,14 @@ void RangedBasicAttack::Trigger(float srcX, float srcY, float dstX, float dstY) 
 
 	// Create Bullet
 	Bullet* newBullet = new Bullet();
+	newBullet->SetTexture(bulletTxr);
 	newBullet->x = srcX;
 	newBullet->y = srcY;
+	// Calculate bullet rotation
+	
 
 	// Bullet Direction
+	/*
 	float vectorX = srcX - dstX;
 	float vectorY = srcY - dstY;
 
@@ -77,11 +121,14 @@ void RangedBasicAttack::Trigger(float srcX, float srcY, float dstX, float dstY) 
 
 	vectorX = (vectorX / length);
 	vectorY = (vectorY / length);
+	*/
 
-	newBullet->velX = -vectorX + (m_caster->velX * velocityInfluence);
-	newBullet->velY = -vectorY + (m_caster->velY * velocityInfluence);
+	Vector2 dir = GetNormalizedVector(srcX, srcY, dstX, dstY);
+	newBullet->velX = -dir.x + (m_caster->velX * velocityInfluence);
+	newBullet->velY = -dir.y + (m_caster->velY * velocityInfluence);
 
-
+	Vector2 startVec{0, -1};
+	newBullet->SetRotation(GetAngleFromVectors(startVec, dir));
 	bulletList[availableIndex] = newBullet;
 	activeBullets++;
 }

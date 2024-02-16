@@ -9,7 +9,7 @@ class Player : public DynamicEntity
 private:
 	Camera2D* _cam{};
 	Config config;
-	Texture2D playerTexture = {};
+	Texture2D texture = {};
 	const static int MAX_SPELL_SLOTS = 10;
 	Spell* spellbook[MAX_SPELL_SLOTS] = {nullptr};
 

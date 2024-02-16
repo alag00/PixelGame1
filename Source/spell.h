@@ -35,19 +35,27 @@ public:
 	virtual void Activate(DynamicEntity &caster){m_caster = &caster;}
 	virtual void Update(float deltaTime) {deltaTime++;}
 	virtual void Render(){}
+	Vector2 GetNormalizedVector(float srcX, float srcY, float dstX, float dstY);
+	float GetAngleFromVectors(Vector2 vec1, Vector2 vec2);
+
 };
 
 class Bullet : public DynamicEntity
 {
 private:
+	Config config;
 	float timeAlive = 1.f;
 	float size = 3.f;
 	bool isAlive = true;
-	int speed = 200;
+	int speed = 400;
+	Texture2D txr{};
+	float rotation = 0.f;
 public:
+	void SetTexture(Texture2D texture){ txr = texture; }
 	void Update(float deltaTime) override;
-	void Render() override { DrawCircle(static_cast<int>(x), static_cast<int>(y), size, ORANGE);}
+	void Render() override;
 	bool IsAlive(){return isAlive;}
+	void SetRotation(float newRot) { rotation = newRot; }
 };
 
 class RangedBasicAttack : public Spell
@@ -61,11 +69,13 @@ private:
 	int activeBullets = 0;
 	Bullet* bulletList[MAX_BULLETS] = { nullptr };
 	float velocityInfluence = 0.2f;
+	Texture2D bulletTxr{};
 public:
 	RangedBasicAttack()
 	{
 		cooldownMax = 0.3f;
 	}
+	void SetTexture(Texture2D texture){ bulletTxr = texture; }
 	void Activate(DynamicEntity& caster) override;
 	void Activate(DynamicEntity& caster, float dstX, float dstY);
 

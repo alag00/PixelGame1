@@ -29,14 +29,14 @@ Player::Player(int role, Camera2D& cam)
 		break;
 	}
 	
-	SetTextureFilter(playerTexture, TEXTURE_FILTER_POINT);
+	SetTextureFilter(texture, TEXTURE_FILTER_POINT);
 		
 
 	//offsetTextureX = (playerTexture.width * config.PIXEL_SCALE) / 2.f;
 	//offsetTextureY = (playerTexture.height * config.PIXEL_SCALE) / 2.f;
 
-	width = playerTexture.width * config.PIXEL_SCALE;
-	height = playerTexture.height * config.PIXEL_SCALE;
+	width = texture.width * config.PIXEL_SCALE;
+	height = texture.height * config.PIXEL_SCALE;
 	
 }
 
@@ -88,13 +88,16 @@ void Player::OnCollision(Entity* other)
 
 void Player::Render()
 {
-	Rectangle src = { 0.f, 0.f, static_cast<float>(playerTexture.width), static_cast<float>(playerTexture.height) };
-	Rectangle dst = { x, y, static_cast<float>(playerTexture.width * config.PIXEL_SCALE), static_cast<float>(playerTexture.height * config.PIXEL_SCALE)};
-	Vector2 origin = { static_cast<float>(playerTexture.width / 2.0f), static_cast<float>(playerTexture.height / 2.0f) };
+	Rectangle src = { 0.f, 0.f, static_cast<float>(texture.width), static_cast<float>(texture.height) };
+	Rectangle dst = { x, y, static_cast<float>(texture.width * config.PIXEL_SCALE), static_cast<float>(texture.height * config.PIXEL_SCALE)};
+	Vector2 origin = { 0.f, 0.f};
+	//Vector2 origin = { static_cast<float>((texture.width * config.PIXEL_SCALE) / 2.0f), static_cast<float>((texture.width * config.PIXEL_SCALE) / 2.0f) };
 	float rotation = 0.0f;
 
-	DrawTexturePro(playerTexture, src, dst, origin, rotation, WHITE);
+	DrawTexturePro(texture, src, dst, origin, rotation, WHITE);
 
+	// CollisionBox
+	
 	Color hitboxColor = YELLOW;
 	if (isColliding)
 	{
@@ -117,10 +120,12 @@ void Player::Render()
 
 void Player::ClassSetupArcanist()
 {
-	playerTexture = LoadTexture("Resources/Arcanist.png");
+	texture = LoadTexture("Resources/Arcanist.png");
+	Texture2D basicTxr = LoadTexture("Resources/ArcaneBolt.png");
 
 	RangedBasicAttack* basicAttack = new RangedBasicAttack();
 	basicAttack->SetCamera(*_cam);
+	basicAttack->SetTexture(basicTxr);
 	spellbook[0] = basicAttack;
 
 	ArcanistSignature* signatureSpell = new ArcanistSignature(*this);
@@ -131,7 +136,7 @@ void Player::ClassSetupArcanist()
 
 void Player::ClassSetupSummoner()
 {
-	playerTexture = LoadTexture("Resources/Summoner.png");
+	texture = LoadTexture("Resources/Summoner.png");
 
 	SummonerSignature* signatureSpell = new SummonerSignature();
 	signatureSpell->SetCamera(*_cam);
@@ -140,16 +145,18 @@ void Player::ClassSetupSummoner()
 
 void Player::ClassSetupNecromancer()
 {
-	playerTexture = LoadTexture("Resources/Necromancer.png");
+	texture = LoadTexture("Resources/Necromancer.png");
+	Texture2D basicTxr = LoadTexture("Resources/FireBolt.png");
 
 	RangedBasicAttack* basicAttack = new RangedBasicAttack();
 	basicAttack->SetCamera(*_cam);
+	basicAttack->SetTexture(basicTxr);
 	spellbook[0] = basicAttack;
 }
 
 void Player::ClassSetupEnchanter()
 {
-	playerTexture = LoadTexture("Resources/Enchanter.png");
+	texture = LoadTexture("Resources/Enchanter.png");
 
 	MeleeBasicAttack* basicAttack = new MeleeBasicAttack();
 	basicAttack->SetCamera(*_cam);
@@ -158,7 +165,7 @@ void Player::ClassSetupEnchanter()
 
 void Player::ClassSetupRogue()
 {
-	playerTexture = LoadTexture("Resources/Rogue.png");
+	texture = LoadTexture("Resources/Rogue.png");
 
 	MeleeBasicAttack* basicAttack = new MeleeBasicAttack();
 	basicAttack->SetCamera(*_cam);
@@ -172,7 +179,7 @@ void Player::ClassSetupRogue()
 
 void Player::ClassSetupPaladin()
 {
-	playerTexture = LoadTexture("Resources/Paladin.png");
+	texture = LoadTexture("Resources/Paladin.png");
 
 	MeleeBasicAttack* basicAttack = new MeleeBasicAttack();
 	basicAttack->SetCamera(*_cam);
