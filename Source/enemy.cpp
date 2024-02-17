@@ -12,12 +12,22 @@ void Enemy::Update(float deltaTime)
 	Act(deltaTime);
 }
 
+bool Enemy::IsAlive()
+{
+	if (GetHealth() <= 0)
+	{
+		return false;
+	}
+	return true;
+}
+
 // Imp
 Imp::Imp(DynamicEntity& target)
 {
 	m_target = &target;
 	//basic = new RangedBasicAttack();
 	texture = LoadTexture("Resources/Imp.png");
+	SetHealth(5);
 }
 void Imp::Sense() 
 {
@@ -115,6 +125,7 @@ Crawler::Crawler(DynamicEntity& target)
 	m_target = &target;
 	//basic = new RangedBasicAttack();
 	texture = LoadTexture("Resources/Crawler.png");
+	SetHealth(5);
 }
 
 void Crawler::Sense()
@@ -168,6 +179,9 @@ Specter::Specter(DynamicEntity& target)
 	m_target = &target;
 	//basic = new RangedBasicAttack();
 	texture = LoadTexture("Resources/Specter.png");
+	SetHealth(5);
+	width = texture.width * config.PIXEL_SCALE;
+	height = texture.height * config.PIXEL_SCALE;
 }
 
 void Specter::Sense()
@@ -204,4 +218,7 @@ void Specter::Render()
 	float rotation = 0.0f;
 
 	DrawTexturePro(texture, src, dst, origin, rotation, WHITE);
+
+	//Enemy::Render();
+
 }

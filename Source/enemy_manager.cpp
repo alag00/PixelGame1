@@ -17,13 +17,28 @@ void EnemyManager::CreateEnemies()
 }
 void EnemyManager::Update(float deltaTime)
 {
-	if (enemyList.size() > 0)
+	// check if enemies are alive
+
+	if (enemyList.size() <= 0)
 	{
-		for (int i = 0; i < enemyList.size(); i++)
+		return;
+	}
+
+	for (int i = 0; i < enemyList.size(); i++)
+	{
+		if (!enemyList.at(i)->IsAlive())
 		{
-			enemyList.at(i)->Update(deltaTime);
+			delete enemyList.at(i);
+			enemyList.at(i) = nullptr;
+			enemyList.erase(enemyList.begin() + i);
 		}
 	}
+
+	for (int i = 0; i < enemyList.size(); i++)
+	{
+		enemyList.at(i)->Update(deltaTime);
+	}
+
 }
 void EnemyManager::Render()
 {

@@ -118,6 +118,18 @@ void Player::Render()
 	
 }
 
+void Player::SpellCollisionCheck(DynamicEntity* other)
+{
+	for (int i = 0; i < MAX_SPELL_SLOTS; i++)
+	{
+		if (spellbook[i] == nullptr)
+		{
+			continue;
+		}
+		spellbook[i]->CollisionCheck(other);
+	}
+}
+
 void Player::ClassSetupArcanist()
 {
 	texture = LoadTexture("Resources/Arcanist.png");

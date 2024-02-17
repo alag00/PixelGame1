@@ -33,4 +33,8 @@ public:
 		x = newPos.x;
 		y = newPos.y;
 	}
+	Vector2 GetCenter()
+	{
+		return Vector2{x+(width / 2.f), y + (height / 2.f) };
+	}
 };

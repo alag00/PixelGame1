@@ -109,14 +109,17 @@ void Level::UpdateGameState()
 
 void Level::CollisionCheck()
 {
+	
 	dungeonManager.CollisionCheck(player);
-	/*
-	if (player->IsColliding(*theBugMan))
+	for (int i = 0; i < enemyManager.GetEnemyList().size(); i++)
 	{
-		player->OnCollision(theBugMan);
-		theBugMan->OnCollision(player);
+		dungeonManager.CollisionCheck(enemyManager.GetEnemyList().at(i));
+		player->SpellCollisionCheck(enemyManager.GetEnemyList().at(i));
+		enemyManager.GetEnemyList().at(i)->SpellCollisionCheck(player);
 	}
-	*/
+
+	
+
 }
 void Level::UpdateCamera()
 {

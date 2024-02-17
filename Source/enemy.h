@@ -26,6 +26,8 @@ public:
 	virtual void Decide(){}
 	virtual void Act(float deltaTime) { deltaTime++; }
 	void Update(float deltaTime) override;
+	virtual void SpellCollisionCheck(DynamicEntity* other) { other; }
+	bool IsAlive();
 };
 
 // Normal Enemy, Range or Melee

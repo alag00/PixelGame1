@@ -34,6 +34,7 @@ public:
 	void Update(float deltaTime) override;
 	void OnCollision(Entity* other) override;
 	void Render() override;
+	void SpellCollisionCheck(DynamicEntity* other);
 	
 	// Class setup
 	void ClassSetupArcanist();

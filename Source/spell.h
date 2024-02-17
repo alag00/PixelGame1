@@ -37,7 +37,7 @@ public:
 	virtual void Render(){}
 	Vector2 GetNormalizedVector(float srcX, float srcY, float dstX, float dstY);
 	float GetAngleFromVectors(Vector2 vec1, Vector2 vec2);
-
+	virtual void CollisionCheck(DynamicEntity* entity) { entity; }
 };
 
 class Bullet : public DynamicEntity
@@ -51,7 +51,7 @@ private:
 	Texture2D txr{};
 	float rotation = 0.f;
 public:
-	void SetTexture(Texture2D texture){ txr = texture; }
+	void SetTexture(Texture2D texture);
 	void Update(float deltaTime) override;
 	void Render() override;
 	bool IsAlive(){return isAlive;}
@@ -82,7 +82,7 @@ public:
 	void Trigger(float srcX, float srcY, float dstX, float dstY);
 	void Update(float deltaTime) override;
 	void Render() override;
-
+	void CollisionCheck(DynamicEntity* entity) override;
 	~RangedBasicAttack();
 };
 

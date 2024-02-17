@@ -34,6 +34,13 @@ float Spell::GetAngleFromVectors(Vector2 vec1, Vector2 vec2)
 
 
 
+void Bullet::SetTexture(Texture2D texture)
+{
+	txr = texture;
+	width = texture.width * config.PIXEL_SCALE;
+	height = texture.height * config.PIXEL_SCALE;
+}
+
 void Bullet::Update(float deltaTime)
 {
 
@@ -70,19 +77,17 @@ void RangedBasicAttack::Activate(DynamicEntity& caster)
 	{
 		return;
 	}
-	//GetWorldToScreen2D
-	//GetScreenToWorld2D
 	float dstX = GetScreenToWorld2D(GetMousePosition(), *_cam).x;
 	float dstY = GetScreenToWorld2D(GetMousePosition(), *_cam).y;
-	Trigger(m_caster->x, m_caster->y, dstX, dstY);
+	Trigger(m_caster->GetCenter().x, m_caster->GetCenter().y, dstX, dstY);
 }
 void RangedBasicAttack::Activate(DynamicEntity& caster, float dstX, float dstY)
 {
 	m_caster = &caster;
 	Trigger(m_caster->x, m_caster->y, dstX, dstY);
 }
-void RangedBasicAttack::Trigger(float srcX, float srcY, float dstX, float dstY) {
-
+void RangedBasicAttack::Trigger(float srcX, float srcY, float dstX, float dstY) 
+{
 	// Deny condition
 	if (activeBullets == MAX_BULLETS || cooldown > 0.f || m_caster == nullptr)
 	{
@@ -109,8 +114,6 @@ void RangedBasicAttack::Trigger(float srcX, float srcY, float dstX, float dstY) 
 	newBullet->SetTexture(bulletTxr);
 	newBullet->x = srcX;
 	newBullet->y = srcY;
-	// Calculate bullet rotation
-	
 
 	// Bullet Direction
 	/*
@@ -127,7 +130,7 @@ void RangedBasicAttack::Trigger(float srcX, float srcY, float dstX, float dstY) 
 	newBullet->velX = -dir.x + (m_caster->velX * velocityInfluence);
 	newBullet->velY = -dir.y + (m_caster->velY * velocityInfluence);
 
-	Vector2 startVec{0, -1};
+	Vector2 startVec{-1, 1};
 	newBullet->SetRotation(GetAngleFromVectors(startVec, dir));
 	bulletList[availableIndex] = newBullet;
 	activeBullets++;
@@ -159,6 +162,26 @@ void RangedBasicAttack::Render()
 			continue;
 		}
 		bulletList[i]->Render();
+	}
+}
+void RangedBasicAttack::CollisionCheck(DynamicEntity* entity)
+{
+	for (int i = 0; i < MAX_BULLETS; i++)
+	{
+		if (bulletList[i] == nullptr)
+		{
+			continue;
+		}
+		if (bulletList[i]->x  < entity->x + entity->width
+			&& bulletList[i]->x + bulletList[i]->width  > entity->x
+			&& bulletList[i]->y  < entity->y + entity->height
+			&& bulletList[i]->y + bulletList[i]->height  > entity->y)
+		{
+			entity->TakeDamage(10);
+			delete bulletList[i];
+			bulletList[i] = nullptr;
+			activeBullets--;
+		}
 	}
 }
 RangedBasicAttack::~RangedBasicAttack()
