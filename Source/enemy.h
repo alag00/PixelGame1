@@ -19,6 +19,7 @@ private:
 	//Color color = RED;
 	float timer = 0.f;
 	const float RESPOND_TIME = 0.25f;
+	Config config;
 public:
 	Texture2D texture = {};
 	
@@ -28,6 +29,7 @@ public:
 	void Update(float deltaTime) override;
 	virtual void SpellCollisionCheck(DynamicEntity* other) { other; }
 	bool IsAlive();
+	virtual void Render() override;
 };
 
 // Normal Enemy, Range or Melee

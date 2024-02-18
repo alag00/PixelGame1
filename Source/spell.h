@@ -70,6 +70,7 @@ private:
 	Bullet* bulletList[MAX_BULLETS] = { nullptr };
 	float velocityInfluence = 0.2f;
 	Texture2D bulletTxr{};
+	Config config;
 public:
 	RangedBasicAttack()
 	{

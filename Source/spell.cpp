@@ -29,7 +29,7 @@ float Spell::GetAngleFromVectors(Vector2 vec1, Vector2 vec2)
 	float mag2 = sqrt((vec2.x * vec2.x) + (vec2.y * vec2.y));
 	float radianAngle = acos(dot / (mag1 * mag2));
 
-	return radianAngle * (180 / PI);
+	return (radianAngle * (180 / PI));
 }
 
 
@@ -62,11 +62,16 @@ void Bullet::Render()
 		return;
 	}
 	Rectangle src = { 0.f, 0.f, static_cast<float>(txr.width), static_cast<float>(txr.height) };
-	Rectangle dst = { x, y, static_cast<float>(txr.width * config.PIXEL_SCALE), static_cast<float>(txr.height * config.PIXEL_SCALE) };
+	Rectangle dst = { x + ((txr.width * config.PIXEL_SCALE) / 2.f), y + ((txr.height * config.PIXEL_SCALE) / 2.f), static_cast<float>(txr.width * config.PIXEL_SCALE), static_cast<float>(txr.height * config.PIXEL_SCALE) };
 	//Vector2 origin = { 0.f, 0.f };
 	Vector2 origin = { static_cast<float>((txr.width * config.PIXEL_SCALE) / 2.0f), static_cast<float>((txr.width * config.PIXEL_SCALE) / 2.0f) };
 
+	//rotation = 0.f;
 	DrawTexturePro(txr, src, dst, origin, rotation, WHITE);
+
+	Color color = YELLOW;
+	color.a = 50;
+	DrawRectangle(static_cast<int>(x), static_cast<int>(y), static_cast<int>(width), static_cast<int>(height), color);
 }
 
 
@@ -108,6 +113,13 @@ void RangedBasicAttack::Trigger(float srcX, float srcY, float dstX, float dstY)
 		return;
 	}
 	cooldown = cooldownMax;
+	// Offset positions for texture
+	srcX -= (bulletTxr.width * config.PIXEL_SCALE) / 2.f;
+	srcY -= (bulletTxr.height * config.PIXEL_SCALE) / 2.f;
+
+	dstX -= (bulletTxr.width * config.PIXEL_SCALE) / 2.f;
+	dstY -= (bulletTxr.height * config.PIXEL_SCALE) / 2.f;
+
 
 	// Create Bullet
 	Bullet* newBullet = new Bullet();

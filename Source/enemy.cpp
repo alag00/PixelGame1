@@ -21,6 +21,20 @@ bool Enemy::IsAlive()
 	return true;
 }
 
+void Enemy::Render()
+{
+	Rectangle src = { 0.f, 0.f, static_cast<float>(texture.width), static_cast<float>(texture.height) };
+	Rectangle dst = { x, y, static_cast<float>(texture.width * config.PIXEL_SCALE), static_cast<float>(texture.height * config.PIXEL_SCALE) };
+	Vector2 origin = { 0.f, 0.f };
+	float rotation = 0.0f;
+
+	DrawTexturePro(texture, src, dst, origin, rotation, WHITE);
+
+	Color color = YELLOW;
+	color.a = 50;
+	DrawRectangle(static_cast<int>(x), static_cast<int>(y), static_cast<int>(width), static_cast<int>(height), color);
+}
+
 // Imp
 Imp::Imp(DynamicEntity& target)
 {
@@ -212,13 +226,14 @@ void Specter::Act(float deltaTime)
 
 void Specter::Render()
 {
+	/*
 	Rectangle src = { 0.f, 0.f, static_cast<float>(texture.width), static_cast<float>(texture.height) };
 	Rectangle dst = { x, y, static_cast<float>(texture.width * config.PIXEL_SCALE), static_cast<float>(texture.height * config.PIXEL_SCALE) };
 	Vector2 origin = { static_cast<float>(texture.width / 2.0f), static_cast<float>(texture.height / 2.0f) };
 	float rotation = 0.0f;
 
 	DrawTexturePro(texture, src, dst, origin, rotation, WHITE);
-
-	//Enemy::Render();
+	*/
+	Enemy::Render();
 
 }
