@@ -123,6 +123,10 @@ void Imp::Render()
 	Enemy::Render();
 	basic.Render();
 }
+void Imp::SpellCollisionCheck(DynamicEntity* other)
+{
+	basic.CollisionCheck(other);
+}
 
 
 // Crawler

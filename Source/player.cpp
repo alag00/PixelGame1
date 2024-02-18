@@ -143,7 +143,7 @@ void Player::ClassSetupArcanist()
 	ArcanistSignature* signatureSpell = new ArcanistSignature(*this);
 	spellbook[1] = signatureSpell;
 
-	
+	SetHealth(75);
 }
 
 void Player::ClassSetupSummoner()
@@ -153,6 +153,8 @@ void Player::ClassSetupSummoner()
 	SummonerSignature* signatureSpell = new SummonerSignature();
 	signatureSpell->SetCamera(*_cam);
 	spellbook[1] = signatureSpell;
+
+	SetHealth(75);
 }
 
 void Player::ClassSetupNecromancer()
@@ -164,6 +166,8 @@ void Player::ClassSetupNecromancer()
 	basicAttack->SetCamera(*_cam);
 	basicAttack->SetTexture(basicTxr);
 	spellbook[0] = basicAttack;
+
+	SetHealth(75);
 }
 
 void Player::ClassSetupEnchanter()
@@ -173,6 +177,8 @@ void Player::ClassSetupEnchanter()
 	MeleeBasicAttack* basicAttack = new MeleeBasicAttack();
 	basicAttack->SetCamera(*_cam);
 	spellbook[0] = basicAttack;
+
+	SetHealth(100);
 }
 
 void Player::ClassSetupRogue()
@@ -186,7 +192,7 @@ void Player::ClassSetupRogue()
 	RogueSignature* signatureSpell = new RogueSignature();
 	spellbook[1] = signatureSpell;
 
-
+	SetHealth(50);
 }
 
 void Player::ClassSetupPaladin()
@@ -196,6 +202,8 @@ void Player::ClassSetupPaladin()
 	MeleeBasicAttack* basicAttack = new MeleeBasicAttack();
 	basicAttack->SetCamera(*_cam);
 	spellbook[0] = basicAttack;
+
+	SetHealth(150);
 }
 
 void Player::Control()
@@ -203,6 +211,12 @@ void Player::Control()
 	velX = 0.f;
 	velY = 0.f;
 	isRunning = false;
+
+
+	if (IsKeyPressed(KEY_P))
+	{
+		TakeDamage(15);
+	}
 
 	if (IsKeyDown(KEY_W))
 	{

@@ -52,6 +52,7 @@ public:
 	void Decide() override;
 	void Act(float deltaTime) override;
 	void Render() override;
+	void SpellCollisionCheck(DynamicEntity* other) override;
 };
 
 // increasing speed while hunting

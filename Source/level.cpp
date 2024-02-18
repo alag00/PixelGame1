@@ -49,6 +49,7 @@ void Level::LoadScene(GameInfo gameInfo)
 	enemyManager.CreateEnemies();
 	dungeonManager.AddEnemiesToDungeon(enemyManager.GetEnemyList());
 	//hud.SetCamera(camera);
+	hud.SetPlayerRef(player);
 	
 	
 }

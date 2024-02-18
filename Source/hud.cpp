@@ -7,6 +7,11 @@ Hud::Hud()
 	miniMapTxr = LoadTexture("Resources/Frame.png");
 }
 
+void Hud::SetPlayerRef(Player* ref)
+{
+	playerRef = ref;
+}
+
 void Hud::UpdateHud(Camera2D cam)
 {
 	Vector2 vec{ 50.f, 50.f };
@@ -33,9 +38,10 @@ void Hud::RenderHud()
 	float rotation = 0.0f;
 	Rectangle src = { 0.f, 0.f, static_cast<float>(healthBarTxr.width), static_cast<float>(healthBarTxr.height) };
 	Rectangle dst = { hpX, hpY, static_cast<float>(healthBarTxr.width * config.PIXEL_SCALE), static_cast<float>(healthBarTxr.height * config.PIXEL_SCALE) };
-	Vector2 origin = { static_cast<float>(healthBarTxr.width / 2.0f), static_cast<float>(healthBarTxr.height / 2.0f) };
-
+	Vector2 origin = { 0.f, 0.f };
+	//Vector2 origin = { static_cast<float>((healthBarTxr.width * config.PIXEL_SCALE) / 2.0f), static_cast<float>((healthBarTxr.height * config.PIXEL_SCALE) / 2.0f) };
 	DrawTexturePro(healthBarTxr, src, dst, origin, rotation, WHITE);
+	DrawText(TextFormat("Health: %i", playerRef->GetHealth()), static_cast<int>(hpX), static_cast<int>(hpY), 25, BLACK);
 
 	DrawRectangle(static_cast<int>(mapX), static_cast<int>(mapY),
 		static_cast<int>(miniMapTxr.width * config.PIXEL_SCALE),

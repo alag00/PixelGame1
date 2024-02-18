@@ -1,12 +1,14 @@
 #pragma once
 #include "raylib.h"
 #include "config.h"
+#include "player.h"
 
 class Hud
 {
 private:
 	Config config;
 	
+	Player* playerRef = nullptr;
 
 	Texture2D healthBarTxr{};
 	float hpX = 100.f;
@@ -27,7 +29,7 @@ private:
 	// maybe hotbar for abilities
 public:
 	Hud();
-
+	void SetPlayerRef(Player* ref);
 	void UpdateHud(Camera2D cam);
 	void RenderHud();
 };
