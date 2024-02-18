@@ -15,12 +15,10 @@ enum class DECISION
 class Enemy : public DynamicEntity
 {
 private:
-	//float size = 10.f;
-	//Color color = RED;
 	float timer = 0.f;
 	const float RESPOND_TIME = 0.25f;
-	Config config;
 public:
+	Config config;
 	Texture2D texture = {};
 	
 	virtual void Sense(){}
@@ -30,9 +28,8 @@ public:
 	virtual void SpellCollisionCheck(DynamicEntity* other) { other; }
 	bool IsAlive();
 	virtual void Render() override;
+	void SetTexture(Texture2D txr);
 };
-
-// Normal Enemy, Range or Melee
 class Imp : public Enemy
 {
 	float size = 10.f;
@@ -47,8 +44,8 @@ class Imp : public Enemy
 	float huntSpeed = 150.f;
 	float fleeSpeed = 100.f;
 	DynamicEntity* m_target = nullptr;
-	Config config;
 	RangedBasicAttack basic;
+	Texture2D bulletTxr{};
 public:
 	Imp(DynamicEntity& target);
 	void Sense() override;

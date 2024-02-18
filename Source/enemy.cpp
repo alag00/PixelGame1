@@ -35,13 +35,21 @@ void Enemy::Render()
 	DrawRectangle(static_cast<int>(x), static_cast<int>(y), static_cast<int>(width), static_cast<int>(height), color);
 }
 
+void Enemy::SetTexture(Texture2D txr)
+{
+	texture = txr;	
+	width = texture.width * config.PIXEL_SCALE;
+	height = texture.height * config.PIXEL_SCALE;
+}
+
 // Imp
 Imp::Imp(DynamicEntity& target)
 {
 	m_target = &target;
-	//basic = new RangedBasicAttack();
-	texture = LoadTexture("Resources/Imp.png");
+	bulletTxr = LoadTexture("Resources/FireBolt.png");
+	basic.SetTexture(bulletTxr);
 	SetHealth(5);
+
 }
 void Imp::Sense() 
 {
@@ -51,7 +59,7 @@ void Imp::Sense()
 	}
 	float vectorX = x - m_target->x;
 	float vectorY = y - m_target->y;
-	distanceBetweenTarget = sqrt((vectorX * vectorX) + (vectorY * vectorY));// magnitude of vector from enemy to player
+	distanceBetweenTarget = sqrt((vectorX * vectorX) + (vectorY * vectorY));
 }
 void Imp::Decide() 
 {
@@ -71,9 +79,6 @@ void Imp::Decide()
 	{
 		decision = DECISION::ATTACK;
 	}
-	//std::cout << "Enemy: Decide Decision: " << static_cast<int>(decision) << std::endl;
-	//std::cout << "Enemy: Own Position:  X = " << xPos << " | Y = " << yPos << std::endl;
-	//std::cout << "Enemy: Target Position:  X = " << m_target->xPos << " | Y = " << m_target->yPos << std::endl;
 }
 void Imp::Act(float deltaTime) 
 {
@@ -109,26 +114,13 @@ void Imp::Act(float deltaTime)
 	}
 	else if (decision == DECISION::ATTACK)
 	{
-		// shoot projectile towards player
-		basic.Activate(*this, m_target->x, m_target->y);
+		basic.Activate(*this, m_target->GetCenter().x, m_target->GetCenter().y);
 		shootTimer = SHOOT_COOLDOWN;
-		//decision = DECISION::FLEE;
 	}
-	//std::cout << "Enemy: Act Decision: " << static_cast<int>(decision) << std::endl;
 }
 void Imp::Render() 
 {
-	//xPos = round(xPos);
-	//yPos = round(yPos);
-	Rectangle src = { 0.f, 0.f, static_cast<float>(texture.width), static_cast<float>(texture.height) };
-	Rectangle dst = { x, y, static_cast<float>(texture.width * config.PIXEL_SCALE), static_cast<float>(texture.height * config.PIXEL_SCALE) };
-	Vector2 origin = { static_cast<float>(texture.width / 2.0f), static_cast<float>(texture.height / 2.0f) };
-	float rotation = 0.0f;
-
-	DrawTexturePro(texture, src, dst, origin, rotation, WHITE);
-
-	//DrawTexture(texture, static_cast<int>(x), static_cast<int>(y), WHITE);
-	//DrawCircle(static_cast<int>(xPos), static_cast<int>(yPos), size, RED);
+	Enemy::Render();
 	basic.Render();
 }
 

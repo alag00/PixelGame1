@@ -8,10 +8,12 @@ void EnemyManager::SetPlayerRef(DynamicEntity* player)
 void EnemyManager::CreateEnemies()
 {
 	// Randomize between all different enemies and have 2-3 be the only enemy types
+	Texture2D enemyTxr = LoadTexture("Resources/Imp.png");
 	int enemyAmount = 10;
 	for (int i = 0; i < enemyAmount; i++)
 	{
-		Specter* newEnemy = new Specter(*playerRef);
+		Imp* newEnemy = new Imp(*playerRef);
+		newEnemy->SetTexture(enemyTxr);
 		enemyList.push_back(newEnemy);
 	}
 }

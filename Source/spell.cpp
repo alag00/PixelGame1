@@ -89,7 +89,7 @@ void RangedBasicAttack::Activate(DynamicEntity& caster)
 void RangedBasicAttack::Activate(DynamicEntity& caster, float dstX, float dstY)
 {
 	m_caster = &caster;
-	Trigger(m_caster->x, m_caster->y, dstX, dstY);
+	Trigger(m_caster->GetCenter().x, m_caster->GetCenter().y, dstX, dstY);
 }
 void RangedBasicAttack::Trigger(float srcX, float srcY, float dstX, float dstY) 
 {
