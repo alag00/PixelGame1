@@ -151,12 +151,16 @@ private:
 	float maxSpeed = 4.f;
 	Texture2D texture = {};
 
+	float ballWidth = 0.f;
+	float ballHeight = 0.f;
+
 public:
 	ArcanistSignature(DynamicEntity& caster);
 	virtual void Activate(DynamicEntity& caster);
 
 	void Update(float deltaTime) override;
 	void Render() override;
+	void CollisionCheck(DynamicEntity* entity) override;
 };
 
 
@@ -297,15 +301,28 @@ public:
 class PaladinSignature : public Spell
 {
 private:
+	int healAmount = 25;
 public:
+	PaladinSignature()
+	{
+		cooldown = 0.f;
+		cooldownMax = 5.f;
+	}
 	void Activate(DynamicEntity& caster) override
 	{
 		m_caster = &caster;
+		if (cooldown <= 0.f)
+		{
+			m_caster->SetHealth(m_caster->GetHealth() + healAmount);
+			cooldown = cooldownMax;
+		}
+
 	}
 
 	void Update(float deltaTime)  override
 	{
-		deltaTime++;
+		cooldown -= deltaTime;
+	
 	}
 	void Render()  override
 	{

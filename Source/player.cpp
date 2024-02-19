@@ -203,6 +203,9 @@ void Player::ClassSetupPaladin()
 	basicAttack->SetCamera(*_cam);
 	spellbook[0] = basicAttack;
 
+	PaladinSignature* signatureSpell = new PaladinSignature();
+	spellbook[1] = signatureSpell;
+
 	SetHealth(150);
 }
 

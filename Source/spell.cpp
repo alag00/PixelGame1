@@ -298,7 +298,8 @@ ArcanistSignature::ArcanistSignature(DynamicEntity& caster)
 	rangeRadius = minRange;
 	cooldownMax = 10.f;
 	texture = LoadTexture("Resources/ArcanistBall.png");
-	SetTextureFilter(texture, TEXTURE_FILTER_POINT);
+	ballWidth = texture.width * config.PIXEL_SCALE;
+	ballHeight = texture.height * config.PIXEL_SCALE;
 }
 void ArcanistSignature::Activate(DynamicEntity& caster)
 {
@@ -341,20 +342,50 @@ void ArcanistSignature::Render()
 {
 	float rotation = 0.0;
 	Rectangle src = { 0, 0, static_cast<float>(texture.width), static_cast<float>(texture.height) };
-	Rectangle dst1 = { b1x, b1y, static_cast<float>(texture.width * config.PIXEL_SCALE), static_cast<float>(texture.height * config.PIXEL_SCALE) };
-	Rectangle dst2 = { b2x, b2y, static_cast<float>(texture.width * config.PIXEL_SCALE), static_cast<float>(texture.height * config.PIXEL_SCALE) };
-	Rectangle dst3 = { b3x, b3y, static_cast<float>(texture.width * config.PIXEL_SCALE), static_cast<float>(texture.height * config.PIXEL_SCALE) };
-	Vector2 origin = { static_cast<float>(texture.width / 2.0f), static_cast<float>(texture.height / 2.0f) };
+	Rectangle dst1 = { b1x, b1y, ballWidth, ballHeight };
+	Rectangle dst2 = { b2x, b2y, ballWidth, ballHeight };
+	Rectangle dst3 = { b3x, b3y, ballWidth, ballHeight };
+	//Vector2 origin = { static_cast<float>((texture.width * config.PIXEL_SCALE) / 2.0f), static_cast<float>((texture.height * config.PIXEL_SCALE) / 2.0f) };
+	Vector2 origin = { 0.f, 0.f };
 
 	DrawTexturePro(texture, src, dst1, origin, rotation, WHITE);
 	DrawTexturePro(texture, src, dst2, origin, rotation, WHITE);
 	DrawTexturePro(texture, src, dst3, origin, rotation, WHITE);
 
-
+	Color color = YELLOW;
+	color.a = 50;
+	DrawRectangle(static_cast<int>(b1x), static_cast<int>(b1y), static_cast<int>(ballWidth), static_cast<int>(ballHeight), color);
+	DrawRectangle(static_cast<int>(b2x), static_cast<int>(b2y), static_cast<int>(ballWidth), static_cast<int>(ballHeight), color);
+	DrawRectangle(static_cast<int>(b3x), static_cast<int>(b3y), static_cast<int>(ballWidth), static_cast<int>(ballHeight), color);
 	//DrawTexture(texture, static_cast<int>(b1x), static_cast<int>(b1y), RED);
 	//DrawTexture(texture, static_cast<int>(b2x), static_cast<int>(b2y), GREEN);
 	//DrawTexture(texture, static_cast<int>(b3x), static_cast<int>(b3y), BLUE);
 
+}
+
+void ArcanistSignature::CollisionCheck(DynamicEntity* entity)
+{
+	if (b1x  < entity->x + entity->width
+		&& b1x + ballWidth  > entity->x
+		&& b1y  < entity->y + entity->height
+		&& b1y + ballHeight  > entity->y)
+	{
+		entity->TakeDamage(1);
+	}
+	if (b2x  < entity->x + entity->width
+		&& b2x + ballWidth  > entity->x
+		&& b2y  < entity->y + entity->height
+		&& b2y + ballHeight  > entity->y)
+	{
+		entity->TakeDamage(1);
+	}
+	if (b3x  < entity->x + entity->width
+		&& b3x + ballWidth  > entity->x
+		&& b3y  < entity->y + entity->height
+		&& b3y + ballHeight  > entity->y)
+	{
+		entity->TakeDamage(1);
+	}
 }
 
 
