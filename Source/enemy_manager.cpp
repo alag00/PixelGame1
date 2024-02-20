@@ -16,6 +16,10 @@ void EnemyManager::CreateEnemies()
 		newEnemy->SetTexture(enemyTxr);
 		enemyList.push_back(newEnemy);
 	}
+	enemyTxr = LoadTexture("Resources/ImpBoss.png");
+	Boss* boss = new Boss(*playerRef);
+	boss->SetTexture(enemyTxr);
+	enemyList.push_back(boss);
 }
 void EnemyManager::Update(float deltaTime)
 {

@@ -5,6 +5,7 @@
 #include <vector>
 #include "button.h"
 #include "config.h"
+#include "zombie.h"
 
 class Effect  // Ice, Fire, 
 {
@@ -219,7 +220,7 @@ public:
 class NecromancerSignature : public Spell
 {
 private:
-	std::vector<DynamicEntity> zombieList;
+	std::vector<Zombie> zombieList; // Zombie vector
 public:
 	void Activate(DynamicEntity& caster) override
 	{
@@ -228,10 +229,19 @@ public:
 
 	void Update(float deltaTime)  override
 	{
-		deltaTime++;
+		for (int i = 0; i < zombieList.size(); i++)
+		{
+			zombieList.at(i).Update(deltaTime);
+		}
 	}
 	void Render()  override
 	{
+		
+		for (int i = 0; i < zombieList.size(); i++)
+		{
+			zombieList.at(i).Render();
+		}
+		
 	}
 };
 

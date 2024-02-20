@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\boss.cpp" />
     <ClCompile Include="Source\button.cpp" />
     <ClCompile Include="Source\dungeon_generation.cpp" />
     <ClCompile Include="Source\enemy.cpp" />
@@ -32,8 +33,10 @@
     <ClCompile Include="Source\player.cpp" />
     <ClCompile Include="Source\scene_manager.cpp" />
     <ClCompile Include="Source\spell.cpp" />
+    <ClCompile Include="Source\zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\boss.h" />
     <ClInclude Include="Source\button.h" />
     <ClInclude Include="Source\config.h" />
     <ClInclude Include="Source\dynamic_entity.h" />
@@ -52,6 +55,7 @@
     <ClInclude Include="Source\scene_manager.h" />
     <ClInclude Include="Source\hub_level.h" />
     <ClInclude Include="Source\spell.h" />
+    <ClInclude Include="Source\zombie.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

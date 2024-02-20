@@ -136,7 +136,7 @@ void DungeonManager::AddEnemiesToDungeon(std::vector<Enemy*> enemyList)
 	
 	}
 	*/
-	int availEnemy = static_cast<int>(enemyList.size());
+	int availEnemy = static_cast<int>(enemyList.size() - 1);
 	int enemyIndex = 0;
 	while (availEnemy > 0)
 	{
@@ -152,6 +152,7 @@ void DungeonManager::AddEnemiesToDungeon(std::vector<Enemy*> enemyList)
 			availEnemy--;
 		}
 	}
+	enemyList.back()->SetPosition(roomList.back()->GetCenter());
 }
 
 DungeonManager::~DungeonManager()

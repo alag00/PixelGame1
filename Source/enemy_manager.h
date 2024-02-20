@@ -1,6 +1,7 @@
 #pragma once
 #include "enemy.h"
 #include "config.h"
+#include "boss.h"
 
 // Holder of Textures
 class EnemyManager
