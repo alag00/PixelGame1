@@ -3,10 +3,10 @@
 #include "enemy.h"
 #include "config.h"
 
+
 enum BOSS_DECISION
 {
 	IDLE,
-	KNOCKBACK,
 	APPROACH,
 	ATTACK,
 };
@@ -17,8 +17,15 @@ private:
 	DynamicEntity* m_target = nullptr;
 	BOSS_DECISION dec = IDLE;
 	bool active = false;
-	float baseSpeed = 20.f;
-	float bonusSpeed = 1.f;
+	float baseSpeed = 150.f;
+
+	float distanceBetweenTarget = 0.f;
+	float attackRange = 100.f;
+	float attackCooldown = 0.f;
+	float chargeTime = 2.f;
+	float chargeCounter = chargeTime;
+	bool firstPhase = true;
+	bool attackActive = false;
 public:
 	Boss(DynamicEntity& target);
 	void Sense() override;
@@ -28,4 +35,7 @@ public:
 	void SpellCollisionCheck(DynamicEntity* other) override;
 	void Render() override;
 	void NextPhase();
+	void PushPlayer();
+	void Attack(float deltaTime);
+	void Approach(float deltaTime);
 };

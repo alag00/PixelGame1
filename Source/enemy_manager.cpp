@@ -21,13 +21,20 @@ void EnemyManager::CreateEnemies()
 	boss->SetTexture(enemyTxr);
 	enemyList.push_back(boss);
 }
-void EnemyManager::Update(float deltaTime)
+bool EnemyManager::Update(float deltaTime)
 {
 	// check if enemies are alive
 
 	if (enemyList.size() <= 0)
 	{
-		return;
+		return false;
+	}
+	if (!enemyList.back()->IsAlive())
+	{
+		delete enemyList.back();
+		enemyList.back() = nullptr;
+		enemyList.erase(enemyList.begin() + enemyList.size()-1);
+		return true;
 	}
 
 	for (int i = 0; i < enemyList.size(); i++)
@@ -44,7 +51,7 @@ void EnemyManager::Update(float deltaTime)
 	{
 		enemyList.at(i)->Update(deltaTime);
 	}
-
+	return false;
 }
 void EnemyManager::Render()
 {

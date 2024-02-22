@@ -13,8 +13,8 @@ private:
 	const static int MAX_SPELL_SLOTS = 10;
 	Spell* spellbook[MAX_SPELL_SLOTS] = {nullptr};
 
-	float acceleration = 10.f;
-	float startSpeed = 200.f;
+	float acceleration = 50.f;
+	float startSpeed = 300.f;
 	float speed = startSpeed;
 	float maxSpeed = 600.f;
 	bool isRunning = false;
@@ -28,7 +28,8 @@ public:
 	Player(int role, Camera2D& cam);
 	~Player();
 	//void SetStartPosition(Vector2 pos);
-	void Control();
+	void Control(float deltaTime);
+	void ReduceVelocity(float deltaTime);
 	void Movement(float deltaTime);
 	void UpdateSpellBook(float deltaTime);
 	void Update(float deltaTime) override;
@@ -43,5 +44,7 @@ public:
 	void ClassSetupEnchanter();
 	void ClassSetupRogue();
 	void ClassSetupPaladin();
+
+
 	
 };

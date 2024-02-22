@@ -50,7 +50,7 @@ void Level::LoadScene(GameInfo gameInfo)
 	dungeonManager.AddEnemiesToDungeon(enemyManager.GetEnemyList());
 	//hud.SetCamera(camera);
 	hud.SetPlayerRef(player);
-	
+	levelExit.SetPlayerRef(player);
 	
 }
 
@@ -78,11 +78,17 @@ void Level::LeaveScene(GameInfo& gameInfo)
 
 bool Level::Update()
 {
+	// Debug
+	if (IsKeyPressed(KEY_T))
+	{
+		player->SetPosition(dungeonManager.GetRoomList().back()->GetCenter());
+	}
+
+
 	UpdateEntities();
 	CollisionCheck();
-	UpdateGameState();
 	UpdateCamera();
-	return false;
+	return UpdateGameState();
 }
 
 void Level::UpdateEntities()
@@ -91,7 +97,11 @@ void Level::UpdateEntities()
 
 	player->Update(deltaTime);
 
-	enemyManager.Update(deltaTime);
+	if (enemyManager.Update(deltaTime))
+	{
+		levelExit.SetPosition(dungeonManager.GetRoomList().back()->GetCenter());
+		levelExit.MakeAvailable();
+	}
 
 	if (entityList.size() > 0)
 	{
@@ -103,9 +113,15 @@ void Level::UpdateEntities()
 	
 }
 
-void Level::UpdateGameState()
+bool Level::UpdateGameState()
 {
-
+	levelExit.Update();
+	if (levelExit.CheckActive())
+	{
+		nextScene = SCENE_TYPE::HUB;
+		return true;
+	}
+	return false;
 }
 
 void Level::CollisionCheck()
@@ -156,6 +172,7 @@ void Level::Render()
 	}
 	
 	player->Render();
+	levelExit.Render();
 	RenderUI();
 	EndMode2D();
 	EndDrawing();

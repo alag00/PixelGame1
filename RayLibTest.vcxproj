@@ -36,6 +36,7 @@
     <ClCompile Include="Source\zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\activator.h" />
     <ClInclude Include="Source\boss.h" />
     <ClInclude Include="Source\button.h" />
     <ClInclude Include="Source\config.h" />

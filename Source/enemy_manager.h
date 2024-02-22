@@ -14,7 +14,7 @@ public:
 	void SetPlayerRef(DynamicEntity* player);
 	void CreateEnemies();
 	std::vector<Enemy*> GetEnemyList() { return enemyList; };
-	void Update(float deltaTime);
+	bool Update(float deltaTime);
 	void Render();
 	void ClearList();
 	void SpawnEnemy();

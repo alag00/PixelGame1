@@ -1,4 +1,5 @@
 #include "player.h"
+#include <iostream>
 
 Player::Player(int role, Camera2D& cam)
 {
@@ -37,7 +38,7 @@ Player::Player(int role, Camera2D& cam)
 
 	width = texture.width * config.PIXEL_SCALE;
 	height = texture.height * config.PIXEL_SCALE;
-	
+
 }
 
 Player::~Player()
@@ -60,8 +61,11 @@ void Player::SetStartPosition(Vector2 pos)
 
 void Player::Update(float deltaTime)
 {
+	//std::cout << "player Vel X: " << velX << std::endl << "player Vel Y: " << velY << std::endl;
+
 	isColliding = false;
-	Control();
+	ReduceVelocity(deltaTime);
+	Control(deltaTime);
 	Movement(deltaTime);
 	UpdateSpellBook(deltaTime);
 }
@@ -209,40 +213,40 @@ void Player::ClassSetupPaladin()
 	SetHealth(150);
 }
 
-void Player::Control()
+void Player::Control(float deltaTime)
 {
-	velX = 0.f;
-	velY = 0.f;
+	
 	isRunning = false;
 
 
 	if (IsKeyPressed(KEY_P))
 	{
-		TakeDamage(15);
+		PushEntity(Vector2{10.f, 10.f});
 	}
 
 	if (IsKeyDown(KEY_W))
 	{
-		velY-= 1.f;
+		velY-= acceleration * deltaTime;
 		isRunning = true;
 	}
 	if (IsKeyDown(KEY_S))
 	{
-		velY+= 1.f;
+		velY+= acceleration * deltaTime;
 		isRunning = true;
 	}
 
 	if (IsKeyDown(KEY_A))
 	{
-		velX-= 1.f;
+		velX-= acceleration * deltaTime;
 		isRunning = true;
 	}
 	if (IsKeyDown(KEY_D))
 	{
-		velX+= 1.f;
+		velX+= acceleration * deltaTime;
 		isRunning = true;
 	}
 
+	/*
 	if (isRunning && speed <= maxSpeed)
 	{
 		speed += acceleration;
@@ -251,7 +255,7 @@ void Player::Control()
 	{
 		speed = startSpeed;
 	}
-	
+	*/
 	
 	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) // Basic Attack
 	{
@@ -271,6 +275,41 @@ void Player::Control()
 	}
 }
 
+void Player::ReduceVelocity(float deltaTime)
+{
+
+	if (velX <= 0.001f && velX >= -0.001f)
+	{
+		velX = 0.f;
+	}
+	if (velY <= 0.001f && velY >= -0.001f)
+	{
+		velY = 0.f;
+	}
+	
+
+	float retardation = 10.f;
+
+	if (velX > 0.f)
+	{
+		velX -= deltaTime * retardation;
+	}
+	if (velX < 0.f)
+	{
+		velX += deltaTime * retardation;
+	}
+
+
+	if (velY > 0.f)
+	{
+		velY -= deltaTime * retardation;
+	}
+	if (velY < 0.f)
+	{
+		velY += deltaTime * retardation;
+	}
+}
+
 void Player::Movement(float deltaTime)
 {
 	/**
@@ -280,14 +319,24 @@ void Player::Movement(float deltaTime)
 	velY = (velY / length);
 
 	*/
+	
+	
+	
+	
 	if (velX != 0.f && velY != 0.f)
 	{
+		//float length = sqrt((velX * velX) + (velY * velY));
+
+		//x += (velX / length) * deltaTime * speed;
+		//y += (velY / length) * deltaTime * speed;
 		// moving diagonally
-		velX /= sqrt(2.f);
-		velY /= sqrt(2.f);
+		
+		
 	}
-	
-	x += velX * deltaTime *  speed;
+	velX /= sqrt(2.f);
+	velY /= sqrt(2.f);
+
+	x += velX * deltaTime * speed;
 	y += velY * deltaTime * speed;
 	
 }
