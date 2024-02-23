@@ -2,7 +2,7 @@
 #include "raylib.h"
 #include "config.h"
 #include "player.h"
-
+#include <math.h>
 class Hud
 {
 private:
@@ -13,6 +13,10 @@ private:
 	Texture2D healthBarTxr{};
 	float hpX = 100.f;
 	float hpY = 100.f;
+	float hpW = 100.f;
+	float hpH = 100.f;
+	float barWidth = 0.f;
+	float playerHpPrec = 1.f;
 
 	Texture2D miniMapTxr{};
 	float mapX = 100.f;

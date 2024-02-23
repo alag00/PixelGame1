@@ -5,6 +5,7 @@
 {
 private:
 	int health = 0;
+	int maxHealth = 0;
 public:
 	float velX = 0.f;
 	float velY = 0.f;
@@ -28,6 +29,9 @@ public:
 		DrawRectangle(static_cast<int>(x), static_cast<int>(y), static_cast<int>(width), static_cast<int>(height), boxColor);
 
 	}
+	void SetMaxHealth(int newValue) { maxHealth = newValue; }
+	int GetMaxHealth() { return maxHealth; }
+
 	void SetHealth(int newValue) { health = newValue; }
 	int GetHealth() { return health; }
 	void TakeDamage(int totalDmg) { health -= totalDmg; }

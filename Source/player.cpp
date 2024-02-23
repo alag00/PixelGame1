@@ -147,6 +147,7 @@ void Player::ClassSetupArcanist()
 	ArcanistSignature* signatureSpell = new ArcanistSignature(*this);
 	spellbook[1] = signatureSpell;
 
+	SetMaxHealth(75);
 	SetHealth(75);
 }
 
@@ -158,6 +159,7 @@ void Player::ClassSetupSummoner()
 	signatureSpell->SetCamera(*_cam);
 	spellbook[1] = signatureSpell;
 
+	SetMaxHealth(75);
 	SetHealth(75);
 }
 
@@ -171,6 +173,7 @@ void Player::ClassSetupNecromancer()
 	basicAttack->SetTexture(basicTxr);
 	spellbook[0] = basicAttack;
 
+	SetMaxHealth(75);
 	SetHealth(75);
 }
 
@@ -182,6 +185,7 @@ void Player::ClassSetupEnchanter()
 	basicAttack->SetCamera(*_cam);
 	spellbook[0] = basicAttack;
 
+	SetMaxHealth(100);
 	SetHealth(100);
 }
 
@@ -198,6 +202,7 @@ void Player::ClassSetupRogue()
 	RogueSignature* signatureSpell = new RogueSignature();
 	spellbook[1] = signatureSpell;
 
+	SetMaxHealth(50);
 	SetHealth(50);
 }
 
@@ -212,6 +217,7 @@ void Player::ClassSetupPaladin()
 	PaladinSignature* signatureSpell = new PaladinSignature();
 	spellbook[1] = signatureSpell;
 
+	SetMaxHealth(150);
 	SetHealth(150);
 }
 

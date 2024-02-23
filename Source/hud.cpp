@@ -4,6 +4,9 @@
 Hud::Hud()
 {
 	healthBarTxr = LoadTexture("Resources/HealthBar.png");
+	hpW = healthBarTxr.width * config.PIXEL_SCALE;
+	hpH = healthBarTxr.height * config.PIXEL_SCALE;
+
 	miniMapTxr = LoadTexture("Resources/Frame.png");
 }
 
@@ -14,6 +17,8 @@ void Hud::SetPlayerRef(Player* ref)
 
 void Hud::UpdateHud(Camera2D cam)
 {
+	playerHpPrec = static_cast<float>(playerRef->GetHealth()) / static_cast<float>(playerRef->GetMaxHealth());
+	
 	Vector2 vec{ 50.f, 50.f };
 	hpX = GetScreenToWorld2D(vec, cam).x;
 	hpY = GetScreenToWorld2D(vec, cam).y;
@@ -31,34 +36,28 @@ void Hud::UpdateHud(Camera2D cam)
 }
 void Hud::RenderHud()
 {
-	DrawRectangle(static_cast<int>(hpX), static_cast<int>(hpY),
-		static_cast<int>(healthBarTxr.width * config.PIXEL_SCALE), 
-		static_cast<int>(healthBarTxr.height * config.PIXEL_SCALE), RED);
+	// Hp
+	DrawRectangle(static_cast<int>(hpX), static_cast<int>(hpY), static_cast<int>(std::lerp(0.f, hpW, playerHpPrec)), static_cast<int>(hpH), RED);
 
+	// HpBar
 	float rotation = 0.0f;
 	Rectangle src = { 0.f, 0.f, static_cast<float>(healthBarTxr.width), static_cast<float>(healthBarTxr.height) };
-	Rectangle dst = { hpX, hpY, static_cast<float>(healthBarTxr.width * config.PIXEL_SCALE), static_cast<float>(healthBarTxr.height * config.PIXEL_SCALE) };
+	Rectangle dst = { hpX, hpY, hpW, hpH };
 	Vector2 origin = { 0.f, 0.f };
-	//Vector2 origin = { static_cast<float>((healthBarTxr.width * config.PIXEL_SCALE) / 2.0f), static_cast<float>((healthBarTxr.height * config.PIXEL_SCALE) / 2.0f) };
+	
 	DrawTexturePro(healthBarTxr, src, dst, origin, rotation, WHITE);
 	DrawText(TextFormat("Health: %i", playerRef->GetHealth()), static_cast<int>(hpX), static_cast<int>(hpY), 25, BLACK);
 
+	// Map
 	DrawRectangle(static_cast<int>(mapX), static_cast<int>(mapY),
 		static_cast<int>(miniMapTxr.width * config.PIXEL_SCALE),
 		static_cast<int>(miniMapTxr.height * config.PIXEL_SCALE), GREEN);
 	
+	// Player Coords
 	DrawText(TextFormat("X: %i", coordX), static_cast<int>(mapX), static_cast<int>(mapY), 50, BLACK);
 	DrawText(TextFormat("Y: %i", coordY), static_cast<int>(mapX), static_cast<int>(mapY) + 50, 50, BLACK);
 
+	// Mouse Coords
 	DrawText(TextFormat("X: %i", mouseCoordX), static_cast<int>(mapX), static_cast<int>(mapY + 100), 25, BLACK);
 	DrawText(TextFormat("Y: %i", mouseCoordY), static_cast<int>(mapX), static_cast<int>(mapY) + 125, 25, BLACK);
-	/*
-	 src = { 0.f, 0.f, static_cast<float>(miniMapTxr.width), static_cast<float>(miniMapTxr.height) };
-	 dst = { mapX, mapY, static_cast<float>(miniMapTxr.width * config.PIXEL_SCALE), static_cast<float>(miniMapTxr.height * config.PIXEL_SCALE) };
-	 origin = { static_cast<float>(miniMapTxr.width / 2.0f), static_cast<float>(miniMapTxr.height / 2.0f) };
-
-	DrawTexturePro(miniMapTxr, src, dst, origin, rotation, WHITE);
-	*/
-
-
 }

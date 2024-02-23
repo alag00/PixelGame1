@@ -38,17 +38,12 @@ Level::~Level()
 void Level::LoadScene(GameInfo gameInfo)
 {
 	m_gameInfo = gameInfo;
-	// Create Map layout
-	// Create Entities
-	//roomManager.Setup();
 	dungeonManager.GenerateDungeon();
-
 	player = new Player(gameInfo.playerClass, camera);
 	player->SetPosition(dungeonManager.GetRoomList().front()->GetCenter());
 	enemyManager.SetPlayerRef(player);
 	enemyManager.CreateEnemies();
 	dungeonManager.AddEnemiesToDungeon(enemyManager.GetEnemyList());
-	//hud.SetCamera(camera);
 	hud.SetPlayerRef(player);
 	levelExit.SetPlayerRef(player);
 	
@@ -140,8 +135,8 @@ void Level::CollisionCheck()
 }
 void Level::UpdateCamera()
 {
-	camera.target.x = player->x - (config.screenWidth / 2.f);
-	camera.target.y = player->y - (config.screenHeight / 2.f);
+	camera.target.x = player->GetCenter().x - (config.screenWidth / 2.f);
+	camera.target.y = player->GetCenter().y - (config.screenHeight / 2.f);
 
 	hud.UpdateHud(camera);
 }
