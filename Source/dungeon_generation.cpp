@@ -87,12 +87,12 @@ void DungeonManager::AddBonusStuff()
 	// Take a leaf room(room with only one hallway) and
 }
 
-void DungeonManager::Render()
+void DungeonManager::Render(Rectangle cam)
 {
 
 	for (int i = 0; i < roomList.size(); i++)
 	{
-		roomList.at(i)->Render();
+		roomList.at(i)->Render(cam);
 	}
 	for (int i = 0; i < hallwayList.size(); i++)
 	{
@@ -100,7 +100,7 @@ void DungeonManager::Render()
 		{
 			continue;
 		}
-		hallwayList.at(i)->Render();
+		hallwayList.at(i)->Render(cam);
 	}
 }
 
@@ -370,6 +370,23 @@ Room::~Room()
 	{
 		delete neighborHalls.at(i);
 		neighborHalls.at(i) = nullptr;
+	}
+}
+
+void Room::Render(Rectangle cam)
+{
+	if (!(x  < cam.x + cam.width
+		&& x + width  > cam.x
+		&& y  < cam.y + cam.height
+		&& y + height  > cam.y))
+	{
+		return;
+	}
+
+	DrawRectangle(static_cast<int>(x), static_cast<int>(y), static_cast<int>(width), static_cast<int>(height), color);
+	for (int i = 0; i < collisionWalls.size(); i++)
+	{
+		DrawRectangle(static_cast<int>(collisionWalls.at(i).x), static_cast<int>(collisionWalls.at(i).y), static_cast<int>(collisionWalls.at(i).width), static_cast<int>(collisionWalls.at(i).height), YELLOW);
 	}
 }
 
@@ -682,8 +699,16 @@ void Hallway::Setup(EntryPoint src, Room* ownerOne, Room* ownerTwo, float bonusL
 	//ownerTwo->GenSetPosFromEntryPoints(src);
 }
 
-void Hallway::Render()
+void Hallway::Render(Rectangle cam)
 {
+	if ( !(x  < cam.x + cam.width
+		&& x + width  > cam.x
+		&& y  < cam.y + cam.height
+		&& y + height  > cam.y))
+	{
+		return;
+	}
+
 	Color color = WHITE;
 	switch (side)
 	{

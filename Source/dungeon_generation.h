@@ -32,7 +32,7 @@ private:
 public:
 	std::vector<Rectangle> collisionWalls{};
 	void Setup(EntryPoint src, Room* ownerOne, Room* ownerTwo, float bonusLen);
-	void Render();
+	void Render(Rectangle cam);
 	void FillContent();
 	void CollisionCheck(Entity* entity); // check if touching entity
 	void OnCollision(Entity* entity, Rectangle wall); // push entity back 
@@ -50,14 +50,16 @@ private:
 	bool taken = false;
 	bool active = false;
 	Config config;
+	
 public:
+	Color color = GRAY;
 	EntryPoint entries[4];  // 0 Top, 1 Bot, 3 Left, 4 Right
 	std::vector<Hallway*> neighborHalls{};
 	std::vector<Rectangle> collisionWalls{};
 
 	Room();
 	~Room();
-	virtual void Render() {};
+	virtual void Render(Rectangle cam);
 	virtual void FillContent();
 	void Setup(float xPos, float yPos, float l, float s);
 	void Activate() { active = true; }
@@ -74,42 +76,30 @@ class SpawnRoom : public Room
 {
 private:
 public:
-	void Render() override
+	void Render(Rectangle cam) override
 	{
-		DrawRectangle(static_cast<int>(x), static_cast<int>(y), static_cast<int>(width), static_cast<int>(height), WHITE);
-		for (int i = 0; i < collisionWalls.size(); i++)
-		{
-			DrawRectangle(static_cast<int>(collisionWalls.at(i).x), static_cast<int>(collisionWalls.at(i).y), static_cast<int>(collisionWalls.at(i).width), static_cast<int>(collisionWalls.at(i).height), YELLOW);
-		}
+		color = WHITE;
+		Room::Render(cam);
 	}
 };
 class BossRoom : public Room
 {
 private:
 public:
-	void Render() override
+	void Render(Rectangle cam) override
 	{
-		DrawRectangle(static_cast<int>(x), static_cast<int>(y), static_cast<int>(width), static_cast<int>(height), VIOLET);
-		for (int i = 0; i < collisionWalls.size(); i++)
-		{
-			DrawRectangle(static_cast<int>(collisionWalls.at(i).x), static_cast<int>(collisionWalls.at(i).y), static_cast<int>(collisionWalls.at(i).width), static_cast<int>(collisionWalls.at(i).height), YELLOW);
-		}
+		color = VIOLET;
+		Room::Render(cam);
 	}
 };
 class EnemyRoom : public Room
 {
 private:
-	Color color = WHITE;
+	
 public:
-	void Render() override
+	void Render(Rectangle cam) override
 	{
-		DrawRectangle(static_cast<int>(x), static_cast<int>(y), static_cast<int>(width), static_cast<int>(height), color);
-
-		for (int i = 0; i < collisionWalls.size(); i++)
-		{
-			DrawRectangle(static_cast<int>(collisionWalls.at(i).x), static_cast<int>(collisionWalls.at(i).y), static_cast<int>(collisionWalls.at(i).width), static_cast<int>(collisionWalls.at(i).height), YELLOW);
-		}
-
+		Room::Render(cam);
 	}
 	void SetRandomColor()
 	{
@@ -145,7 +135,7 @@ public:
 	void FillRooms();
 	void AddBonusStuff();
 	void AddEnemiesToDungeon(std::vector<Enemy*> enemyList);
-	void Render();
+	void Render(Rectangle cam);
 	void CollisionCheck(Entity* entity);
 	std::vector<Room*> GetRoomList(){return roomList;}
 	~DungeonManager();

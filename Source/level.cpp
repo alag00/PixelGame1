@@ -146,7 +146,10 @@ void Level::Render()
 	BeginMode2D(camera);
 	ClearBackground(BLACK);
 
-	dungeonManager.Render();
+	Rectangle cameraBox{camera.target.x , camera.target.y, 
+		static_cast<float>(config.screenWidth), static_cast<float>(config.screenHeight)};
+
+	dungeonManager.Render(cameraBox);
 	
 	if (staticEntityList.size() > 0)
 	{
@@ -168,6 +171,20 @@ void Level::Render()
 	
 	player->Render();
 	levelExit.Render();
+
+	//Debug
+	int x = static_cast<int>(cameraBox.x + 10);
+	int y = static_cast<int>(cameraBox.y + 10);
+	int width = static_cast<int>(cameraBox.width - 20);
+	int height = static_cast<int>(cameraBox.height - 20);
+
+	DrawLine(x, y, x + width, y, RED);
+	DrawLine(x, y, x , y + height, RED);
+	DrawLine(x + width, y + height, x - width, y + height, RED);
+	DrawLine(x + width, y + height, x + width, y - height, RED);
+	
+	
+	
 	RenderUI();
 	EndMode2D();
 	EndDrawing();
