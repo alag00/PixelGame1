@@ -188,9 +188,11 @@ void Player::ClassSetupEnchanter()
 void Player::ClassSetupRogue()
 {
 	texture = LoadTexture("Resources/Rogue.png");
+	Texture2D swordTexture = LoadTexture("Resources/Sword.png");
 
 	MeleeBasicAttack* basicAttack = new MeleeBasicAttack();
 	basicAttack->SetCamera(*_cam);
+	basicAttack->SetTexture(swordTexture);
 	spellbook[0] = basicAttack;
 
 	RogueSignature* signatureSpell = new RogueSignature();

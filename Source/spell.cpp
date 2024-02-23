@@ -40,7 +40,6 @@ void Bullet::SetTexture(Texture2D texture)
 	width = texture.width * config.PIXEL_SCALE;
 	height = texture.height * config.PIXEL_SCALE;
 }
-
 void Bullet::Update(float deltaTime)
 {
 
@@ -53,7 +52,6 @@ void Bullet::Update(float deltaTime)
 	}
 
 }
-
 void Bullet::Render()
 {
 	if (txr.id == 0)
@@ -206,6 +204,13 @@ RangedBasicAttack::~RangedBasicAttack()
 }
 
 
+void MeleeBasicAttack::SetTexture(Texture2D texture)
+{
+	swordTxr = texture;
+	width = swordTxr.width * config.PIXEL_SCALE;
+	height = swordTxr.height * config.PIXEL_SCALE;
+}
+
 void MeleeBasicAttack::Activate(DynamicEntity& caster)
 {
 	// Deny condition
@@ -217,8 +222,8 @@ void MeleeBasicAttack::Activate(DynamicEntity& caster)
 	activated = true;
 
 	// Bullet Direction
-	vectorX = m_caster->x - GetScreenToWorld2D(GetMousePosition(), *_cam).x;
-	vectorY = m_caster->y - GetScreenToWorld2D(GetMousePosition(), *_cam).y;
+	vectorX = m_caster->GetCenter().x - GetScreenToWorld2D(GetMousePosition(), *_cam).x;
+	vectorY = m_caster->GetCenter().y - GetScreenToWorld2D(GetMousePosition(), *_cam).y;
 
 	float length = sqrt((vectorX * vectorX) + (vectorY * vectorY));
 
@@ -260,8 +265,8 @@ void MeleeBasicAttack::Update(float deltaTime)
 		angle -= deltaTime * speed;
 	}
 
-	xPos = m_caster->x + std::cos(angle) * range;
-	yPos = m_caster->y + std::sin(angle) * range;
+	xPos = m_caster->GetCenter().x + std::cos(angle) * range;
+	yPos = m_caster->GetCenter().y + std::sin(angle) * range;
 
 
 
@@ -283,11 +288,72 @@ void MeleeBasicAttack::Update(float deltaTime)
 }
 void MeleeBasicAttack::Render()
 {
-	if (activated)
+	if (!activated)
 	{
-		DrawCircle(static_cast<int>(xPos), static_cast<int>(yPos), size, RED);
+		return;
+		//DrawCircle(static_cast<int>(xPos), static_cast<int>(yPos), size, RED);
 	}
+	if (swordTxr.id == 0)
+	{
+		DrawCircle(static_cast<int>(xPos), static_cast<int>(yPos), size, ORANGE);
+		return;
+	}
+	
+	//float x = xPos - (width / 2.f);
+	//float y = yPos - (height / 2.f);
+	// Nearest Point
+	/*
+	Vector2 nearestPoint;
+	nearestPoint.x = std::max(x, std::min(x + width, m_caster->GetCenter().x));
+	nearestPoint.y = std::max(y, std::min(y + height, m_caster->GetCenter().y));
+	DrawCircle(static_cast<int>(nearestPoint.x), static_cast<int>(nearestPoint.y), 3.f, RED);
+	*/
+	Vector2 nP{ 0.f, 0.f };
+	nP.x = m_caster->GetCenter().x - xPos;
+	nP.y = m_caster->GetCenter().y - yPos;
+
+	float magV = sqrt((nP.x * nP.x) + (nP.y * nP.y));
+	float aX = xPos + (nP.x / magV) * (height / 2.f);
+	float aY = yPos + (nP.y / magV) * (height / 2.f);
+
+	// Texture
+	Rectangle src = { 0.f, 0.f, static_cast<float>(swordTxr.width), static_cast<float>(swordTxr.height) };
+	Rectangle dst = { aX , aY , width, height};
+	Vector2 origin = { width / 2.0f, height };
+	//Vector2 origin = { static_cast<float>((swordTxr.width * config.PIXEL_SCALE) / 2.0f), static_cast<float>((swordTxr.width * config.PIXEL_SCALE) / 2.0f) };
+	rotation = (angle * (180 / PI)) + 90.f ;
+	DrawTexturePro(swordTxr, src, dst, origin, rotation, WHITE);
+	
+	
+	// Collision Circle
+	Color color = YELLOW;
+	color.a = 50;
+	DrawCircle(static_cast<int>(xPos), static_cast<int>(yPos), height / 2.f, color);
+	//DrawRectangle(static_cast<int>(x), static_cast<int>(y), static_cast<int>(width), static_cast<int>(height), color);
+
+
 }
+
+void MeleeBasicAttack::CollisionCheck(DynamicEntity* entity)
+{
+	float x = xPos - (width / 2.f);
+	float y = yPos - (height / 2.f);
+
+	Vector2 nearestPoint;
+	nearestPoint.x = std::max(entity->x, std::min(entity->x + entity->width, xPos));
+	nearestPoint.y = std::max(entity->y, std::min(entity->y + entity->height, yPos));
+	
+	float vX = nearestPoint.x - x;
+	float vY = nearestPoint.y - y;
+
+	float distance = sqrt((vX * vX) + (vY * vY));
+	if (distance <= height / 2.f)
+	{
+		entity->TakeDamage(10);
+	}
+	
+}
+
 
 
 

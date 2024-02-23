@@ -6,6 +6,7 @@
 #include "button.h"
 #include "config.h"
 #include "zombie.h"
+#include <algorithm>
 
 class Effect  // Ice, Fire, 
 {
@@ -96,24 +97,30 @@ private:
 	float xPos = 0.f;
 	float yPos = 0.f;
 
+	float rotation = 0.f;
+
 	float size = 5.f;
-	float range = 40.f;
+	float range = 100.f;
 	float angle = 0.f;
 	float speed = 15.f;
 	float limit = 45.f;
 	bool activated = false;
-
+	float width = 0.f;
+	float height = 0.f;
 	float vectorX = 0.f;
 	float vectorY = 0.f;
 	const float angleOffset = PI / 3.f;
 	bool reverse = false;
+	Texture2D swordTxr{};
+	Config config;
 public:
 	MeleeBasicAttack(){cooldownMax = 0.2f;}
-
+	void SetTexture(Texture2D texture);
 	void SetInitialSwing(bool reverseSwing){reverse = reverseSwing;}
 	void Activate(DynamicEntity& caster) override;
 	void Update(float deltaTime) override;
 	void Render() override;
+	void CollisionCheck(DynamicEntity* entity) override;
 };
 
 // Signature Spells

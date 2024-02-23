@@ -125,5 +125,11 @@
     <ClInclude Include="Source\activator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\card_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\card.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

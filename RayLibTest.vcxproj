@@ -39,6 +39,8 @@
     <ClInclude Include="Source\activator.h" />
     <ClInclude Include="Source\boss.h" />
     <ClInclude Include="Source\button.h" />
+    <ClInclude Include="Source\card.h" />
+    <ClInclude Include="Source\card_manager.h" />
     <ClInclude Include="Source\config.h" />
     <ClInclude Include="Source\dynamic_entity.h" />
     <ClInclude Include="Source\enemy.h" />
