@@ -6,6 +6,7 @@
 private:
 	int health = 0;
 	int maxHealth = 0;
+	bool invincible = false;
 public:
 	float velX = 0.f;
 	float velY = 0.f;
@@ -53,4 +54,7 @@ public:
 
 		return Vector2{vectorX, vectorY};
 	}
+
+	void SetInvincibility(bool newValue) { invincible = newValue; }
+	bool GetInvincibility() { return invincible; }
 };

@@ -22,14 +22,18 @@ Vector2 Spell::GetNormalizedVector(float srcX, float srcY, float dstX, float dst
 	return Vector2{vectorX, vectorY};
 }
 
-float Spell::GetAngleFromVectors(Vector2 vec1, Vector2 vec2)
+float Spell::GetAngleFromVector(Vector2 vec)
 {
+	/*
 	float dot =  (vec1.x * vec2.x) + (vec1.y * vec2.y);
 	float mag1 = sqrt((vec1.x * vec1.x) + (vec1.y * vec1.y));
 	float mag2 = sqrt((vec2.x * vec2.x) + (vec2.y * vec2.y));
 	float radianAngle = acos(dot / (mag1 * mag2));
 
 	return (radianAngle * (180 / PI));
+	*/
+	float radianAngle = atan2(vec.x, vec.y);
+	return (radianAngle * (180 / PI)) + 90.f;
 }
 
 
@@ -140,8 +144,7 @@ void RangedBasicAttack::Trigger(float srcX, float srcY, float dstX, float dstY)
 	newBullet->velX = -dir.x + (m_caster->velX * velocityInfluence);
 	newBullet->velY = -dir.y + (m_caster->velY * velocityInfluence);
 
-	Vector2 startVec{-1, 1};
-	newBullet->SetRotation(GetAngleFromVectors(startVec, dir));
+	newBullet->SetRotation(GetAngleFromVector(dir));
 	bulletList[availableIndex] = newBullet;
 	activeBullets++;
 }
@@ -460,6 +463,9 @@ Soldier::Soldier(Texture2D newStatue, Texture2D newSword)
 {
 	statueTxr = newStatue;
 	swordTxr = newSword;
+
+	width = statueTxr.width * config.PIXEL_SCALE;
+	height = statueTxr.height * config.PIXEL_SCALE;
 }
 
 void Soldier::Update(float deltaTime)
@@ -493,6 +499,7 @@ void Soldier::Update(float deltaTime)
 	}
 	swordPosX = std::lerp(srcX, dstX, progress);
 	swordPosY = std::lerp(srcY, dstY, progress);
+	swordCenter = { swordPosX + ((swordTxr.width * config.PIXEL_SCALE) / 2.f), swordPosY + ((swordTxr.height * config.PIXEL_SCALE) / 2.f) };
 
 
 }
@@ -503,44 +510,96 @@ void Soldier::Attack(Vector2 mousePos)
 		return;
 	}
 	// Calculate direction
-	float vectorX = x - mousePos.x;
-	float vectorY = y - mousePos.y;
+	float centerX = GetCenter().x;
+	float centerY = GetCenter().y;
+
+	float vectorX = centerX - mousePos.x;
+	float vectorY = centerY - mousePos.y;
 
 	float length = sqrt((vectorX * vectorX) + (vectorY * vectorY));
 
 	vectorX = -(vectorX / length);
 	vectorY = -(vectorY / length);
 
-	dstX = x + (vectorX * range);
-	dstY = y + (vectorY * range);
+	dstX = centerX + (vectorX * range);
+	dstY = centerY + (vectorY * range);
 
-	srcX = x;
-	srcY = y;
+	srcX = centerX;
+	srcY = centerY;
 
 	progress = 0.f;
 	reverse = false;
 	activated = true;
+
+
+	float radianAngle = atan2(vectorY, vectorX);
+	rotation = (radianAngle * (180 / PI)) + 90.f;
+	/*
+	Vector2 vec1{-1.f, -1.f};
+	float dot = (vec1.x * vectorX) + (vec1.y * vectorY);
+	float mag1 = sqrt((vec1.x * vec1.x) + (vec1.y * vec1.y));
+	float mag2 = sqrt((vectorX * vectorX) + (vectorY * vectorY));
+	float radianAngle = acos(dot / (mag1 * mag2));
+
+	rotation = (radianAngle * (180 / PI));
+	*/
+	
 }
 void Soldier::Render()
 {
 	Rectangle src = { 0.f, 0.f, static_cast<float>(statueTxr.width), static_cast<float>(statueTxr.height) };
-	Rectangle dst = { x, y, static_cast<float>(statueTxr.width * config.PIXEL_SCALE), static_cast<float>(statueTxr.height * config.PIXEL_SCALE) };
-	Vector2 origin = { static_cast<float>(statueTxr.width / 2.0f), static_cast<float>(statueTxr.height / 2.0f) };
-	float rotation = 0.0f;
+	Rectangle dst = { x, y, width, height };
+	Vector2 origin = {0.f, 0.f};
+	
 
-	DrawTexturePro(statueTxr, src, dst, origin, rotation, WHITE);
+	DrawTexturePro(statueTxr, src, dst, origin, 0.f, WHITE);
+
+	Color hitboxColor = YELLOW;
+	hitboxColor.a = 50;
+	DrawRectangle(static_cast<int>(x), static_cast<int>(y), static_cast<int>(width), static_cast<int>(height), hitboxColor);
 
 	if (!activated)
 	{
 		return;
 	}
+	
+	Vector2 nP{ 0.f, 0.f };
+	nP.x = GetCenter().x - swordPosX;
+	nP.y = GetCenter().y - swordPosY;
+
+	float magV = sqrt((nP.x * nP.x) + (nP.y * nP.y));
+	float aX = swordPosX + (nP.x / magV) * (height / 2.f);
+	float aY = swordPosY + (nP.y / magV) * (height / 2.f);
+
 	 src = { 0.f, 0.f, static_cast<float>(swordTxr.width), static_cast<float>(swordTxr.height) };
-	 dst = { x, y, static_cast<float>(swordTxr.width * config.PIXEL_SCALE), static_cast<float>(swordTxr.height * config.PIXEL_SCALE) };
-	 origin = { static_cast<float>(swordTxr.width / 2.0f), static_cast<float>(swordTxr.height / 2.0f) };
+	 dst = { aX, aY, static_cast<float>(swordTxr.width * config.PIXEL_SCALE), static_cast<float>(swordTxr.height * config.PIXEL_SCALE) };
+	 origin = { static_cast<float>(swordTxr.width * config.PIXEL_SCALE) / 2.f, static_cast<float>(swordTxr.height * config.PIXEL_SCALE) };
 	
 
 	DrawTexturePro(swordTxr, src, dst, origin, rotation, WHITE);
-	//	DrawCircle(static_cast<int>(swordPosX), static_cast<int>(swordPosY), swordSize, RED);
+	DrawCircle(static_cast<int>(swordPosX), static_cast<int>(swordPosY), height / 2.f, hitboxColor);
+
+		//DrawCircle(static_cast<int>(swordPosX), static_cast<int>(swordPosY), swordSize, RED);
+}
+
+void Soldier::CollisionCheck(DynamicEntity* entity)
+{
+	float _x = swordPosX - (width / 2.f);
+	float _y = swordPosY - (height / 2.f);
+   
+	Vector2 nearestPoint;
+	nearestPoint.x = std::max(entity->x, std::min(entity->x + entity->width, swordPosX));
+	nearestPoint.y = std::max(entity->y, std::min(entity->y + entity->height, swordPosY));
+
+	float vX = nearestPoint.x - _x;
+	float vY = nearestPoint.y - _y;
+
+	float distance = sqrt((vX * vX) + (vY * vY));
+	if (distance <= height / 2.f)
+	{
+		entity->TakeDamage(10);
+	}
+
 }
 
 
@@ -559,8 +618,8 @@ void SummonerSignature::Activate(DynamicEntity& caster)
 	m_caster = &caster;
 	// summon soldier at mouse pos
 	Soldier* newSoldier = new Soldier(soldierTxr, swordTxr);
-	newSoldier->x = GetScreenToWorld2D(GetMousePosition(), *_cam).x;
-	newSoldier->y = GetScreenToWorld2D(GetMousePosition(), *_cam).y;
+	newSoldier->x = GetScreenToWorld2D(GetMousePosition(), *_cam).x - (newSoldier->width / 2.f);
+	newSoldier->y = GetScreenToWorld2D(GetMousePosition(), *_cam).y - (newSoldier->height / 2.f);
 	soldiers.push_back(newSoldier);
 	cooldown = cooldownMax;
 }
@@ -609,6 +668,17 @@ void SummonerSignature::Render()
 			continue;
 		}
 		soldiers.at(i)->Render();
+	}
+}
+void SummonerSignature::CollisionCheck(DynamicEntity* entity)
+{
+	for (int i = 0; i < soldiers.size(); i++)
+	{
+		if (soldiers.at(i) == nullptr)
+		{
+			continue;
+		}
+		soldiers.at(i)->CollisionCheck(entity);
 	}
 }
 SummonerSignature::~SummonerSignature()

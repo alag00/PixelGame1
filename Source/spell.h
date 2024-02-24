@@ -38,7 +38,7 @@ public:
 	virtual void Update(float deltaTime) {deltaTime++;}
 	virtual void Render(){}
 	Vector2 GetNormalizedVector(float srcX, float srcY, float dstX, float dstY);
-	float GetAngleFromVectors(Vector2 vec1, Vector2 vec2);
+	float GetAngleFromVector(Vector2 vec);
 	virtual void CollisionCheck(DynamicEntity* entity) { entity; }
 };
 
@@ -188,6 +188,7 @@ private:
 	float swordPosY = 0.f;
 	float swordSpeed = 5.f;
 	float range = 100.f;
+	float rotation = 0.f;
 	//bool attacking = false;
 	float srcX = 0.f;
 	float srcY = 0.f;
@@ -199,12 +200,14 @@ private:
 	Texture2D statueTxr = {};
 	Texture2D swordTxr = {};
 	Config config;
+	Vector2 swordCenter{ 0.f, 0.f };
 public:
 	Soldier(Texture2D newStatue, Texture2D newSword);
 	void Update(float deltaTime);
 	void Attack(Vector2 mousePos);
 	void Render();
 	bool IsAlive(){return alive;}
+	void CollisionCheck(DynamicEntity* entity);
 };
 
 class SummonerSignature : public Spell
@@ -218,6 +221,7 @@ public:
 	void Activate(DynamicEntity& caster) override;
 	void Update(float deltaTime) override;
 	void Render() override;
+	void CollisionCheck(DynamicEntity* entity) override;
 	~SummonerSignature();
 };
 
