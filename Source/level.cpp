@@ -60,10 +60,12 @@ bool Level::Update()
 void Level::UpdateEntities()
 {
 	float deltaTime = GetFrameTime();
-
 	player->Update(deltaTime);
 
-	if (enemyManager.Update(deltaTime))
+	Rectangle cameraBox{ camera.target.x , camera.target.y,
+		static_cast<float>(config.screenWidth), static_cast<float>(config.screenHeight) };
+
+	if (enemyManager.Update(deltaTime, cameraBox))
 	{
 		levelExit.SetPosition(dungeonManager.GetRoomList().back()->GetCenter());
 		levelExit.MakeAvailable();

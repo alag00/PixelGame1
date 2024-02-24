@@ -2,6 +2,10 @@
 
 void Enemy::Update(float deltaTime) 
 {
+	if (!GetIsActive())
+	{
+		return;
+	}
 	timer += deltaTime;
 	if (timer >= RESPOND_TIME)
 	{
@@ -23,6 +27,10 @@ bool Enemy::IsAlive()
 
 void Enemy::Render()
 {
+	if (!GetIsActive())
+	{
+		return;
+	}
 	Rectangle src = { 0.f, 0.f, static_cast<float>(texture.width), static_cast<float>(texture.height) };
 	Rectangle dst = { x, y, static_cast<float>(texture.width * config.PIXEL_SCALE), static_cast<float>(texture.height * config.PIXEL_SCALE) };
 	Vector2 origin = { 0.f, 0.f };
@@ -40,6 +48,19 @@ void Enemy::SetTexture(Texture2D txr)
 	texture = txr;	
 	width = texture.width * config.PIXEL_SCALE;
 	height = texture.height * config.PIXEL_SCALE;
+}
+
+void Enemy::InFrameCheck(Rectangle cam)
+{
+	if (x  < cam.x + cam.width
+		&& x + width  > cam.x
+		&& y  < cam.y + cam.height
+		&& y + height  > cam.y)
+	{
+		SetIsActive(true);
+		return;
+	}
+	SetIsActive(false);
 }
 
 // Imp

@@ -15,7 +15,7 @@ void Hud::SetPlayerRef(Player* ref)
 	playerRef = ref;
 }
 
-void Hud::SetBossRef(DynamicEntity* ref)
+void Hud::SetBossRef(Enemy* ref)
 {
 	bossRef = ref;
 }
@@ -43,6 +43,10 @@ void Hud::UpdateHud(Camera2D cam)
 	mouseCoordY = static_cast<int>(GetScreenToWorld2D(GetMousePosition(), cam).y);
 
 	// BOSS HP
+	if (!bossRef->GetIsActive() || !bossRef->IsAlive())
+	{
+		return;
+	}
 	vec = { (config.screenWidth / 2.f) - (bossHpBar.width / 2.f), config.screenHeight - (bossHpBar.height + 10.f)};
 	bossHpBar.x = GetScreenToWorld2D(vec, cam).x;
 	bossHpBar.y = GetScreenToWorld2D(vec, cam).y;
@@ -77,5 +81,9 @@ void Hud::RenderHud()
 	DrawText(TextFormat("Y: %i", mouseCoordY), static_cast<int>(mapX), static_cast<int>(mapY) + 125, 25, BLACK);
 
 	// Boss Hp
+	if (!bossRef->GetIsActive() || !bossRef->IsAlive())
+	{
+		return;
+	}
 	DrawRectangle(static_cast<int>(bossHpBar.x), static_cast<int>(bossHpBar.y), static_cast<int>(currentBossWidth) , static_cast<int>(bossHpBar.height), RED);
 }

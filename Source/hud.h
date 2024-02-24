@@ -2,6 +2,7 @@
 #include "raylib.h"
 #include "config.h"
 #include "player.h"
+#include "enemy.h"
 #include <math.h>
 class Hud
 {
@@ -9,7 +10,7 @@ private:
 	Config config;
 	
 	Player* playerRef = nullptr;
-	DynamicEntity* bossRef = nullptr;
+	Enemy* bossRef = nullptr;
 
 	Texture2D healthBarTxr{};
 	float hpX = 100.f;
@@ -38,7 +39,7 @@ private:
 public:
 	Hud();
 	void SetPlayerRef(Player* ref);
-	void SetBossRef(DynamicEntity* ref);
+	void SetBossRef(Enemy* ref);
 	void UpdateHud(Camera2D cam);
 	void RenderHud();
 };

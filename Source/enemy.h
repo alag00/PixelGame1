@@ -17,6 +17,7 @@ class Enemy : public DynamicEntity
 private:
 	float timer = 0.f;
 	const float RESPOND_TIME = 0.25f;
+	bool isActive = false;
 public:
 	Config config;
 	Texture2D texture = {};
@@ -29,6 +30,10 @@ public:
 	bool IsAlive();
 	virtual void Render() override;
 	void SetTexture(Texture2D txr);
+
+	void InFrameCheck(Rectangle cam);
+	bool GetIsActive() { return isActive; }
+	void SetIsActive(bool newValue) { isActive = newValue; }
 };
 class Imp : public Enemy
 {

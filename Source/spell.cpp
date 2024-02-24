@@ -210,7 +210,6 @@ void MeleeBasicAttack::SetTexture(Texture2D texture)
 	width = swordTxr.width * config.PIXEL_SCALE;
 	height = swordTxr.height * config.PIXEL_SCALE;
 }
-
 void MeleeBasicAttack::Activate(DynamicEntity& caster)
 {
 	// Deny condition

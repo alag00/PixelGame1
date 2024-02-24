@@ -21,7 +21,7 @@ void EnemyManager::CreateEnemies()
 	boss->SetTexture(enemyTxr);
 	enemyList.push_back(boss);
 }
-bool EnemyManager::Update(float deltaTime)
+bool EnemyManager::Update(float deltaTime, Rectangle cam)
 {
 	// check if enemies are alive
 
@@ -49,6 +49,7 @@ bool EnemyManager::Update(float deltaTime)
 
 	for (int i = 0; i < enemyList.size(); i++)
 	{
+		enemyList.at(i)->InFrameCheck(cam);
 		enemyList.at(i)->Update(deltaTime);
 	}
 	return false;
