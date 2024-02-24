@@ -12,27 +12,9 @@ Level::~Level()
 	delete player;
 	player = nullptr;
 
-	// delete theBugMan;
-	// theBugMan = nullptr;
-	if (entityList.size() > 0)
-	{
-		for (int i = 0; i < entityList.size(); i++)
-		{
-			delete entityList.at(i);
-			entityList.at(i) = nullptr;
-		}
-	}
-
+	
 	enemyManager.ClearList();
-
-	if (staticEntityList.size() > 0)
-	{
-		for (int i = 0; i < staticEntityList.size(); i++)
-		{
-			delete staticEntityList.at(i);
-			staticEntityList.at(i) = nullptr;
-		}
-	}
+	
 }
 
 void Level::LoadScene(GameInfo gameInfo)
@@ -45,6 +27,7 @@ void Level::LoadScene(GameInfo gameInfo)
 	enemyManager.CreateEnemies();
 	dungeonManager.AddEnemiesToDungeon(enemyManager.GetEnemyList());
 	hud.SetPlayerRef(player);
+	hud.SetBossRef(enemyManager.GetEnemyList().back());
 	levelExit.SetPlayerRef(player);
 	
 }
@@ -55,19 +38,7 @@ void Level::LeaveScene(GameInfo& gameInfo)
 	delete player;
 	player = nullptr;
 
-	for (int i = 0; i < entityList.size(); i++)
-	{
-		delete entityList.at(i);
-		entityList.at(i) = nullptr;
-	}
-
 	enemyManager.ClearList();
-
-	for (int i = 0; i < staticEntityList.size(); i++)
-	{
-		delete staticEntityList.at(i);
-		staticEntityList.at(i) = nullptr;
-	}
 
 }
 
@@ -97,15 +68,6 @@ void Level::UpdateEntities()
 		levelExit.SetPosition(dungeonManager.GetRoomList().back()->GetCenter());
 		levelExit.MakeAvailable();
 	}
-
-	if (entityList.size() > 0)
-	{
-		for (int i = 0; i < entityList.size(); i++)
-		{
-			entityList.at(i)->Update(deltaTime);
-		}
-	}
-	
 }
 
 bool Level::UpdateGameState()
@@ -150,29 +112,13 @@ void Level::Render()
 		static_cast<float>(config.screenWidth), static_cast<float>(config.screenHeight)};
 
 	dungeonManager.Render(cameraBox);
-	
-	if (staticEntityList.size() > 0)
-	{
-		for (int i = 0; i < staticEntityList.size(); i++)
-		{
-			staticEntityList.at(i)->Render();
-		}
-	}
-
 	enemyManager.Render();
-
-	if (entityList.size() > 0)
-	{
-		for (int i = 0; i < entityList.size(); i++)
-		{
-			entityList.at(i)->Render();
-		}
-	}
 	
 	player->Render();
 	levelExit.Render();
 
 	//Debug
+	/*
 	int x = static_cast<int>(cameraBox.x + 10);
 	int y = static_cast<int>(cameraBox.y + 10);
 	int width = static_cast<int>(cameraBox.width - 20);
@@ -182,7 +128,7 @@ void Level::Render()
 	DrawLine(x, y, x , y + height, RED);
 	DrawLine(x + width, y + height, x - width, y + height, RED);
 	DrawLine(x + width, y + height, x + width, y - height, RED);
-	
+	*/
 	
 	
 	RenderUI();
@@ -192,7 +138,6 @@ void Level::Render()
 
 void Level::RenderUI()
 {
-	// Hud, Buttons and such
 	hud.RenderHud();
 }
 

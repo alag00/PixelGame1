@@ -9,6 +9,7 @@ private:
 	Config config;
 	
 	Player* playerRef = nullptr;
+	DynamicEntity* bossRef = nullptr;
 
 	Texture2D healthBarTxr{};
 	float hpX = 100.f;
@@ -27,6 +28,9 @@ private:
 
 	int mouseCoordX = 100;
 	int mouseCoordY = 100;
+
+	Rectangle bossHpBar{100.f, 100.f, 400.f, 75.f};
+	float currentBossWidth = 100.f;
 	// Health
 	// Mini Map
 	// Some other stuff
@@ -34,6 +38,7 @@ private:
 public:
 	Hud();
 	void SetPlayerRef(Player* ref);
+	void SetBossRef(DynamicEntity* ref);
 	void UpdateHud(Camera2D cam);
 	void RenderHud();
 };

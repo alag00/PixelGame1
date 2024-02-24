@@ -15,24 +15,39 @@ void Hud::SetPlayerRef(Player* ref)
 	playerRef = ref;
 }
 
+void Hud::SetBossRef(DynamicEntity* ref)
+{
+	bossRef = ref;
+}
+
 void Hud::UpdateHud(Camera2D cam)
 {
+	// PLAYER HP
 	playerHpPrec = static_cast<float>(playerRef->GetHealth()) / static_cast<float>(playerRef->GetMaxHealth());
-	
 	Vector2 vec{ 50.f, 50.f };
 	hpX = GetScreenToWorld2D(vec, cam).x;
 	hpY = GetScreenToWorld2D(vec, cam).y;
 	
+	// MAP
 	vec = {config.screenWidth - (miniMapTxr.width * config.PIXEL_SCALE), 0.f};
 	mapX = GetScreenToWorld2D(vec, cam).x;
 	mapY = GetScreenToWorld2D(vec, cam).y;
 
+	// PLAYER COORDS
 	vec = {config.screenWidth / 2.f, config.screenHeight / 2.f };
 	coordX = static_cast<int>(GetScreenToWorld2D(vec, cam).x);
 	coordY = static_cast<int>(GetScreenToWorld2D(vec, cam).y);
 
+	// MOUSE COORDS
 	mouseCoordX = static_cast<int>(GetScreenToWorld2D(GetMousePosition(), cam).x);
 	mouseCoordY = static_cast<int>(GetScreenToWorld2D(GetMousePosition(), cam).y);
+
+	// BOSS HP
+	vec = { (config.screenWidth / 2.f) - (bossHpBar.width / 2.f), config.screenHeight - (bossHpBar.height + 10.f)};
+	bossHpBar.x = GetScreenToWorld2D(vec, cam).x;
+	bossHpBar.y = GetScreenToWorld2D(vec, cam).y;
+	float bossHpPrec = static_cast<float>(bossRef->GetHealth()) / static_cast<float>(bossRef->GetMaxHealth());
+	currentBossWidth = std::lerp(0.f, bossHpBar.width, bossHpPrec);
 }
 void Hud::RenderHud()
 {
@@ -60,4 +75,7 @@ void Hud::RenderHud()
 	// Mouse Coords
 	DrawText(TextFormat("X: %i", mouseCoordX), static_cast<int>(mapX), static_cast<int>(mapY + 100), 25, BLACK);
 	DrawText(TextFormat("Y: %i", mouseCoordY), static_cast<int>(mapX), static_cast<int>(mapY) + 125, 25, BLACK);
+
+	// Boss Hp
+	DrawRectangle(static_cast<int>(bossHpBar.x), static_cast<int>(bossHpBar.y), static_cast<int>(currentBossWidth) , static_cast<int>(bossHpBar.height), RED);
 }

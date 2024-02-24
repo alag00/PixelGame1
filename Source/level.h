@@ -20,11 +20,8 @@ private:
 	SCENE_TYPE nextScene = SCENE_TYPE::NONE;
 	Config config;
 	GameInfo m_gameInfo;
-	std::vector<DynamicEntity*> entityList; // stuffl ike enemies // should be in enemymanager
-	std::vector<Entity*> staticEntityList; // stuff like walls
 	EnemyManager enemyManager;
 	Player* player = nullptr;
-	//RoomManager roomManager;
 	DungeonManager dungeonManager;
 	Camera2D camera = {};
 	Hud hud;

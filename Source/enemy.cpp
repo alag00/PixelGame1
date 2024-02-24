@@ -49,7 +49,7 @@ Imp::Imp(DynamicEntity& target)
 	bulletTxr = LoadTexture("Resources/FireBolt.png");
 	basic.SetTexture(bulletTxr);
 	SetHealth(5);
-
+	
 }
 void Imp::Sense() 
 {

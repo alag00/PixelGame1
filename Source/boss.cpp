@@ -4,6 +4,7 @@ Boss::Boss(DynamicEntity& target)
 {
 	m_target = &target;
 	SetHealth(150);
+	SetMaxHealth(150);
 }
 
 void Boss::Sense()
