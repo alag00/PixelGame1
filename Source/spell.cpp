@@ -141,8 +141,8 @@ void RangedBasicAttack::Trigger(float srcX, float srcY, float dstX, float dstY)
 	*/
 
 	Vector2 dir = GetNormalizedVector(srcX, srcY, dstX, dstY);
-	newBullet->velX = -dir.x + (m_caster->velX * velocityInfluence);
-	newBullet->velY = -dir.y + (m_caster->velY * velocityInfluence);
+	newBullet->velX = -dir.x;// +(m_caster->velX * velocityInfluence);
+	newBullet->velY = -dir.y;// +(m_caster->velY * velocityInfluence);
 
 	newBullet->SetRotation(GetAngleFromVector(dir));
 	bulletList[availableIndex] = newBullet;
@@ -190,7 +190,8 @@ void RangedBasicAttack::CollisionCheck(DynamicEntity* entity)
 			&& bulletList[i]->y  < entity->y + entity->height
 			&& bulletList[i]->y + bulletList[i]->height  > entity->y)
 		{
-			entity->TakeDamage(10);
+			entity->TakeDamage(1);
+			//entity->PushEntityFrom(m_caster->GetCenter(), 2.f);
 			delete bulletList[i];
 			bulletList[i] = nullptr;
 			activeBullets--;

@@ -35,12 +35,23 @@ public:
 
 	void SetHealth(int newValue) { health = newValue; }
 	int GetHealth() { return health; }
-	void TakeDamage(int totalDmg) { health -= totalDmg; }
+	virtual void TakeDamage(int totalDmg) { health -= totalDmg; }
 	void PushEntity(Vector2 force)
 	{
 		
 		velX = force.x;
 		velY = force.y;
+	}
+	void PushEntityFrom(Vector2 from, float forcePower)
+	{
+		Vector2 force = GetNormalizedVectorTowardsPos(from.x, from.y);
+
+		force.x *= forcePower;
+		force.y *= forcePower;
+
+		velX = force.x;
+		velY = force.y;
+
 	}
 	Vector2 GetNormalizedVectorTowardsPos(float dstX, float dstY)
 	{

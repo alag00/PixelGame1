@@ -14,6 +14,7 @@ void Enemy::Update(float deltaTime)
 		timer = 0.f;
 	}
 	Act(deltaTime);
+	InvincibleCheck(deltaTime);
 }
 
 bool Enemy::IsAlive()
@@ -35,10 +36,15 @@ void Enemy::Render()
 	Rectangle dst = { x, y, static_cast<float>(texture.width * config.PIXEL_SCALE), static_cast<float>(texture.height * config.PIXEL_SCALE) };
 	Vector2 origin = { 0.f, 0.f };
 	float rotation = 0.0f;
+	Color color = WHITE;
+	if (GetInvincibility())
+	{
+		color = RED;
+		//color.a = 75;
+	}
+	DrawTexturePro(texture, src, dst, origin, rotation, color);
 
-	DrawTexturePro(texture, src, dst, origin, rotation, WHITE);
-
-	Color color = YELLOW;
+	color = YELLOW;
 	color.a = 50;
 	DrawRectangle(static_cast<int>(x), static_cast<int>(y), static_cast<int>(width), static_cast<int>(height), color);
 }
@@ -61,6 +67,30 @@ void Enemy::InFrameCheck(Rectangle cam)
 		return;
 	}
 	SetIsActive(false);
+}
+
+void Enemy::TakeDamage(int totalDmg)
+{
+	if (GetInvincibility())
+	{
+		return;
+	}
+	DynamicEntity::TakeDamage(totalDmg);
+	SetInvincibility(true);
+	invincibleTimer = invincibleTimeMax;
+}
+
+void Enemy::InvincibleCheck(float deltaTime)
+{
+	if (!GetInvincibility())
+	{
+		return;
+	}
+	invincibleTimer -= deltaTime;
+	if (invincibleTimer <= 0.f)
+	{
+		SetInvincibility(false);
+	}
 }
 
 // Imp

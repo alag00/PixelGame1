@@ -18,6 +18,8 @@ private:
 	float timer = 0.f;
 	const float RESPOND_TIME = 0.25f;
 	bool isActive = false;
+	float invincibleTimer = 0.f;
+	float invincibleTimeMax = 0.2f;
 public:
 	Config config;
 	Texture2D texture = {};
@@ -34,6 +36,9 @@ public:
 	void InFrameCheck(Rectangle cam);
 	bool GetIsActive() { return isActive; }
 	void SetIsActive(bool newValue) { isActive = newValue; }
+	void TakeDamage(int totalDmg) override;
+	void InvincibleCheck(float deltaTime);
+
 };
 class Imp : public Enemy
 {
