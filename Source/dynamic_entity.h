@@ -36,6 +36,7 @@ public:
 	void SetHealth(int newValue) { health = newValue; }
 	int GetHealth() { return health; }
 	virtual void TakeDamage(int totalDmg) { health -= totalDmg; }
+	void TakeDamage(float totalDmg) { TakeDamage(static_cast<int>(totalDmg)); }
 	void PushEntity(Vector2 force)
 	{
 		

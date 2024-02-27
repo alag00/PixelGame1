@@ -3,10 +3,11 @@
 #include "spell.h"
 #include <vector>
 #include "config.h"
-
+#include "game_info.h"
 class Player : public DynamicEntity
 {
 private:
+	bool isPause = false;
 	Camera2D* _cam{};
 	Config config;
 	Texture2D texture = {};
@@ -25,7 +26,7 @@ private:
 public:
 	//int velX = 0;
 	//int velY = 0;
-	Player(int role, Camera2D& cam);
+	Player(GameInfo info, Camera2D& cam);
 	~Player();
 	//void SetStartPosition(Vector2 pos);
 	void Control(float deltaTime);
@@ -36,6 +37,7 @@ public:
 	void OnCollision(Entity* other) override;
 	void Render() override;
 	void SpellCollisionCheck(DynamicEntity* other);
+	void SetPlayerPauseMode(bool newValue) { isPause = newValue; };
 	
 	// Class setup
 	void ClassSetupArcanist();
@@ -44,6 +46,7 @@ public:
 	void ClassSetupEnchanter();
 	void ClassSetupRogue();
 	void ClassSetupPaladin();
+
 
 
 	

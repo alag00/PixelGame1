@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Source\boss.cpp" />
     <ClCompile Include="Source\button.cpp" />
+    <ClCompile Include="Source\card_manager.cpp" />
     <ClCompile Include="Source\dungeon_generation.cpp" />
     <ClCompile Include="Source\enemy.cpp" />
     <ClCompile Include="Source\enemy_manager.cpp" />

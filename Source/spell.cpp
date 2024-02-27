@@ -1,12 +1,31 @@
 #include "spell.h"
 
-void Spell::ReduceCooldown(float amount)
+void Spell::ReduceCooldown(float percAmount)
 {
+	/*
 	cooldownMax -= amount;
 	if (cooldown <= 0.f)
 	{
 		cooldownMax = 0.1f;
 	}
+	*/
+	cooldownMax -= (cooldownMax * percAmount);
+	if (cooldownMax <= 0.f)
+	{
+		cooldownMax = 0.1f;
+	}
+	cooldown = cooldownMax;
+
+}
+
+void Spell::IncreaseSpeed(float percAmount)
+{
+	speed *= (percAmount + 1.f);
+}
+
+void Spell::IncreaseDamage(float percAmount)
+{
+	dmg *= (percAmount + 1.f);
 }
 
 Vector2 Spell::GetNormalizedVector(float srcX, float srcY, float dstX, float dstY)
@@ -190,7 +209,7 @@ void RangedBasicAttack::CollisionCheck(DynamicEntity* entity)
 			&& bulletList[i]->y  < entity->y + entity->height
 			&& bulletList[i]->y + bulletList[i]->height  > entity->y)
 		{
-			entity->TakeDamage(1);
+			entity->TakeDamage(dmg);
 			//entity->PushEntityFrom(m_caster->GetCenter(), 2.f);
 			delete bulletList[i];
 			bulletList[i] = nullptr;
@@ -352,7 +371,7 @@ void MeleeBasicAttack::CollisionCheck(DynamicEntity* entity)
 	float distance = sqrt((vX * vX) + (vY * vY));
 	if (distance <= height / 2.f)
 	{
-		entity->TakeDamage(10);
+		entity->TakeDamage(dmg);
 	}
 	
 }
@@ -439,34 +458,35 @@ void ArcanistSignature::CollisionCheck(DynamicEntity* entity)
 		&& b1y  < entity->y + entity->height
 		&& b1y + ballHeight  > entity->y)
 	{
-		entity->TakeDamage(1);
+		entity->TakeDamage(dmg);
 	}
 	if (b2x  < entity->x + entity->width
 		&& b2x + ballWidth  > entity->x
 		&& b2y  < entity->y + entity->height
 		&& b2y + ballHeight  > entity->y)
 	{
-		entity->TakeDamage(1);
+		entity->TakeDamage(dmg);
 	}
 	if (b3x  < entity->x + entity->width
 		&& b3x + ballWidth  > entity->x
 		&& b3y  < entity->y + entity->height
 		&& b3y + ballHeight  > entity->y)
 	{
-		entity->TakeDamage(1);
+		entity->TakeDamage(dmg);
 	}
 }
 
 
 
 
-Soldier::Soldier(Texture2D newStatue, Texture2D newSword)
+Soldier::Soldier(Texture2D newStatue, Texture2D newSword, float newDmg)
 {
 	statueTxr = newStatue;
 	swordTxr = newSword;
 
 	width = statueTxr.width * config.PIXEL_SCALE;
 	height = statueTxr.height * config.PIXEL_SCALE;
+	dmg = newDmg;
 }
 
 void Soldier::Update(float deltaTime)
@@ -598,7 +618,7 @@ void Soldier::CollisionCheck(DynamicEntity* entity)
 	float distance = sqrt((vX * vX) + (vY * vY));
 	if (distance <= height / 2.f)
 	{
-		entity->TakeDamage(10);
+		entity->TakeDamage(dmg);
 	}
 
 }
@@ -609,6 +629,7 @@ SummonerSignature::SummonerSignature()
 	soldierTxr = LoadTexture("Resources/SummonerStatue.png");
 	swordTxr = LoadTexture("Resources/Sword.png");
 	cooldownMax = 2.5f;
+	dmg = 10.f;
 }
 void SummonerSignature::Activate(DynamicEntity& caster) 
 {
@@ -618,7 +639,7 @@ void SummonerSignature::Activate(DynamicEntity& caster)
 	}
 	m_caster = &caster;
 	// summon soldier at mouse pos
-	Soldier* newSoldier = new Soldier(soldierTxr, swordTxr);
+	Soldier* newSoldier = new Soldier(soldierTxr, swordTxr, dmg);
 	newSoldier->x = GetScreenToWorld2D(GetMousePosition(), *_cam).x - (newSoldier->width / 2.f);
 	newSoldier->y = GetScreenToWorld2D(GetMousePosition(), *_cam).y - (newSoldier->height / 2.f);
 	soldiers.push_back(newSoldier);

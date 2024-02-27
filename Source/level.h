@@ -12,6 +12,7 @@
 #include "dungeon_generation.h"
 #include "hud.h"
 #include "activator.h"
+#include "card_manager.h"
 
 // Level = Scene
 class Level : public Scene
@@ -26,6 +27,7 @@ private:
 	Camera2D camera = {};
 	Hud hud;
 	Activator levelExit;
+	CardManager cardManager;
 
 public:
 	Level();

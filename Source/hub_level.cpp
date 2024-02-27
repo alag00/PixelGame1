@@ -71,12 +71,12 @@ void Hub::LoadScene(GameInfo gameInfo)  {
 	backgroundTxr = LoadTexture("Resources/Background.png");
 }
 bool Hub::Update() {
-
+	Vector2 mousePos = GetMousePosition();
 	if (showClasses)
 	{
 		for (int i = 0; i < classAmount; i++)
 		{
-			if (classButtons[i].Update())
+			if (classButtons[i].Update(mousePos))
 			{
 				m_gameInfo.playerClass = i + 1;
 				showClasses = false;
@@ -84,12 +84,12 @@ bool Hub::Update() {
 		}
 		return false;
 	}
-	if (playButton.Update())
+	if (playButton.Update(mousePos))
 	{
 		ChangeToPlay();
 		return true;
 	}
-	if (mainButton.Update())
+	if (mainButton.Update(mousePos))
 	{
 		ChangeToMain();
 		return true;

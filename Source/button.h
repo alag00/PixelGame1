@@ -24,7 +24,7 @@ public:
 	void SetupImage(Texture2D buttonTexture);
 	void SetupImage(Texture2D buttonTexture, Texture2D otherTexture);
 	void SetupToolTip(const char* _text);
-	bool Update();
+	bool Update(Vector2 mousePos);
 	void Render();
 	void Hover();
 };

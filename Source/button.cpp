@@ -34,12 +34,12 @@ void Button::SetupToolTip(const char* _text)
 		toolTipBox.x = 0.f;
 	}
 }
-bool Button::Update()
+bool Button::Update(Vector2 mousePos)
 {
-	if (GetMousePosition().x >= x &&
-		GetMousePosition().x <= (x + width) &&
-		GetMousePosition().y >= y &&
-		GetMousePosition().y <= (y + height))
+	if (mousePos.x >= x &&
+		mousePos.x <= (x + width) &&
+		mousePos.y >= y &&
+		mousePos.y <= (y + height))
 	{
 		Hover();
 	}

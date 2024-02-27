@@ -21,7 +21,7 @@ void Level::LoadScene(GameInfo gameInfo)
 {
 	m_gameInfo = gameInfo;
 	dungeonManager.GenerateDungeon();
-	player = new Player(gameInfo.playerClass, camera);
+	player = new Player(gameInfo, camera);
 	player->SetPosition(dungeonManager.GetRoomList().front()->GetCenter());
 	enemyManager.SetPlayerRef(player);
 	enemyManager.CreateEnemies();
@@ -29,7 +29,8 @@ void Level::LoadScene(GameInfo gameInfo)
 	hud.SetPlayerRef(player);
 	hud.SetBossRef(enemyManager.GetEnemyList().back());
 	levelExit.SetPlayerRef(player);
-	
+	cardManager.SetPlayerRef(player);
+	cardManager.SetGameInfoRef(m_gameInfo);
 }
 
 void Level::LeaveScene(GameInfo& gameInfo)
@@ -69,6 +70,7 @@ void Level::UpdateEntities()
 	{
 		levelExit.SetPosition(dungeonManager.GetRoomList().back()->GetCenter());
 		levelExit.MakeAvailable();
+		cardManager.Activate();
 	}
 }
 
@@ -102,6 +104,7 @@ void Level::UpdateCamera()
 	camera.target.x = player->GetCenter().x - (config.screenWidth / 2.f);
 	camera.target.y = player->GetCenter().y - (config.screenHeight / 2.f);
 
+	cardManager.Update(camera);
 	hud.UpdateHud(camera);
 }
 void Level::Render()
@@ -141,6 +144,7 @@ void Level::Render()
 void Level::RenderUI()
 {
 	hud.RenderHud();
+	cardManager.Render();
 }
 
 

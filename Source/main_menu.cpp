@@ -9,12 +9,13 @@ void MainMenu::LoadScene(GameInfo gameInfo)
 }
 bool MainMenu::Update() 
 {
-	if (playButton.Update())
+	Vector2 mousePos = GetMousePosition();
+	if (playButton.Update(mousePos))
 	{
 		ChangeToPlay();
 		return true;
 	}
-	if (hubButton.Update())
+	if (hubButton.Update(mousePos))
 	{
 		ChangeToHub();
 		return true;

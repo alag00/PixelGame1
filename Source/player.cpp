@@ -1,11 +1,11 @@
 #include "player.h"
 #include <iostream>
 
-Player::Player(int role, Camera2D& cam)
+Player::Player(GameInfo info, Camera2D& cam)
 {
 	_cam = &cam;
 	// Load Textures
-	switch (role)
+	switch (info.playerClass)
 	{
 	case 0:
 		ClassSetupArcanist();
@@ -39,6 +39,19 @@ Player::Player(int role, Camera2D& cam)
 	width = texture.width * config.PIXEL_SCALE;
 	height = texture.height * config.PIXEL_SCALE;
 
+	// Set Cards
+	for (int i = 0; i < info.equippedCards.size(); i++)
+	{
+		for (int j = 0; j < MAX_SPELL_SLOTS; j++)
+		{
+			if (spellbook[j] == nullptr)
+			{
+				continue;
+			}
+			info.equippedCards.at(i)->TriggerEffect(spellbook[j]);
+		}
+	}
+
 }
 
 Player::~Player()
@@ -62,6 +75,10 @@ void Player::SetStartPosition(Vector2 pos)
 void Player::Update(float deltaTime)
 {
 	//std::cout << "player Vel X: " << velX << std::endl << "player Vel Y: " << velY << std::endl;
+	if (isPause)
+	{
+		return;
+	}
 
 	isColliding = false;
 	ReduceVelocity(deltaTime);

@@ -22,12 +22,20 @@ public:
 class Spell
 {
 private:
+	
 public:
+
 	Camera2D* _cam{};
 	DynamicEntity* m_caster = nullptr;
 	float cooldownMax = 0.f;
 	float cooldown = 0.f;
-	void ReduceCooldown(float amount);
+	float dmg = 0.f;
+	float speed = 0.f;
+
+	void ReduceCooldown(float percAmount);
+	void IncreaseSpeed(float percAmount);
+	void IncreaseDamage(float percAmount);
+	void IncreaseProjectile(int amount) { amount; };
 
 	void SetCamera(Camera2D &cam) {
 
@@ -64,7 +72,7 @@ class RangedBasicAttack : public Spell
 {
 private:
 	//const float MAX_COOLDOWN = 0.3f;
-	float cooldown = 0.f;
+	//float cooldown = 0.f;
 	int range = 10;
 
 	const static int MAX_BULLETS = 5;
@@ -77,6 +85,7 @@ public:
 	RangedBasicAttack()
 	{
 		cooldownMax = 0.3f;
+		dmg = 10.f;
 	}
 	void SetTexture(Texture2D texture){ bulletTxr = texture; }
 	void Activate(DynamicEntity& caster) override;
@@ -102,7 +111,6 @@ private:
 	float size = 5.f;
 	float range = 100.f;
 	float angle = 0.f;
-	float speed = 15.f;
 	float limit = 45.f;
 	bool activated = false;
 	float width = 0.f;
@@ -114,7 +122,7 @@ private:
 	Texture2D swordTxr{};
 	Config config;
 public:
-	MeleeBasicAttack(){cooldownMax = 0.2f;}
+	MeleeBasicAttack() { cooldownMax = 0.2f; speed = 15.f; dmg = 5.f; }
 	void SetTexture(Texture2D texture);
 	void SetInitialSwing(bool reverseSwing){reverse = reverseSwing;}
 	void Activate(DynamicEntity& caster) override;
@@ -182,7 +190,7 @@ private:
 	float lifeTime = 5.f;
 	bool alive = true;
 	float size = 15.f;
-
+	float dmg = 0.f;
 	float swordSize = 5.f;
 	float swordPosX = 0.f;
 	float swordPosY = 0.f;
@@ -202,7 +210,7 @@ private:
 	Config config;
 	Vector2 swordCenter{ 0.f, 0.f };
 public:
-	Soldier(Texture2D newStatue, Texture2D newSword);
+	Soldier(Texture2D newStatue, Texture2D newSword, float newDmg);
 	void Update(float deltaTime);
 	void Attack(Vector2 mousePos);
 	void Render();
