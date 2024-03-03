@@ -47,6 +47,12 @@ void Enemy::Render()
 	color = YELLOW;
 	color.a = 50;
 	DrawRectangle(static_cast<int>(x), static_cast<int>(y), static_cast<int>(width), static_cast<int>(height), color);
+
+	// hp bar
+	int barHeight = static_cast<int>(config.PIXEL_SCALE * 2);
+	float hpPerc = static_cast<float>(GetHealth()) / static_cast<float>(GetMaxHealth());
+	int barWidth = static_cast<int>(std::lerp(0.f, width, hpPerc));
+	DrawRectangle(static_cast<int>(x), static_cast<int>(y + height), barWidth, barHeight, RED);
 }
 
 void Enemy::SetTexture(Texture2D txr)
@@ -99,7 +105,8 @@ Imp::Imp(DynamicEntity& target)
 	m_target = &target;
 	bulletTxr = LoadTexture("Resources/FireBolt.png");
 	basic.SetTexture(bulletTxr);
-	SetHealth(5);
+	SetHealth(15);
+	SetMaxHealth(15);
 	
 }
 void Imp::Sense() 

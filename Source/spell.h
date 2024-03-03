@@ -7,6 +7,7 @@
 #include "config.h"
 #include "zombie.h"
 #include <algorithm>
+#include "corpse.h"
 
 class Effect  // Ice, Fire, 
 {
@@ -85,7 +86,7 @@ public:
 	RangedBasicAttack()
 	{
 		cooldownMax = 0.3f;
-		dmg = 10.f;
+		dmg = 1.f;
 	}
 	void SetTexture(Texture2D texture){ bulletTxr = texture; }
 	void Activate(DynamicEntity& caster) override;
@@ -239,13 +240,40 @@ public:
 class NecromancerSignature : public Spell
 {
 private:
-	std::vector<Zombie> zombieList; // Zombie vector
+	float range = 100.f;
+	std::vector<Zombie> zombieList{}; // Zombie vector
+	std::vector<EnemyCorpse>* deadEnemiesList{};
+	std::vector<DynamicEntity>* enemiesList{};
 public:
 	void Activate(DynamicEntity& caster) override
 	{
 		m_caster = &caster;
-	}
+		for (int i = 0; i < deadEnemiesList->size(); i++)
+		{
 
+			if (GetDistance(m_caster->GetCenter(), deadEnemiesList->at(i).position) <= range)
+			{
+				CreateZombie(deadEnemiesList->at(i));
+				deadEnemiesList->erase(deadEnemiesList->begin() + i);
+			}
+		}
+	}
+	void CreateZombie(EnemyCorpse corpse)
+	{
+		Zombie newZombie;
+		newZombie.Setup(corpse.txr, corpse.position, m_caster);
+		zombieList.push_back(newZombie);
+	}
+	void SetCorpseList(std::vector<EnemyCorpse> &corpseList)
+	{
+		deadEnemiesList = &corpseList;
+	}
+	float GetDistance(Vector2 vec1, Vector2 vec2)
+	{
+		float vectorX = vec1.x - vec2.x;
+		float vectorY = vec1.y - vec2.y;
+		return static_cast<float>(sqrt((vectorX * vectorX) + (vectorY * vectorY)));
+	}
 	void Update(float deltaTime)  override
 	{
 		for (int i = 0; i < zombieList.size(); i++)

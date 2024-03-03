@@ -41,6 +41,11 @@ bool EnemyManager::Update(float deltaTime, Rectangle cam)
 	{
 		if (!enemyList.at(i)->IsAlive())
 		{
+			EnemyCorpse newCorpse;
+			newCorpse.txr = enemyList.at(i)->GetTexture();
+			newCorpse.position = enemyList.at(i)->GetCenter();
+			deadEnemies.push_back(newCorpse);
+
 			delete enemyList.at(i);
 			enemyList.at(i) = nullptr;
 			enemyList.erase(enemyList.begin() + i);
@@ -61,6 +66,15 @@ void EnemyManager::Render()
 		for (int i = 0; i < enemyList.size(); i++)
 		{
 			enemyList.at(i)->Render();
+		}
+	}
+	if (deadEnemies.size() > 0)
+	{
+		Color color = RED;
+		color.a = 50;
+		for (int i = 0; i < deadEnemies.size(); i++)
+		{
+			DrawCircle(static_cast<int>(deadEnemies.at(i).position.x), static_cast<int>(deadEnemies.at(i).position.y), 50.f, color);
 		}
 	}
 }

@@ -134,5 +134,8 @@
     <ClInclude Include="Source\card.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\corpse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

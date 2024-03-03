@@ -4,6 +4,8 @@
 #include <vector>
 #include "config.h"
 #include "game_info.h"
+#include "corpse.h"
+
 class Player : public DynamicEntity
 {
 private:
@@ -26,7 +28,7 @@ private:
 public:
 	//int velX = 0;
 	//int velY = 0;
-	Player(GameInfo info, Camera2D& cam);
+	Player(GameInfo info, Camera2D& cam, std::vector<EnemyCorpse>& corpseList);
 	~Player();
 	//void SetStartPosition(Vector2 pos);
 	void Control(float deltaTime);
@@ -42,7 +44,7 @@ public:
 	// Class setup
 	void ClassSetupArcanist();
 	void ClassSetupSummoner();
-	void ClassSetupNecromancer();
+	void ClassSetupNecromancer(std::vector<EnemyCorpse>& corpseList);
 	void ClassSetupEnchanter();
 	void ClassSetupRogue();
 	void ClassSetupPaladin();

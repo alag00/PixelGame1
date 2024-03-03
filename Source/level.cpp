@@ -21,7 +21,7 @@ void Level::LoadScene(GameInfo gameInfo)
 {
 	m_gameInfo = gameInfo;
 	dungeonManager.GenerateDungeon();
-	player = new Player(gameInfo, camera);
+	player = new Player(gameInfo, camera, enemyManager.GetCorpseList());
 	player->SetPosition(dungeonManager.GetRoomList().front()->GetCenter());
 	enemyManager.SetPlayerRef(player);
 	enemyManager.CreateEnemies();
@@ -91,6 +91,10 @@ void Level::CollisionCheck()
 	dungeonManager.CollisionCheck(player);
 	for (int i = 0; i < enemyManager.GetEnemyList().size(); i++)
 	{
+		if (!enemyManager.GetEnemyList().at(i)->GetIsActive())
+		{
+			continue;
+		}
 		dungeonManager.CollisionCheck(enemyManager.GetEnemyList().at(i));
 		player->SpellCollisionCheck(enemyManager.GetEnemyList().at(i));
 		enemyManager.GetEnemyList().at(i)->SpellCollisionCheck(player);

@@ -32,7 +32,7 @@ public:
 	bool IsAlive();
 	virtual void Render() override;
 	void SetTexture(Texture2D txr);
-
+	Texture2D GetTexture() { return texture; }
 	void InFrameCheck(Rectangle cam);
 	bool GetIsActive() { return isActive; }
 	void SetIsActive(bool newValue) { isActive = newValue; }

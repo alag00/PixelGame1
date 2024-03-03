@@ -43,6 +43,7 @@
     <ClInclude Include="Source\card.h" />
     <ClInclude Include="Source\card_manager.h" />
     <ClInclude Include="Source\config.h" />
+    <ClInclude Include="Source\corpse.h" />
     <ClInclude Include="Source\dynamic_entity.h" />
     <ClInclude Include="Source\enemy.h" />
     <ClInclude Include="Source\enemy_manager.h" />

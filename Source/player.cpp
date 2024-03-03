@@ -1,7 +1,7 @@
 #include "player.h"
 #include <iostream>
 
-Player::Player(GameInfo info, Camera2D& cam)
+Player::Player(GameInfo info, Camera2D& cam, std::vector<EnemyCorpse>& corpseList)
 {
 	_cam = &cam;
 	// Load Textures
@@ -17,7 +17,7 @@ Player::Player(GameInfo info, Camera2D& cam)
 		ClassSetupSummoner();
 		break;
 	case 3:
-		ClassSetupNecromancer();
+		ClassSetupNecromancer(corpseList);
 		break;
 	case 4:
 		ClassSetupEnchanter();
@@ -180,7 +180,7 @@ void Player::ClassSetupSummoner()
 	SetHealth(75);
 }
 
-void Player::ClassSetupNecromancer()
+void Player::ClassSetupNecromancer(std::vector<EnemyCorpse>& corpseList)
 {
 	texture = LoadTexture("Resources/Necromancer.png");
 	Texture2D basicTxr = LoadTexture("Resources/FireBolt.png");
@@ -189,6 +189,10 @@ void Player::ClassSetupNecromancer()
 	basicAttack->SetCamera(*_cam);
 	basicAttack->SetTexture(basicTxr);
 	spellbook[0] = basicAttack;
+
+	NecromancerSignature* signatureSpell = new NecromancerSignature();
+	signatureSpell->SetCorpseList(corpseList);
+	spellbook[1] = signatureSpell;
 
 	SetMaxHealth(75);
 	SetHealth(75);
