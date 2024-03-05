@@ -1,5 +1,6 @@
 #pragma once
 #include "raylib.h"
+#include <cmath>
 class Entity 
 {
 public:
@@ -28,6 +29,32 @@ public:
 		
 		return false;
 	}
+	bool AABBvsAABBCheck(Rectangle rect) 
+	{ 
+		if (x < rect.x + rect.width && x + width > rect.x &&
+			y < rect.y + rect.height && y + height > rect.y)
+		{
+			return true;
+		}
+		return false; 
+	}
+	bool AABBvsCircle(Vector2 pos, float radius) 
+	{ 
+		Vector2 nearestPoint;
+		nearestPoint.x = std::max(x, std::min(x + width, pos.x));
+		nearestPoint.y = std::max(y, std::min(y + height, pos.y));
+
+		float dX = nearestPoint.x - pos.x;
+		float dY = nearestPoint.y - pos.y;
+
+		float distance = sqrt((dX * dX) + (dY * dY));
+		if (distance <= radius)
+		{
+			return true;
+		}
+		return false;
+	}
+
 	void SetPosition(Vector2 newPos)
 	{
 		x = newPos.x;

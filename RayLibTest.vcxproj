@@ -60,6 +60,7 @@
     <ClInclude Include="Source\scene_manager.h" />
     <ClInclude Include="Source\hub_level.h" />
     <ClInclude Include="Source\spell.h" />
+    <ClInclude Include="Source\status.h" />
     <ClInclude Include="Source\zombie.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

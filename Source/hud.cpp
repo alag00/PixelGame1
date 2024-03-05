@@ -73,13 +73,14 @@ void Hud::RenderHud()
 		static_cast<int>(miniMapTxr.height * config.PIXEL_SCALE), GREEN);
 	
 	// Player Coords
-	DrawText(TextFormat("X: %i", coordX), static_cast<int>(mapX), static_cast<int>(mapY), 50, BLACK);
-	DrawText(TextFormat("Y: %i", coordY), static_cast<int>(mapX), static_cast<int>(mapY) + 50, 50, BLACK);
+	DrawText(TextFormat("X: %i", coordX), static_cast<int>(mapX), static_cast<int>(mapY + 40), 40, BLACK);
+	DrawText(TextFormat("Y: %i", coordY), static_cast<int>(mapX), static_cast<int>(mapY) + 80, 40, BLACK);
 
 	// Mouse Coords
-	DrawText(TextFormat("X: %i", mouseCoordX), static_cast<int>(mapX), static_cast<int>(mapY + 100), 25, BLACK);
-	DrawText(TextFormat("Y: %i", mouseCoordY), static_cast<int>(mapX), static_cast<int>(mapY) + 125, 25, BLACK);
+	DrawText(TextFormat("X: %i", mouseCoordX), static_cast<int>(mapX), static_cast<int>(mapY + 120), 25, BLACK);
+	DrawText(TextFormat("Y: %i", mouseCoordY), static_cast<int>(mapX), static_cast<int>(mapY) + 140, 25, BLACK);
 
+	DrawFPS(static_cast<int>(mapX), static_cast<int>(mapY));
 	// Boss Hp
 	if (!bossRef->GetIsActive() || !bossRef->IsAlive())
 	{

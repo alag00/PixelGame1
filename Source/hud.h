@@ -30,6 +30,9 @@ private:
 	int mouseCoordX = 100;
 	int mouseCoordY = 100;
 
+	int fpsX = 100;
+	int fpsY = 100;
+
 	Rectangle bossHpBar{100.f, 100.f, 400.f, 75.f};
 	float currentBossWidth = 100.f;
 	// Health

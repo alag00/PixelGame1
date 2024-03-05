@@ -232,6 +232,7 @@ void MeleeBasicAttack::SetTexture(Texture2D texture)
 	swordTxr = texture;
 	width = swordTxr.width * config.PIXEL_SCALE;
 	height = swordTxr.height * config.PIXEL_SCALE;
+	swordRadius = height / 2.f;
 }
 void MeleeBasicAttack::Activate(DynamicEntity& caster)
 {
@@ -287,8 +288,8 @@ void MeleeBasicAttack::Update(float deltaTime)
 		angle -= deltaTime * speed;
 	}
 
-	xPos = m_caster->GetCenter().x + std::cos(angle) * range;
-	yPos = m_caster->GetCenter().y + std::sin(angle) * range;
+	swordPos.x = m_caster->GetCenter().x + std::cos(angle) * range;
+	swordPos.y = m_caster->GetCenter().y + std::sin(angle) * range;
 
 
 
@@ -317,7 +318,7 @@ void MeleeBasicAttack::Render()
 	}
 	if (swordTxr.id == 0)
 	{
-		DrawCircle(static_cast<int>(xPos), static_cast<int>(yPos), size, ORANGE);
+		DrawCircle(static_cast<int>(swordPos.x), static_cast<int>(swordPos.y), size, ORANGE);
 		return;
 	}
 	
@@ -331,12 +332,12 @@ void MeleeBasicAttack::Render()
 	DrawCircle(static_cast<int>(nearestPoint.x), static_cast<int>(nearestPoint.y), 3.f, RED);
 	*/
 	Vector2 nP{ 0.f, 0.f };
-	nP.x = m_caster->GetCenter().x - xPos;
-	nP.y = m_caster->GetCenter().y - yPos;
+	nP.x = m_caster->GetCenter().x - swordPos.x;
+	nP.y = m_caster->GetCenter().y - swordPos.y;
 
 	float magV = sqrt((nP.x * nP.x) + (nP.y * nP.y));
-	float aX = xPos + (nP.x / magV) * (height / 2.f);
-	float aY = yPos + (nP.y / magV) * (height / 2.f);
+	float aX = swordPos.x + (nP.x / magV) * (height / 2.f);
+	float aY = swordPos.y + (nP.y / magV) * (height / 2.f);
 
 	// Texture
 	Rectangle src = { 0.f, 0.f, static_cast<float>(swordTxr.width), static_cast<float>(swordTxr.height) };
@@ -350,7 +351,7 @@ void MeleeBasicAttack::Render()
 	// Collision Circle
 	Color color = YELLOW;
 	color.a = 50;
-	DrawCircle(static_cast<int>(xPos), static_cast<int>(yPos), height / 2.f, color);
+	DrawCircle(static_cast<int>(swordPos.x), static_cast<int>(swordPos.y), height / 2.f, color);
 	//DrawRectangle(static_cast<int>(x), static_cast<int>(y), static_cast<int>(width), static_cast<int>(height), color);
 
 
@@ -358,6 +359,7 @@ void MeleeBasicAttack::Render()
 
 void MeleeBasicAttack::CollisionCheck(DynamicEntity* entity)
 {
+	/*
 	float x = xPos - (width / 2.f);
 	float y = yPos - (height / 2.f);
 
@@ -373,7 +375,11 @@ void MeleeBasicAttack::CollisionCheck(DynamicEntity* entity)
 	{
 		entity->TakeDamage(dmg);
 	}
-	
+	*/
+	if (entity->AABBvsCircle(swordPos, swordRadius))
+	{
+		entity->TakeDamage(dmg);
+	}
 }
 
 
@@ -385,9 +391,11 @@ ArcanistSignature::ArcanistSignature(DynamicEntity& caster)
 	m_caster = &caster;
 	rangeRadius = minRange;
 	cooldownMax = 10.f;
+	dmg = 1.f;
 	texture = LoadTexture("Resources/ArcanistBall.png");
 	ballWidth = texture.width * config.PIXEL_SCALE;
 	ballHeight = texture.height * config.PIXEL_SCALE;
+	ballRadius = ballWidth / 2.f;
 }
 void ArcanistSignature::Activate(DynamicEntity& caster)
 {
@@ -417,22 +425,24 @@ void ArcanistSignature::Update(float deltaTime)
 
 	angle += deltaTime * speed;
 
-	b1x = originX + std::cos(angle) * rangeRadius;
-	b1y = originY + std::sin(angle) * rangeRadius;
-	b2x = originX + std::cos(angle + offset) * rangeRadius;
-	b2y = originY + std::sin(angle + offset) * rangeRadius;
-	b3x = originX + std::cos(angle - offset) * rangeRadius;
-	b3y = originY + std::sin(angle - offset) * rangeRadius;
+	balls[0].x = originX + std::cos(angle) * rangeRadius;
+	balls[0].y = originY + std::sin(angle) * rangeRadius;
+	balls[1].x = originX + std::cos(angle + offset) * rangeRadius;
+	balls[1].y = originY + std::sin(angle + offset) * rangeRadius;
+	balls[2].x = originX + std::cos(angle - offset) * rangeRadius;
+	balls[2].y = originY + std::sin(angle - offset) * rangeRadius;
 
 
 }
 void ArcanistSignature::Render() 
 {
 	float rotation = 0.0;
+	//float widthOffset = ballWidth / 2.f;
+	//float heightOffset = ballHeight / 2.f;
 	Rectangle src = { 0, 0, static_cast<float>(texture.width), static_cast<float>(texture.height) };
-	Rectangle dst1 = { b1x, b1y, ballWidth, ballHeight };
-	Rectangle dst2 = { b2x, b2y, ballWidth, ballHeight };
-	Rectangle dst3 = { b3x, b3y, ballWidth, ballHeight };
+	Rectangle dst1 = { balls[0].x, balls[0].y, ballWidth, ballHeight};
+	Rectangle dst2 = { balls[1].x, balls[1].y, ballWidth, ballHeight };
+	Rectangle dst3 = { balls[2].x, balls[2].y, ballWidth, ballHeight };
 	//Vector2 origin = { static_cast<float>((texture.width * config.PIXEL_SCALE) / 2.0f), static_cast<float>((texture.height * config.PIXEL_SCALE) / 2.0f) };
 	Vector2 origin = { 0.f, 0.f };
 
@@ -442,9 +452,15 @@ void ArcanistSignature::Render()
 
 	Color color = YELLOW;
 	color.a = 50;
-	DrawRectangle(static_cast<int>(b1x), static_cast<int>(b1y), static_cast<int>(ballWidth), static_cast<int>(ballHeight), color);
-	DrawRectangle(static_cast<int>(b2x), static_cast<int>(b2y), static_cast<int>(ballWidth), static_cast<int>(ballHeight), color);
-	DrawRectangle(static_cast<int>(b3x), static_cast<int>(b3y), static_cast<int>(ballWidth), static_cast<int>(ballHeight), color);
+	//DrawRectangle(static_cast<int>(b1x), static_cast<int>(b1y), static_cast<int>(ballWidth), static_cast<int>(ballHeight), color);
+	//DrawRectangle(static_cast<int>(b2x), static_cast<int>(b2y), static_cast<int>(ballWidth), static_cast<int>(ballHeight), color);
+	//DrawRectangle(static_cast<int>(b3x), static_cast<int>(b3y), static_cast<int>(ballWidth), static_cast<int>(ballHeight), color);
+	
+	float widthOffset = ballWidth / 2.f;
+	float heightOffset = ballHeight / 2.f;
+	DrawCircle(static_cast<int>(balls[0].x + widthOffset), static_cast<int>(balls[0].y + heightOffset), ballRadius, color);
+	DrawCircle(static_cast<int>(balls[1].x + widthOffset), static_cast<int>(balls[1].y + heightOffset), ballRadius, color);
+	DrawCircle(static_cast<int>(balls[2].x + widthOffset), static_cast<int>(balls[2].y + heightOffset), ballRadius, color);
 	//DrawTexture(texture, static_cast<int>(b1x), static_cast<int>(b1y), RED);
 	//DrawTexture(texture, static_cast<int>(b2x), static_cast<int>(b2y), GREEN);
 	//DrawTexture(texture, static_cast<int>(b3x), static_cast<int>(b3y), BLUE);
@@ -453,6 +469,7 @@ void ArcanistSignature::Render()
 
 void ArcanistSignature::CollisionCheck(DynamicEntity* entity)
 {
+	/*
 	if (b1x  < entity->x + entity->width
 		&& b1x + ballWidth  > entity->x
 		&& b1y  < entity->y + entity->height
@@ -474,6 +491,41 @@ void ArcanistSignature::CollisionCheck(DynamicEntity* entity)
 	{
 		entity->TakeDamage(dmg);
 	}
+	*/
+	for (int i = 0; i < ballCount; i++)
+	{
+		if (BallCollisionCheck(entity, balls[i]))
+		{
+			entity->TakeDamage(dmg);
+		}
+	}
+}
+
+bool ArcanistSignature::BallCollisionCheck(DynamicEntity* entity, Vector2 ballPos)
+{
+	//float x = xPos - (width / 2.f);
+	//float y = yPos - (height / 2.f);
+
+	if (entity->AABBvsCircle(ballPos, ballRadius))
+	{
+		return true;
+	}
+	/*
+	Vector2 nearestPoint;
+	nearestPoint.x = std::max(entity->x, std::min(entity->x + entity->width, ballPos.x));
+	nearestPoint.y = std::max(entity->y, std::min(entity->y + entity->height, ballPos.y));
+
+	float dX = nearestPoint.x - ballPos.x;
+	float dY = nearestPoint.y - ballPos.y;
+
+	float distance = sqrt((dX * dX) + (dY * dY));
+	if (distance <= ballRadius)
+	{
+		return true;
+	}
+	return false;
+	*/
+	return false;
 }
 
 
@@ -487,6 +539,7 @@ Soldier::Soldier(Texture2D newStatue, Texture2D newSword, float newDmg)
 	width = statueTxr.width * config.PIXEL_SCALE;
 	height = statueTxr.height * config.PIXEL_SCALE;
 	dmg = newDmg;
+	swordRadius = height / 2.f;
 }
 
 void Soldier::Update(float deltaTime)
@@ -518,9 +571,9 @@ void Soldier::Update(float deltaTime)
 		activated = false;
 		return;
 	}
-	swordPosX = std::lerp(srcX, dstX, progress);
-	swordPosY = std::lerp(srcY, dstY, progress);
-	swordCenter = { swordPosX + ((swordTxr.width * config.PIXEL_SCALE) / 2.f), swordPosY + ((swordTxr.height * config.PIXEL_SCALE) / 2.f) };
+	swordPos.x = std::lerp(srcX, dstX, progress);
+	swordPos.y = std::lerp(srcY, dstY, progress);
+	swordCenter = { swordPos.x + ((swordTxr.width * config.PIXEL_SCALE) / 2.f), swordPos.y + ((swordTxr.height * config.PIXEL_SCALE) / 2.f) };
 
 
 }
@@ -585,12 +638,12 @@ void Soldier::Render()
 	}
 	
 	Vector2 nP{ 0.f, 0.f };
-	nP.x = GetCenter().x - swordPosX;
-	nP.y = GetCenter().y - swordPosY;
+	nP.x = GetCenter().x - swordPos.x;
+	nP.y = GetCenter().y - swordPos.y;
 
 	float magV = sqrt((nP.x * nP.x) + (nP.y * nP.y));
-	float aX = swordPosX + (nP.x / magV) * (height / 2.f);
-	float aY = swordPosY + (nP.y / magV) * (height / 2.f);
+	float aX = swordPos.x + (nP.x / magV) * (height / 2.f);
+	float aY = swordPos.y + (nP.y / magV) * (height / 2.f);
 
 	 src = { 0.f, 0.f, static_cast<float>(swordTxr.width), static_cast<float>(swordTxr.height) };
 	 dst = { aX, aY, static_cast<float>(swordTxr.width * config.PIXEL_SCALE), static_cast<float>(swordTxr.height * config.PIXEL_SCALE) };
@@ -598,13 +651,18 @@ void Soldier::Render()
 	
 
 	DrawTexturePro(swordTxr, src, dst, origin, rotation, WHITE);
-	DrawCircle(static_cast<int>(swordPosX), static_cast<int>(swordPosY), height / 2.f, hitboxColor);
+	DrawCircle(static_cast<int>(swordPos.x), static_cast<int>(swordPos.y), height / 2.f, hitboxColor);
 
 		//DrawCircle(static_cast<int>(swordPosX), static_cast<int>(swordPosY), swordSize, RED);
 }
 
 void Soldier::CollisionCheck(DynamicEntity* entity)
 {
+	if (entity->AABBvsCircle(swordPos, swordRadius))
+	{
+		entity->TakeDamage(dmg);
+	}
+	/*
 	float _x = swordPosX - (width / 2.f);
 	float _y = swordPosY - (height / 2.f);
    
@@ -620,6 +678,7 @@ void Soldier::CollisionCheck(DynamicEntity* entity)
 	{
 		entity->TakeDamage(dmg);
 	}
+	*/
 
 }
 
@@ -629,7 +688,7 @@ SummonerSignature::SummonerSignature()
 	soldierTxr = LoadTexture("Resources/SummonerStatue.png");
 	swordTxr = LoadTexture("Resources/Sword.png");
 	cooldownMax = 2.5f;
-	dmg = 10.f;
+	dmg = 1.f;
 }
 void SummonerSignature::Activate(DynamicEntity& caster) 
 {

@@ -104,8 +104,10 @@ private:
 	//const float MAX_COOLDOWN = 0.2f;
 	float cooldown = 0.f;
 
-	float xPos = 0.f;
-	float yPos = 0.f;
+	Vector2 swordPos{ 0.f, 0.f };
+	float swordRadius = 0.f;
+	//float xPos = 0.f;
+	//float yPos = 0.f;
 
 	float rotation = 0.f;
 
@@ -123,7 +125,7 @@ private:
 	Texture2D swordTxr{};
 	Config config;
 public:
-	MeleeBasicAttack() { cooldownMax = 0.2f; speed = 15.f; dmg = 5.f; }
+	MeleeBasicAttack() { cooldownMax = 0.2f; speed = 15.f; dmg = 1.f; }
 	void SetTexture(Texture2D texture);
 	void SetInitialSwing(bool reverseSwing){reverse = reverseSwing;}
 	void Activate(DynamicEntity& caster) override;
@@ -143,13 +145,17 @@ class ArcanistSignature : public Spell
 {
 private:
 	Config config;
+
+	static const int ballCount = 3;
+	Vector2 balls[ballCount]{};
+	/*
 	float b1x = 0.f;
 	float b1y = 0.f;			 
 	float b2x = 0.f; 
 	float b2y = 0.f;
 	float b3x = 0.f; 
 	float b3y = 0.f;
-
+	*/
 	float ballSize = 5.f;
 
 	float originX = 0.f;
@@ -170,6 +176,7 @@ private:
 
 	float ballWidth = 0.f;
 	float ballHeight = 0.f;
+	float ballRadius = 0.f;
 
 public:
 	ArcanistSignature(DynamicEntity& caster);
@@ -178,6 +185,7 @@ public:
 	void Update(float deltaTime) override;
 	void Render() override;
 	void CollisionCheck(DynamicEntity* entity) override;
+	bool BallCollisionCheck(DynamicEntity* entity, Vector2 ballPos);
 };
 
 
@@ -193,8 +201,10 @@ private:
 	float size = 15.f;
 	float dmg = 0.f;
 	float swordSize = 5.f;
-	float swordPosX = 0.f;
-	float swordPosY = 0.f;
+	Vector2 swordPos{0.f, 0.f};
+	float swordRadius = 0.f;
+	//float swordPosX = 0.f;
+	//float swordPosY = 0.f;
 	float swordSpeed = 5.f;
 	float range = 100.f;
 	float rotation = 0.f;

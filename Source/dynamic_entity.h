@@ -1,5 +1,6 @@
 #pragma once
 #include "entity.h"
+#include "status.h"
 #include <cmath>
  class DynamicEntity : public Entity
 {

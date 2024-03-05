@@ -137,5 +137,8 @@
     <ClInclude Include="Source\corpse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\status.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
