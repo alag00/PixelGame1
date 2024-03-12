@@ -1,5 +1,6 @@
 
 #include "hud.h"
+#include <cstdlib>
 
 Hud::Hud()
 {
@@ -80,6 +81,10 @@ void Hud::RenderHud()
 	DrawText(TextFormat("X: %i", mouseCoordX), static_cast<int>(mapX), static_cast<int>(mapY + 120), 25, BLACK);
 	DrawText(TextFormat("Y: %i", mouseCoordY), static_cast<int>(mapX), static_cast<int>(mapY) + 140, 25, BLACK);
 
+	// Seed
+	//DrawText(TextFormat("Seed: %i", rand()), static_cast<int>(mapX), static_cast<int>(mapY + 160), 25, BLACK);
+
+	// Fps
 	DrawFPS(static_cast<int>(mapX), static_cast<int>(mapY));
 	// Boss Hp
 	if (!bossRef->GetIsActive() || !bossRef->IsAlive())
