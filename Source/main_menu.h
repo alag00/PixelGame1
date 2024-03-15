@@ -2,6 +2,7 @@
 #include "config.h"
 #include "scene.h"
 #include "button.h"
+#include "animation.h"
 
 class MainMenu : public Scene
 {
@@ -10,8 +11,10 @@ private:
 	GameInfo m_gameInfo;
 	Button playButton; // onClick = switch Scene to Dungeon Level
 	Button hubButton; // onClick = switch Scene to Dungeon Level
-	
 	SCENE_TYPE nextScene = SCENE_TYPE::NONE;
+
+	//
+	//Texture2D atlas{};
 public:
 	void LoadScene(GameInfo gameInfo) override;
 	void LeaveScene(GameInfo& gameInfo) override{gameInfo = m_gameInfo;}

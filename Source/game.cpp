@@ -6,6 +6,7 @@ Game::Game()
 	SetTargetFPS(config.fpsTarget);
 	Image icon = LoadImage("Resources/Necromancer.png");
 	SetWindowIcon(icon);
+	UnloadImage(icon);
 }
 
 Game::~Game()

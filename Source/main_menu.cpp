@@ -6,6 +6,8 @@ void MainMenu::LoadScene(GameInfo gameInfo)
 	// Setup Buttons
 	playButton.Setup(0.f, config.screenHeight / 2.f, 200, 100, "Play");
 	hubButton.Setup((config.screenWidth / 2.f) + 200, config.screenHeight / 2.f, 200, 100, "Hub");
+
+	
 }
 bool MainMenu::Update() 
 {
@@ -35,4 +37,6 @@ void MainMenu::RenderUI()
 {
 	playButton.Render();
 	hubButton.Render();
+
+	
 }

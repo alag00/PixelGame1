@@ -3,6 +3,7 @@
 #include "scene.h"
 #include "config.h"
 #include "button.h"
+#include "animation.h"
 
 class Hub : public Scene
 {
@@ -21,6 +22,8 @@ private:
 
 	// Background
 	Texture2D backgroundTxr{};
+
+	Animator anim;
 public:
 	void LoadScene(GameInfo gameInfo) override;
 	void LeaveScene(GameInfo& gameInfo) override {gameInfo = m_gameInfo;}

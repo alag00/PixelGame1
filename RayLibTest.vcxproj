@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\animation.cpp" />
     <ClCompile Include="Source\boss.cpp" />
     <ClCompile Include="Source\button.cpp" />
     <ClCompile Include="Source\card_manager.cpp" />
@@ -39,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\activator.h" />
+    <ClInclude Include="Source\animation.h" />
     <ClInclude Include="Source\boss.h" />
     <ClInclude Include="Source\button.h" />
     <ClInclude Include="Source\card.h" />

@@ -2,7 +2,7 @@
 #include "dynamic_entity.h"
 #include "enemy.h"
 #include "config.h"
-
+#include "animation.h"
 
 enum BOSS_DECISION
 {
@@ -26,6 +26,9 @@ private:
 	float chargeCounter = chargeTime;
 	bool firstPhase = true;
 	bool attackActive = false;
+
+	Animator anim;
+	Texture2D walkAtlas{};
 public:
 	Boss(DynamicEntity& target);
 	void Sense() override;

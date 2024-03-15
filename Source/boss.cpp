@@ -5,6 +5,8 @@ Boss::Boss(DynamicEntity& target)
 	m_target = &target;
 	SetHealth(150);
 	SetMaxHealth(150);
+	walkAtlas = LoadTexture("Resources/ImpBossWalkAtlas.png");
+	anim.SetAnimation(texture, 1);
 }
 
 void Boss::Sense()
@@ -30,14 +32,17 @@ void Boss::Decide()
 	if (attackCooldown > 0.f)
 	{
 		dec = BOSS_DECISION::IDLE;
+		anim.SetAnimation(texture, 1);
 	}
 	else if (distanceBetweenTarget > attackRange)
 	{
 		dec = BOSS_DECISION::APPROACH;
+		anim.SetAnimation(walkAtlas, 8);
 	}
 	else if (distanceBetweenTarget <= attackRange)
 	{
 		dec = BOSS_DECISION::ATTACK;
+		anim.SetAnimation(texture, 1);
 	}
 }
 
@@ -74,7 +79,8 @@ void Boss::Render()
 	Vector2 origin = { 0.f, 0.f };
 	float rotation = 0.0f;
 
-	DrawTexturePro(texture, src, dst, origin, rotation, RED);
+	anim.DrawAnimationPro(dst, origin, rotation, WHITE);
+	//DrawTexturePro(texture, src, dst, origin, rotation, RED);
 
 	
 

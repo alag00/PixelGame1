@@ -25,6 +25,8 @@ private:
 
 	float offsetTextureX = 0.f;
 	float offsetTextureY = 0.f;
+
+	bool lookingRight = true;
 public:
 	//int velX = 0;
 	//int velY = 0;

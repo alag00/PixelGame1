@@ -69,6 +69,12 @@ void Hub::LoadScene(GameInfo gameInfo)  {
 		*/
 
 	backgroundTxr = LoadTexture("Resources/Background.png");
+
+
+	//Image testAtlas = LoadImage("Resources/Arcanist.png");
+	Texture2D atlas = LoadTexture("Resources/SpriteSheet.png");
+	anim.SetAnimation(atlas, 11);
+	//UnloadImage(testAtlas);
 }
 bool Hub::Update() {
 	Vector2 mousePos = GetMousePosition();
@@ -133,4 +139,7 @@ void Hub::RenderUI()  {
 	}
 	playButton.Render();
 	mainButton.Render();
+
+	Rectangle dest{ 0.f, 0.f, 32 * config.PIXEL_SCALE, 32 * config.PIXEL_SCALE };
+	anim.DrawAnimationPro(dest, Vector2{ 0.f, 0.f }, 0, WHITE);
 }

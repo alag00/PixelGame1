@@ -110,7 +110,11 @@ void Player::OnCollision(Entity* other)
 void Player::Render()
 {
 	Rectangle src = { 0.f, 0.f, static_cast<float>(texture.width), static_cast<float>(texture.height) };
-	Rectangle dst = { x, y, static_cast<float>(texture.width * config.PIXEL_SCALE), static_cast<float>(texture.height * config.PIXEL_SCALE)};
+	Rectangle dst = { x, y, width, height };
+	if (!lookingRight)
+	{
+		src = { 0.f, 0.f, static_cast<float>(-texture.width), static_cast<float>(texture.height) };
+	}
 	Vector2 origin = { 0.f, 0.f};
 	//Vector2 origin = { static_cast<float>((texture.width * config.PIXEL_SCALE) / 2.0f), static_cast<float>((texture.width * config.PIXEL_SCALE) / 2.0f) };
 	float rotation = 0.0f;
@@ -248,11 +252,6 @@ void Player::Control(float deltaTime)
 	isRunning = false;
 
 
-	if (IsKeyPressed(KEY_P))
-	{
-		PushEntity(Vector2{10.f, 10.f});
-	}
-
 	if (IsKeyDown(KEY_W))
 	{
 		velY-= acceleration * deltaTime;
@@ -268,11 +267,13 @@ void Player::Control(float deltaTime)
 	{
 		velX-= acceleration * deltaTime;
 		isRunning = true;
+		lookingRight = false;
 	}
 	if (IsKeyDown(KEY_D))
 	{
 		velX+= acceleration * deltaTime;
 		isRunning = true;
+		lookingRight = true;
 	}
 
 	/*
