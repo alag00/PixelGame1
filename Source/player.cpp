@@ -119,7 +119,8 @@ void Player::Render()
 	Vector2 origin = { 0.f, 0.f};
 	//Vector2 origin = { static_cast<float>((texture.width * config.PIXEL_SCALE) / 2.0f), static_cast<float>((texture.width * config.PIXEL_SCALE) / 2.0f) };
 	float rotation = 0.0f;
-	
+	DrawTexturePro(texture, src, dst, origin, rotation, WHITE);
+	/*
 	if (lookingDown)
 	{
 		DrawTexturePro(texture, src, dst, origin, rotation, WHITE);
@@ -128,6 +129,7 @@ void Player::Render()
 	{
 		DrawTexturePro(backTxr, src, dst, origin, rotation, WHITE);
 	}
+	*/
 	// CollisionBox
 	
 	Color hitboxColor = YELLOW;
@@ -168,22 +170,20 @@ void Player::UpdateTextureFacing()
 	if (mousePos.x >= GetCenter().x)
 	{
 		lookingRight = true;
-		
+		return;
 	}
-	else
-	{
-
+	
 	lookingRight = false;
-	}
+	
 
-
+	/*
 	if (mousePos.y >= GetCenter().y)
 	{
 		lookingDown = true;
 		return;
 	}
 	lookingDown = false;
-	
+	*/
 }
 
 void Player::ClassSetupArcanist()
@@ -218,7 +218,7 @@ void Player::ClassSetupSummoner()
 void Player::ClassSetupNecromancer(std::vector<EnemyCorpse>& corpseList)
 {
 	texture = LoadTexture("Resources/Necromancer.png");
-	backTxr = LoadTexture("Resources/NecromancerBack.png");
+	//backTxr = LoadTexture("Resources/NecromancerBack.png");
 	Texture2D basicTxr = LoadTexture("Resources/FireBolt.png");
 
 	RangedBasicAttack* basicAttack = new RangedBasicAttack();

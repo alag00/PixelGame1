@@ -17,14 +17,34 @@ Level::~Level()
 	
 }
 
+void Level::SetRandomTheme(GameInfo gameInfo)
+{
+	bool redo = false;
+	do {
+		levelTheme = rand() % 2 + 1;
+		for (int i = 0; i < gameInfo.defeatedBosses.size(); i++)
+		{
+			if (levelTheme == gameInfo.defeatedBosses.at(i))
+			{
+				redo = true;
+			}
+		}
+	} while (levelTheme == 0 || redo);
+	levelTheme = 2;
+}
+
 void Level::LoadScene(GameInfo gameInfo)
 {
 	m_gameInfo = gameInfo;
+
+	// Decide Theme, Boss and Stuff here
+	SetRandomTheme(gameInfo);
 	dungeonManager.GenerateDungeon();
 	player = new Player(gameInfo, camera, enemyManager.GetCorpseList());
 	player->SetPosition(dungeonManager.GetRoomList().front()->GetCenter());
 	enemyManager.SetPlayerRef(player);
 	enemyManager.CreateEnemies();
+	enemyManager.CreateBoss(levelTheme);
 	dungeonManager.AddEnemiesToDungeon(enemyManager.GetEnemyList());
 	hud.SetPlayerRef(player);
 	hud.SetBossRef(enemyManager.GetEnemyList().back());
@@ -71,6 +91,7 @@ void Level::UpdateEntities()
 		levelExit.SetPosition(dungeonManager.GetRoomList().back()->GetCenter());
 		levelExit.MakeAvailable();
 		cardManager.Activate();
+		m_gameInfo.defeatedBosses.push_back(levelTheme);
 	}
 }
 

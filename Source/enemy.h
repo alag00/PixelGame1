@@ -38,7 +38,7 @@ public:
 	void SetIsActive(bool newValue) { isActive = newValue; }
 	void TakeDamage(int totalDmg) override;
 	void InvincibleCheck(float deltaTime);
-
+	virtual void SetRoomRef(Rectangle room) { room; }
 };
 class Imp : public Enemy
 {

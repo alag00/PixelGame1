@@ -86,7 +86,7 @@ public:
 	RangedBasicAttack()
 	{
 		cooldownMax = 0.3f;
-		dmg = 1.f;
+		dmg = 10.f;
 	}
 	void SetTexture(Texture2D texture){ bulletTxr = texture; }
 	void Activate(DynamicEntity& caster) override;

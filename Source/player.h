@@ -13,7 +13,7 @@ private:
 	Camera2D* _cam{};
 	Config config;
 	Texture2D texture = {};
-	Texture2D backTxr{};
+	//Texture2D backTxr{};
 	const static int MAX_SPELL_SLOTS = 10;
 	Spell* spellbook[MAX_SPELL_SLOTS] = {nullptr};
 
@@ -28,7 +28,7 @@ private:
 	float offsetTextureY = 0.f;
 
 	bool lookingRight = true;
-	bool lookingDown = true;
+	//bool lookingDown = true;
 public:
 	//int velX = 0;
 	//int velY = 0;

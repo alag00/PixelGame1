@@ -28,10 +28,11 @@ private:
 	Hud hud;
 	Activator levelExit;
 	CardManager cardManager;
-
+	int levelTheme = 0;
 public:
 	Level();
 	~Level();
+	void SetRandomTheme(GameInfo gameInfo);
 	void LoadScene(GameInfo gameInfo) override;// Generate Level
 	void LeaveScene(GameInfo& gameInfo) override;// Leave Level // Return to Level Manager
 	bool Update() override; // Update everything in the level // player, enemies, entities

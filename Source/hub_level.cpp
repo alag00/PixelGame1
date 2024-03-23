@@ -73,7 +73,7 @@ void Hub::LoadScene(GameInfo gameInfo)  {
 
 	//Image testAtlas = LoadImage("Resources/Arcanist.png");
 	Texture2D atlas = LoadTexture("Resources/SpriteSheet.png");
-	anim.SetAnimation(atlas, 11);
+	anim.SetAnimation(atlas, 11, false);
 	//UnloadImage(testAtlas);
 }
 bool Hub::Update() {

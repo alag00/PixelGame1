@@ -10,8 +10,10 @@ private:
 	Texture2D atlas{};
 	float fps = 12.f;
 	float frameTimer = 0.f;
+	bool flippedX = false;
+	bool looping = true;
 public:
-	void SetAnimation(Texture2D newSpriteSheet, int totalFrames);
+	void SetAnimation(Texture2D newSpriteSheet, int totalFrames, bool loop);
 	void DrawAnimationPro(Rectangle dest, Vector2 origin, float rotation, Color tint);
-
+	void FlipAnimationHorizontal();
 };

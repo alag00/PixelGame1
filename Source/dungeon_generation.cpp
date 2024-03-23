@@ -174,6 +174,8 @@ void DungeonManager::AddEnemiesToDungeon(std::vector<Enemy*> enemyList)
 		}
 	}
 	enemyList.back()->SetPosition(roomList.back()->GetCenter());
+	Rectangle roomSize = { roomList.back()->x, roomList.back()->y, roomList.back()->width, roomList.back()->height};
+	enemyList.back()->SetRoomRef(roomSize);
 }
 
 DungeonManager::~DungeonManager()

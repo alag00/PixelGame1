@@ -16,10 +16,25 @@ void EnemyManager::CreateEnemies()
 		newEnemy->SetTexture(enemyTxr);
 		enemyList.push_back(newEnemy);
 	}
-	enemyTxr = LoadTexture("Resources/ImpBoss.png");
-	Boss* boss = new Boss(*playerRef);
-	boss->SetTexture(enemyTxr);
-	enemyList.push_back(boss);
+	
+}
+void EnemyManager::CreateBoss(int theme)
+{
+
+	switch (theme)
+	{
+	case 1:
+		ImpBoss * imp;
+		imp = new ImpBoss(*playerRef);
+		enemyList.push_back(imp);
+		break;
+	case 2:
+		JesterBoss * jest;
+		jest = new JesterBoss(*playerRef);
+		enemyList.push_back(jest);
+		break;
+	}
+	
 }
 bool EnemyManager::Update(float deltaTime, Rectangle cam)
 {
