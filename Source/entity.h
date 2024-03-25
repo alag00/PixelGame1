@@ -55,7 +55,7 @@ public:
 		return false;
 	}
 
-	void SetPosition(Vector2 newPos)
+	virtual void SetPosition(Vector2 newPos)
 	{
 		x = newPos.x;
 		y = newPos.y;

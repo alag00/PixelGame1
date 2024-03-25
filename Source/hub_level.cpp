@@ -154,11 +154,12 @@ void Hub::Render()  {
 	// Background
 	RenderBackground();
 	//DrawText("This is The Hub", config.screenWidth / 2, config.screenHeight / 2, 10, BLACK);
+	levelEntrance.Render();
 	if (!showClasses)
 	{
 		player->Render();
 	}
-	levelEntrance.Render();
+	
 	RenderUI();
 	EndDrawing();
 }
@@ -190,7 +191,7 @@ void Hub::SetPlayer()
 	levelEntrance.MakeAvailable();
 	player->SetPosition(camera.target);
 
-	Vector2 entrancePos = { static_cast<float>(config.screenWidth - 100.f),static_cast<float>(config.screenHeight / 2.f) };
+	Vector2 entrancePos = { static_cast<float>(config.screenWidth - levelEntrance.width),static_cast<float>(config.screenHeight / 2.f) };
 	levelEntrance.SetPosition(entrancePos);
 }
 

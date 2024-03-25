@@ -138,14 +138,16 @@ void Level::Render()
 	BeginMode2D(camera);
 	ClearBackground(BLACK);
 
+	
+
 	Rectangle cameraBox{camera.target.x , camera.target.y, 
 		static_cast<float>(config.screenWidth), static_cast<float>(config.screenHeight)};
 
 	dungeonManager.Render(cameraBox);
-	enemyManager.Render();
-	
-	player->Render();
 	levelExit.Render();
+	enemyManager.Render();
+	player->Render();
+	
 
 	//Debug
 	/*
