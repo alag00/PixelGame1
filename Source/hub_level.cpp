@@ -176,6 +176,7 @@ void Hub::RenderUI()  {
 		DrawText("CHOOSE YOUR CLASS", 50, 50, 50 ,YELLOW);
 		return;
 	}
+	levelEntrance.RenderUI();
 	//playButton.Render();
 	//mainButton.Render();
 

@@ -73,21 +73,20 @@ public:
 		{
 			return;
 		}
-		//float halfRange = range / 2.f;
-		//Rectangle dst = { x- range, y - range, range * 2.f, range* 2.f };
 		Vector2 origin = { 0.f, 0.f };
 		anim.DrawAnimationPro(dst, origin, 0.f, WHITE);
+	}
+	void RenderUI()
+	{
+		if (!active || !inRange)
+		{
+			return;
+		}
+		Rectangle speechBox = dst;
+		speechBox.y -= speechBox.height;
+		DrawRectangleRec(speechBox, WHITE);
 
-		/*
-		Color color = WHITE;
-		color.a = 40;
-		DrawCircle(static_cast<int>(x), static_cast<int>(y), range, color);
-
-		DrawLine(static_cast<int>(x), 
-			static_cast<int>(y), 
-			static_cast<int>(playerRef->GetCenter().x), 
-			static_cast<int>(playerRef->GetCenter().y), RED);
-		*/
+		DrawText("Press 'E'", static_cast<int>(speechBox.x), static_cast<int>(speechBox.y), 25, BLACK);
 	}
 	void MakeAvailable() { active = true; }
 };

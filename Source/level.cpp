@@ -170,6 +170,7 @@ void Level::Render()
 
 void Level::RenderUI()
 {
+	levelExit.RenderUI();
 	hud.RenderHud();
 	cardManager.Render();
 }
