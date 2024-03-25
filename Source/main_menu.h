@@ -9,12 +9,13 @@ class MainMenu : public Scene
 private:
 	Config config;
 	GameInfo m_gameInfo;
-	Button playButton; // onClick = switch Scene to Dungeon Level
+	//Button playButton; // onClick = switch Scene to Dungeon Level
 	Button hubButton; // onClick = switch Scene to Dungeon Level
 	SCENE_TYPE nextScene = SCENE_TYPE::NONE;
 
 	//
-	//Texture2D atlas{};
+	bool hasLoadedTxr = false;
+	Texture2D backgroundTxr{};
 public:
 	void LoadScene(GameInfo gameInfo) override;
 	void LeaveScene(GameInfo& gameInfo) override{gameInfo = m_gameInfo;}
@@ -25,6 +26,10 @@ public:
 	void ChangeToPlay(){nextScene = SCENE_TYPE::DUNGEON_LEVEL;}
 	void ChangeToHub(){nextScene = SCENE_TYPE::HUB;}
 	SCENE_TYPE GetNewScene() override{return nextScene;}
+
+	void DrawBackground();
+
+	void TextureSetup();
 };
 
 // Stage 1: Background Image, Texts and functional Buttons that leads to DungeonLevel Scene

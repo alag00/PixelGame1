@@ -2,12 +2,20 @@
 
 void Hub::LoadScene(GameInfo gameInfo)  {
 	m_gameInfo = gameInfo;
-	mainButton.Setup(0.f, config.screenHeight / 2.f, 200.f, 100.f, "Main Menu");
-	playButton.Setup((config.screenWidth / 2.f) + 200, config.screenHeight / 2.f, 200.f, 100.f, "Play");
+	//mainButton.Setup(0.f, config.screenHeight / 2.f, 200.f, 100.f, "Main Menu");
+	//playButton.Setup((config.screenWidth / 2.f) + 200, config.screenHeight / 2.f, 200.f, 100.f, "Play");
+
+	camera.target.x = config.screenWidth / 2.f;
+	camera.target.y = config.screenHeight / 2.f;
+	camera.zoom = 1.f;
+
+	backgroundTxr = LoadTexture("Resources/Background.png");
+	CreateWalls();
 
 	if (gameInfo.playerClass != 0)
 	{
 		showClasses = false;
+		SetPlayer();
 		return;
 	}
 
@@ -54,28 +62,28 @@ void Hub::LoadScene(GameInfo gameInfo)  {
 	classTexture = LoadTexture("Resources/Paladin.png");
 	classButtons[5].SetupImage(frameTexture, classTexture);
 	classButtons[5].SetupToolTip(" Paladin | Melee, Slow, Healer, Tanky | Can Heal ");
-	//for (int i = 0; i < 6; i++)
-	//{
-		//classButtons[i].SetupImage(frameTexture);
-	//}
-	//Texture2D arcanistTexture = LoadTexure("Resources/Arcanist.png"); // an entity with class Texture
+
+
+
+
+	
 	/*
-	classButtons[0].Setup(0.f,0.f, buttonSize, buttonSize,	  "");
-	classButtons[1].Setup(300.f, 0.f, buttonSize, buttonSize, "");
-	classButtons[2].Setup(600.f, 0.f, buttonSize, buttonSize, "");
-	classButtons[3].Setup(0.f, 200.f, buttonSize, buttonSize, "");
-	classButtons[4].Setup(300.f, 200.f, buttonSize, buttonSize,"");
-	classButtons[5].Setup(600.f, 200.f, buttonSize, buttonSize,"");
-		*/
-
-	backgroundTxr = LoadTexture("Resources/Background.png");
-
-
+	room.Setup(0.f ,0.f, backgroundTxr);
+	room.width = static_cast<float>(config.screenWidth);
+	room.height = static_cast<float>(config.screenHeight);
+	room.FillContent();
+	*/
 	//Image testAtlas = LoadImage("Resources/Arcanist.png");
-	Texture2D atlas = LoadTexture("Resources/SpriteSheet.png");
-	anim.SetAnimation(atlas, 11, false);
+	//Texture2D atlas = LoadTexture("Resources/SpriteSheet.png");
+	//anim.SetAnimation(atlas, 11, false);
 	//UnloadImage(testAtlas);
+
+	
+
+	
+	
 }
+
 bool Hub::Update() {
 	Vector2 mousePos = GetMousePosition();
 	if (showClasses)
@@ -86,10 +94,12 @@ bool Hub::Update() {
 			{
 				m_gameInfo.playerClass = i + 1;
 				showClasses = false;
+				SetPlayer();	
 			}
 		}
 		return false;
 	}
+	/*
 	if (playButton.Update(mousePos))
 	{
 		ChangeToPlay();
@@ -100,31 +110,59 @@ bool Hub::Update() {
 		ChangeToMain();
 		return true;
 	}
+	*/
+
+	float deltaTime = GetFrameTime();
+	player->Update(deltaTime);
+	levelEntrance.Update();
+	WallCollisionCheck();
+	//room.CollisionCheck(player);
+	if (levelEntrance.CheckActive())
+	{
+		ChangeToPlay();
+		return true;
+	}
 	return false;
 }
+
 void Hub::RenderBackground()
 {
+	//Rectangle camRect = { 0.f, 0.f, static_cast<float>(config.screenWidth), static_cast<float>(config.screenHeight) };
+	//room.Render(camRect);
+	
+	
 	float rotation = 0.0f;
 
 	Rectangle src = { 0.f, 0.f, static_cast<float>(backgroundTxr.width), static_cast<float>(backgroundTxr.height) };
-	Rectangle dst = { (config.screenWidth / 2.f) - ((backgroundTxr.width * config.PIXEL_SCALE) / 2.f), 100.f, static_cast<float>(backgroundTxr.width * config.PIXEL_SCALE), static_cast<float>(backgroundTxr.height * config.PIXEL_SCALE) };
-	Vector2 origin = { static_cast<float>(backgroundTxr.width / 2.0f), static_cast<float>(backgroundTxr.height / 2.0f) };
+	Rectangle dst = { 0.f, 0.f, static_cast<float>(config.screenWidth), static_cast<float>(config.screenHeight) };
+	Vector2 origin = { 0.f, 0.f };
 
 	DrawTexturePro(backgroundTxr, src, dst, origin, rotation, WHITE);
-
+	/*
+	Color color = RED;
+//	color.a = 50;
+	for (int i = 0; i < 4; i++)
+	{
+		DrawRectangleRec(collisionWalls.at(i), color);
+	}
+	*/
 }
+
 void Hub::Render()  {
 	BeginDrawing();
 	ClearBackground(BROWN);
 	// Background
 	RenderBackground();
-	DrawText("This is The Hub", config.screenWidth / 2, config.screenHeight / 2, 10, BLACK);
-
-
-
+	//DrawText("This is The Hub", config.screenWidth / 2, config.screenHeight / 2, 10, BLACK);
+	if (!showClasses)
+	{
+		player->Render();
+	}
+	levelEntrance.Render();
 	RenderUI();
 	EndDrawing();
 }
+
 void Hub::RenderUI()  {
 
 	if (showClasses)
@@ -137,9 +175,68 @@ void Hub::RenderUI()  {
 		DrawText("CHOOSE YOUR CLASS", 50, 50, 50 ,YELLOW);
 		return;
 	}
-	playButton.Render();
-	mainButton.Render();
+	//playButton.Render();
+	//mainButton.Render();
 
-	Rectangle dest{ 0.f, 0.f, 32 * config.PIXEL_SCALE, 32 * config.PIXEL_SCALE };
-	anim.DrawAnimationPro(dest, Vector2{ 0.f, 0.f }, 0, WHITE);
+	//Rectangle dest{ 0.f, 0.f, 32 * config.PIXEL_SCALE, 32 * config.PIXEL_SCALE };
+	//anim.DrawAnimationPro(dest, Vector2{ 0.f, 0.f }, 0, WHITE);
+}
+
+void Hub::SetPlayer()
+{
+	std::vector<EnemyCorpse> corpseList{};
+	player = new Player(m_gameInfo, camera, corpseList);
+	levelEntrance.SetPlayerRef(player);
+	levelEntrance.MakeAvailable();
+	player->SetPosition(camera.target);
+
+	Vector2 entrancePos = { static_cast<float>(config.screenWidth - 100.f),static_cast<float>(config.screenHeight / 2.f) };
+	levelEntrance.SetPosition(entrancePos);
+}
+
+void Hub::CreateWalls()
+{
+	float width = static_cast<float>(config.screenWidth);
+	float height = static_cast<float>(config.screenHeight);
+	float thickness = 50.f;
+	Rectangle top{ 0.f, 0.f,width, thickness };
+	collisionWalls.push_back(top);
+	Rectangle bot{ 0.f, height - thickness,width, thickness };
+	collisionWalls.push_back(bot);
+	Rectangle left{ 0.f, 0.f,thickness, height };
+	collisionWalls.push_back(left);
+	Rectangle right{ width - thickness, 0.f,thickness, height };
+	collisionWalls.push_back(right);
+}
+
+void Hub::WallCollisionCheck()
+{
+	for (int i = 0; i < collisionWalls.size(); i++)
+	{
+		if (player->AABBvsAABBCheck(collisionWalls.at(i)))
+		{
+			WallOnCollision(collisionWalls.at(i));
+		}
+	}
+}
+
+void Hub::WallOnCollision(Rectangle wall)
+{
+	if (wall.width > wall.height)
+	{
+		if (wall.y < player->y)
+		{
+			player->y = wall.y + wall.height;
+			return;
+		}
+		player->y = wall.y - player->height;
+		return;
+	}
+
+	if (wall.x < player->x)
+	{
+		player->x = wall.x + wall.width;
+		return;
+	}
+	player->x = wall.x - player->width;
 }

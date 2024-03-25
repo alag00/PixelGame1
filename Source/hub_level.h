@@ -4,6 +4,10 @@
 #include "config.h"
 #include "button.h"
 #include "animation.h"
+#include "activator.h"
+#include "player.h"
+#include "corpse.h"
+//#include "room.h"
 
 class Hub : public Scene
 {
@@ -22,8 +26,12 @@ private:
 
 	// Background
 	Texture2D backgroundTxr{};
+	//Animator anim;
+	std::vector<Rectangle> collisionWalls{};
 
-	Animator anim;
+	Activator levelEntrance;
+	Player* player = nullptr;
+	Camera2D camera;
 public:
 	void LoadScene(GameInfo gameInfo) override;
 	void LeaveScene(GameInfo& gameInfo) override {gameInfo = m_gameInfo;}
@@ -34,6 +42,10 @@ public:
 	void ChangeToPlay(){nextScene = SCENE_TYPE::DUNGEON_LEVEL;}
 	void ChangeToMain(){nextScene = SCENE_TYPE::MAIN_MENU;}
 	SCENE_TYPE GetNewScene() override{return nextScene;}
+	void SetPlayer();
+	void CreateWalls();
+	void WallCollisionCheck();
+	void WallOnCollision(Rectangle wall);
 };
 
 // First time in Hud = Choose your Class and Deity
