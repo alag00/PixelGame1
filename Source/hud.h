@@ -35,10 +35,6 @@ private:
 
 	Rectangle bossHpBar{100.f, 100.f, 400.f, 75.f};
 	float currentBossWidth = 100.f;
-	// Health
-	// Mini Map
-	// Some other stuff
-	// maybe hotbar for abilities
 public:
 	Hud();
 	void SetPlayerRef(Player* ref);

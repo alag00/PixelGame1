@@ -23,7 +23,6 @@ void Button::SetupToolTip(const char* _text)
 {
 	hasToolTip = true;
 	toolTipText = _text;
-	// set toolTipBox size compared to text
 	toolTipBox.width = static_cast<float>(strlen(toolTipText) * (fontSize / 1.5f));
 	toolTipBox.height = static_cast<float>(fontSize * 1.5f);
 	toolTipBox.x = x -(toolTipBox.width / 2.f);

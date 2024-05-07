@@ -52,8 +52,6 @@ public:
 	void Sense() override;
 	void Decide() override;
 	void Act(float deltaTime) override;
-	//void Update(float deltaTime) override;
-	//void SpellCollisionCheck(DynamicEntity* other) override;
 	void Render() override;
 	void NextPhase();
 	void PushPlayer();

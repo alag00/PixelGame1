@@ -97,14 +97,14 @@ public:
 	void Act(float deltaTime) override;
 	void Render() override;
 };
-//
+
 class Skeleton : public Enemy
 {
 private:
 public:
 };
 
-//
+// Slowly teleports towards player, deals dmg at end of teleport
 class HellSpirit : public Enemy
 {
 private:

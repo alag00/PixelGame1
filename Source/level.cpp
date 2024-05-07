@@ -30,14 +30,13 @@ void Level::SetRandomTheme(GameInfo gameInfo)
 			}
 		}
 	} while (levelTheme == 0 || redo);
-	levelTheme = 2;
+	//levelTheme = 2;
 }
 
 void Level::LoadScene(GameInfo gameInfo)
 {
 	m_gameInfo = gameInfo;
 
-	// Decide Theme, Boss and Stuff here
 	SetRandomTheme(gameInfo);
 	dungeonManager.GenerateDungeon();
 	player = new Player(gameInfo, camera, enemyManager.GetCorpseList());
@@ -150,19 +149,7 @@ void Level::Render()
 	
 
 	//Debug
-	/*
-	int x = static_cast<int>(cameraBox.x + 10);
-	int y = static_cast<int>(cameraBox.y + 10);
-	int width = static_cast<int>(cameraBox.width - 20);
-	int height = static_cast<int>(cameraBox.height - 20);
 
-	DrawLine(x, y, x + width, y, RED);
-	DrawLine(x, y, x , y + height, RED);
-	DrawLine(x + width, y + height, x - width, y + height, RED);
-	DrawLine(x + width, y + height, x + width, y - height, RED);
-	*/
-	
-	
 	RenderUI();
 	EndMode2D();
 	EndDrawing();

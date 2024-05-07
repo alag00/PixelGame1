@@ -14,45 +14,35 @@ void Hallway::Setup(EntryPoint src, Room* ownerOne, Room* ownerTwo, Texture2D ne
 	switch (src.side)
 	{
 	case SIDE::UP:
-		//height = config.HALLWAY_LENGTH + bonusLen;
-		//width = config.HALLWAY_LENGTH / 2.f;
-		x = (ownerOne->x + width) + rand() % static_cast<int>(ownerOne->width - (width * 3)); ;//x = ownerOne->x - src.position.x + (ownerOne->width / 2.f);
+		x = (ownerOne->x + width) + rand() % static_cast<int>(ownerOne->width - (width * 3)); 
 		y = ownerOne->y - src.position.y - height;
 
-		ownerTwo->x = (x - width) - rand() % static_cast<int>(ownerTwo->width - (width * 3)); // (ownerTwo->width / 2.f) + (width / 2.f);//x - (ownerTwo->width / 2.f) + rand() % static_cast<int>(ownerTwo->width - (width * 2)) - static_cast<int>(((ownerTwo->width / 2.0f )-width)); // x - (owner2width /2) + width TO x + (owner2width /2) - width
+		ownerTwo->x = (x - width) - rand() % static_cast<int>(ownerTwo->width - (width * 3)); 
 		ownerTwo->y = y - ownerTwo->height;
 		break;
 	case SIDE::DOWN:
-		//height = config.HALLWAY_LENGTH + bonusLen;
-		//width = config.HALLWAY_LENGTH / 2.f;
-		x = (ownerOne->x + width) + rand() % static_cast<int>(ownerOne->width - (width * 3)); // x = ownerOne->x - src.position.x + (ownerOne->width / 2.f);
+		x = (ownerOne->x + width) + rand() % static_cast<int>(ownerOne->width - (width * 3));
 		y = ownerOne->y + src.position.y + ownerOne->height;
 
-		ownerTwo->x = (x - width) - rand() % static_cast<int>(ownerTwo->width - (width * 3)); //ownerTwo->x = x - (ownerTwo->width / 2.f) + rand() % static_cast<int>(ownerTwo->width - (width * 2)) - static_cast<int>(((ownerTwo->width / 2.0f)- width));
+		ownerTwo->x = (x - width) - rand() % static_cast<int>(ownerTwo->width - (width * 3)); 
 		ownerTwo->y = y + height;
 		break;
 	case SIDE::LEFT:
-		//height = config.HALLWAY_LENGTH / 2.f;
-		//width = config.HALLWAY_LENGTH + bonusLen;
 		x = ownerOne->x - src.position.x - width;
 		y = ownerOne->y - src.position.y + (ownerOne->height / 2.f);
 
 		ownerTwo->x = x - ownerTwo->width;
-		ownerTwo->y = (y - height) - rand() % static_cast<int>(ownerTwo->height - (height * 3));  //ownerTwo->y = y - (ownerTwo->height / 2.f) + rand() % static_cast<int>(ownerTwo->height - (height * 2)) - static_cast<int>((ownerTwo->height / 2.0f));
+		ownerTwo->y = (y - height) - rand() % static_cast<int>(ownerTwo->height - (height * 3));  
 		break;
 	case SIDE::RIGHT:
-		//height = config.HALLWAY_LENGTH / 2.f;
-		//width = config.HALLWAY_LENGTH + bonusLen;
 		x = ownerOne->x + src.position.x + ownerOne->width;
 		y = ownerOne->y - src.position.y + (ownerOne->height / 2.f);
 
 		ownerTwo->x = x + width;
-		ownerTwo->y = (y - height) - rand() % static_cast<int>(ownerTwo->height - (height * 3)); // ownerTwo->y = y - (ownerTwo->height / 2.f) + rand() % static_cast<int>(ownerTwo->height - (height * 2)) - static_cast<int>((ownerTwo->height / 2.0f));
+		ownerTwo->y = (y - height) - rand() % static_cast<int>(ownerTwo->height - (height * 3)); 
 		break;
 	}
 	side = src.side;
-	//src.position = { x, y };
-	//ownerTwo->GenSetPosFromEntryPoints(src);
 }
 
 void Hallway::Render(Rectangle cam)
@@ -86,7 +76,7 @@ void Hallway::Render(Rectangle cam)
 	Rectangle src = { 0.f, 0.f, static_cast<float>(txr.width), static_cast<float>(txr.height) };
 	Rectangle dst = { x, y, static_cast<float>(txr.width * config.PIXEL_SCALE), static_cast<float>(txr.height * config.PIXEL_SCALE) };
 	Vector2 origin = { 0.f, 0.f };
-	//Vector2 origin = { static_cast<float>((texture.width * config.PIXEL_SCALE) / 2.0f), static_cast<float>((texture.width * config.PIXEL_SCALE) / 2.0f) };
+	
 	float rotation = 0.0f;
 
 	DrawTexturePro(txr, src, dst, origin, rotation, WHITE);
@@ -118,7 +108,6 @@ void Hallway::Render(Rectangle cam)
 
 void Hallway::FillContent()
 {
-	// Add 2 collision boxes on the long sides
 	float thickness = 50.f;
 	if (width > height)
 	{
@@ -135,7 +124,7 @@ void Hallway::FillContent()
 
 }
 
-void Hallway::CollisionCheck(Entity* entity)// check if touching entity
+void Hallway::CollisionCheck(Entity* entity)
 {
 	for (int i = 0; i < collisionWalls.size(); i++)
 	{
@@ -148,7 +137,7 @@ void Hallway::CollisionCheck(Entity* entity)// check if touching entity
 		}
 	}
 }
-void Hallway::OnCollision(Entity* entity, Rectangle wall)// push entity back 
+void Hallway::OnCollision(Entity* entity, Rectangle wall)
 {
 	if (wall.width > wall.height)
 	{
@@ -211,12 +200,11 @@ void Room::Render(Rectangle cam)
 		return;
 	}
 
-	//DrawRectangle(static_cast<int>(x), static_cast<int>(y), static_cast<int>(width), static_cast<int>(height), color);
-
+	
 	Rectangle src = { 0.f, 0.f, static_cast<float>(txr.width), static_cast<float>(txr.height) };
 	Rectangle dst = { x, y, static_cast<float>(txr.width * config.PIXEL_SCALE), static_cast<float>(txr.height * config.PIXEL_SCALE) };
 	Vector2 origin = { 0.f, 0.f };
-	//Vector2 origin = { static_cast<float>((texture.width * config.PIXEL_SCALE) / 2.0f), static_cast<float>((texture.width * config.PIXEL_SCALE) / 2.0f) };
+	
 	float rotation = 0.0f;
 
 	DrawTexturePro(txr, src, dst, origin, rotation, WHITE);
@@ -243,22 +231,7 @@ void Room::Setup(float xPos, float yPos, Texture2D newTxr)
 	}
 	x = xPos * (randX * 0.1f);
 	y = yPos * (randY * 0.1f);
-	/*
-	int randNum = rand() % 2 + 1;
-	switch (randNum)
-	{
-	case 1:
-		width = l + rand() % (100 * static_cast<int>(config.PIXEL_SCALE)) + 1;
-		height = s + rand() % (100 * static_cast<int>(config.PIXEL_SCALE)) + 1;
-		break;
-	case 2:
-		width = s + rand() % (100 * static_cast<int>(config.PIXEL_SCALE)) + 1;
-		height = l + rand() % (100 * static_cast<int>(config.PIXEL_SCALE)) + 1;
-		break;
-	}
-	*/
-	//xPos;
-	//yPos;
+	
 	txr = newTxr;
 	width = txr.width * config.PIXEL_SCALE;
 	height = txr.height * config.PIXEL_SCALE;
@@ -379,144 +352,15 @@ void Room::CreateCollisionWalls(EntryPoint entry, float thickness, SIDE ownerOne
 
 void Room::FillContent()
 {
-	// Add 4 collision boxes on each side
-	// Upper Room Collision
+
 	float thickness = 50.f;
 	CreateCollisionWalls(entries[0], thickness, SIDE::UP, SIDE::DOWN);
 	CreateCollisionWalls(entries[1], thickness, SIDE::DOWN, SIDE::UP);
 	CreateCollisionWalls(entries[2], thickness, SIDE::LEFT, SIDE::RIGHT);
 	CreateCollisionWalls(entries[3], thickness, SIDE::RIGHT, SIDE::LEFT);
-	/*
-	if (!entries[0].isAvailable)
-	{
-		// Get correct hallway
-		int correctIndex = GetCorrectHallway(SIDE::UP, SIDE::DOWN);
-
-		float hallwayX = neighborHalls.at(correctIndex)->GetX();
-		float hallwayWidth = neighborHalls.at(correctIndex)->GetWidth();
-
-		// left of hallway
-		Rectangle upperBoxOne{ x, y - thickness, hallwayX - x, thickness };
-		collisionWalls.push_back(upperBoxOne);
-
-		// right of hallway
-		Rectangle upperBoxTwo{ hallwayX + hallwayWidth, y - thickness, width - (hallwayX - x + hallwayWidth), thickness };
-		collisionWalls.push_back(upperBoxTwo);
-	}
-	else
-	{
-		Rectangle upperBox{ x, y - thickness, width, thickness };
-		collisionWalls.push_back(upperBox);
-	}
-
-	if (!entries[1].isAvailable)
-	{
-		// Get correct hallway
-		int correctIndex = 0;
-
-		for (int i = 0; i < neighborHalls.size(); i++)
-		{
-			if (neighborHalls.at(i) == nullptr)
-			{
-				continue;
-			}
-			if (neighborHalls.at(i)->GetSide() == SIDE::DOWN && this == neighborHalls.at(i)->GetOwnerOne()
-				|| neighborHalls.at(i)->GetSide() == SIDE::UP && this == neighborHalls.at(i)->GetOwnerTwo())
-			{
-				correctIndex = i;
-			}
-		}
-
-		float hallwayX = neighborHalls.at(correctIndex)->GetX();
-		float hallwayWidth = neighborHalls.at(correctIndex)->GetWidth();
-
-		// left of hallway
-		Rectangle bottomBoxOne{ x, y + height, hallwayX - x, thickness };
-		collisionWalls.push_back(bottomBoxOne);
-
-		// right of hallway
-		Rectangle bottomBoxTwo{ hallwayX + hallwayWidth, y + height, width - (hallwayX - x + hallwayWidth), thickness };
-		collisionWalls.push_back(bottomBoxTwo);
-	}
-	else
-	{
-		Rectangle bottomBox{ x, y + height, width, thickness };
-		collisionWalls.push_back(bottomBox);
-	}
-
-	if (!entries[2].isAvailable)
-	{
-		// Get correct hallway
-		int correctIndex = 0;
-
-		for (int i = 0; i < neighborHalls.size(); i++)
-		{
-			if (neighborHalls.at(i) == nullptr)
-			{
-				continue;
-			}
-			if (neighborHalls.at(i)->GetSide() == SIDE::LEFT && this == neighborHalls.at(i)->GetOwnerOne()
-				|| neighborHalls.at(i)->GetSide() == SIDE::RIGHT && this == neighborHalls.at(i)->GetOwnerTwo())
-			{
-				correctIndex = i;
-			}
-		}
-
-		float hallwayY = neighborHalls.at(correctIndex)->GetY();
-		float hallwayHeight = neighborHalls.at(correctIndex)->GetHeight();
-
-		// left of hallway
-		Rectangle leftBoxOne{ x - thickness, y, thickness, hallwayY - y };
-		collisionWalls.push_back(leftBoxOne);
-
-		// right of hallway
-		Rectangle leftBoxTwo{ x - thickness, hallwayY + hallwayHeight, thickness, height - (hallwayY - y + hallwayHeight) };
-		collisionWalls.push_back(leftBoxTwo);
-	}
-	else
-	{
-		Rectangle leftBox{ x - thickness, y, thickness, height };
-		collisionWalls.push_back(leftBox);
-	}
-
-	if (!entries[3].isAvailable)
-	{
-		// Get correct hallway
-		int correctIndex = 0;
-
-		for (int i = 0; i < neighborHalls.size(); i++)
-		{
-			if (neighborHalls.at(i) == nullptr)
-			{
-				continue;
-			}
-			if (neighborHalls.at(i)->GetSide() == SIDE::RIGHT && this == neighborHalls.at(i)->GetOwnerOne()
-				|| neighborHalls.at(i)->GetSide() == SIDE::LEFT && this == neighborHalls.at(i)->GetOwnerTwo())
-			{
-				correctIndex = i;
-			}
-		}
-
-		float hallwayY = neighborHalls.at(correctIndex)->GetY();
-		float hallwayHeight = neighborHalls.at(correctIndex)->GetHeight();
-
-		// left of hallway
-		Rectangle leftBoxOne{ x + width, y, thickness, hallwayY - y };
-		collisionWalls.push_back(leftBoxOne);
-
-		// right of hallway
-		Rectangle leftBoxTwo{ x + width, hallwayY + hallwayHeight, thickness, height - (hallwayY - y + hallwayHeight) };
-		collisionWalls.push_back(leftBoxTwo);
-	}
-	else
-	{
-		Rectangle rightBox{ x + width, y, thickness, height };
-		collisionWalls.push_back(rightBox);
-	}
-	*/
 }
 
-void Room::CollisionCheck(Entity* entity)// check if touching entity
+void Room::CollisionCheck(Entity* entity)
 {
 	for (int i = 0; i < collisionWalls.size(); i++)
 	{
@@ -530,10 +374,9 @@ void Room::CollisionCheck(Entity* entity)// check if touching entity
 	}
 }
 
-void Room::OnCollision(Entity* entity, Rectangle wall)// push entity back 
+void Room::OnCollision(Entity* entity, Rectangle wall)
 {
-	// Push only in 1 axis
-	// if wall width is longer only push on y-axis
+
 	if (wall.width > wall.height)
 	{
 		if (wall.y < entity->y)

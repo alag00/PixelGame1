@@ -9,11 +9,11 @@ class MainMenu : public Scene
 private:
 	Config config;
 	GameInfo m_gameInfo;
-	//Button playButton; // onClick = switch Scene to Dungeon Level
-	Button hubButton; // onClick = switch Scene to Dungeon Level
+	
+	Button hubButton; 
 	SCENE_TYPE nextScene = SCENE_TYPE::NONE;
 
-	//
+	
 	bool hasLoadedTxr = false;
 	Texture2D backgroundTxr{};
 public:
@@ -31,7 +31,3 @@ public:
 
 	void TextureSetup();
 };
-
-// Stage 1: Background Image, Texts and functional Buttons that leads to DungeonLevel Scene
-// Stage 2: Having a functional Settings Menu
-// Stage 3: Having functional Saves which can be selected

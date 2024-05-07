@@ -40,7 +40,6 @@ void Enemy::Render()
 	if (GetInvincibility())
 	{
 		color = RED;
-		//color.a = 75;
 	}
 	DrawTexturePro(texture, src, dst, origin, rotation, color);
 
@@ -103,7 +102,7 @@ void Enemy::InvincibleCheck(float deltaTime)
 Imp::Imp(DynamicEntity& target)
 {
 	m_target = &target;
-	bulletTxr = LoadTexture("Resources/FireBolt.png");
+	bulletTxr = LoadTexture("Resources/Texture/FireBolt.png");
 	basic.SetTexture(bulletTxr);
 	SetHealth(15);
 	SetMaxHealth(15);
@@ -191,22 +190,13 @@ void Imp::SpellCollisionCheck(DynamicEntity* other)
 Crawler::Crawler(DynamicEntity& target)
 {
 	m_target = &target;
-	//basic = new RangedBasicAttack();
-	texture = LoadTexture("Resources/Crawler.png");
+	texture = LoadTexture("Resources/Texture/Crawler.png");
 	SetHealth(5);
 }
 
 void Crawler::Sense()
 {
-	/*
-	if (m_target == nullptr)
-	{
-		return;
-	}
-	float vectorX = x - m_target->x;
-	float vectorY = y - m_target->y;
-	distanceBetweenTarget = sqrt((vectorX * vectorX) + (vectorY * vectorY));// magnitude of vector from enemy to player
-	*/
+
 }
 
 void Crawler::Decide()
@@ -245,8 +235,7 @@ void Crawler::Render()
 Specter::Specter(DynamicEntity& target)
 {
 	m_target = &target;
-	//basic = new RangedBasicAttack();
-	texture = LoadTexture("Resources/Specter.png");
+	texture = LoadTexture("Resources/Texture/Specter.png");
 	SetHealth(5);
 	width = texture.width * config.PIXEL_SCALE;
 	height = texture.height * config.PIXEL_SCALE;
@@ -280,14 +269,6 @@ void Specter::Act(float deltaTime)
 
 void Specter::Render()
 {
-	/*
-	Rectangle src = { 0.f, 0.f, static_cast<float>(texture.width), static_cast<float>(texture.height) };
-	Rectangle dst = { x, y, static_cast<float>(texture.width * config.PIXEL_SCALE), static_cast<float>(texture.height * config.PIXEL_SCALE) };
-	Vector2 origin = { static_cast<float>(texture.width / 2.0f), static_cast<float>(texture.height / 2.0f) };
-	float rotation = 0.0f;
-
-	DrawTexturePro(texture, src, dst, origin, rotation, WHITE);
-	*/
 	Enemy::Render();
 
 }

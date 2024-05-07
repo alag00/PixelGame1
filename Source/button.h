@@ -7,7 +7,6 @@ class Button : public Rectangle{
 private:
 	bool isHover = false;
 	Config config;
-	// Text Related
 	const char* text = "";
 	int fontSize = 20;
 	Color color = BLACK;
@@ -15,7 +14,6 @@ private:
 	Texture2D bonusTexture{};
 	bool hasNoTexture = true;
 
-	// Hover tooltip
 	bool hasToolTip = false;
 	Rectangle toolTipBox{0.f,0.f,0.f,0.f};
 	const char* toolTipText = "";

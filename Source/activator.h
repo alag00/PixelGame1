@@ -17,7 +17,7 @@ private:
 public:
 	Activator()
 	{
-		portalAtlas = LoadTexture("Resources/TeleporterAtlas.png");
+		portalAtlas = LoadTexture("Resources/Texture/TeleporterAtlas.png");
 		anim.SetAnimation(portalAtlas, 3, true);
 		height = static_cast<float>(portalAtlas.height * config.PIXEL_SCALE);
 		width = static_cast<float>((portalAtlas.width / 3.f) * config.PIXEL_SCALE);

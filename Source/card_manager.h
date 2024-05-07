@@ -23,8 +23,8 @@ public:
 	~CardManager();
 	void SetPlayerRef(Player* ref) { playerRef = ref; }
 	void SetGameInfoRef(GameInfo& ref) { gameInfoRef = &ref; }
-	void Update(Camera2D cam); // check buttons activations
-	void Activate(); // Set active = true, set player to invincible
+	void Update(Camera2D cam); 
+	void Activate(); 
 	void DeActivate();
-	void Render(); // Render Cards if active == true
+	void Render(); 
 };

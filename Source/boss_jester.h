@@ -6,17 +6,6 @@
 #include "animation.h"
 #include "jackbox.h"
 
-/*
-* Jester Boss AI Cycle:
-* Move Around Player
-* Charge Dash Attack
-* Dash Attack Towards Player
-* 
-* 2ND PHASE
-* Spawn Boxes that attacks around itself (to limit player free space)
-* Performs Everything Faster
-*/
-
 class JesterBoss : public Enemy
 {
 private:
@@ -59,7 +48,6 @@ public:
 	void Sense() override;
 	void Decide() override;
 	void Act(float deltaTime) override;
-	//void Update(float deltaTime) override;
 	void SpellCollisionCheck(DynamicEntity* other) override;
 	void Render() override;
 	void NextPhase();

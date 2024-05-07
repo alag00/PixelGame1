@@ -5,10 +5,10 @@ ImpBoss::ImpBoss(DynamicEntity& target)
 	m_target = &target;
 	SetHealth(150);
 	SetMaxHealth(150);
-	Texture2D tempTxr = LoadTexture("Resources/ImpBoss.png");
+	Texture2D tempTxr = LoadTexture("Resources/Texture/ImpBoss.png");
 	SetTexture(tempTxr);
 
-	walkAtlas = LoadTexture("Resources/ImpBossWalkAtlas.png");
+	walkAtlas = LoadTexture("Resources/Texture/ImpBossWalkAtlas.png");
 	anim.SetAnimation(texture, 1, false);
 
 	if (m_target->GetCenter().x < GetCenter().x)
@@ -81,18 +81,6 @@ void ImpBoss::Act(float deltaTime)
 	}
 }
 
-/*
-void ImpBoss::SpellCollisionCheck(DynamicEntity* other)
-{
-	if (!attackActive)
-	{
-		return;
-	}
-	PushPlayer();
-	attackActive = false;
-	other;
-}
-*/
 void ImpBoss::Render()
 {
 	/*
@@ -149,7 +137,6 @@ void ImpBoss::PushPlayer()
 	force.x *= -pushPower;
 	force.y *= -pushPower;
 
-	//Vector2 force2 = {-vectorX, -vectorY};
 	m_target->PushEntity(force);
 
 }

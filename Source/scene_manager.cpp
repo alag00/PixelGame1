@@ -48,8 +48,6 @@ void SceneManager::ChangeScene(SCENE_TYPE sceneType)
 		currentScene->LoadScene(gameInfo);
 		break;
 	case SCENE_TYPE::NONE:
-		// Something is wrong
-		// Restart Game Or Terminate Application
 		break;
 	}
 }

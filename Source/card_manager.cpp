@@ -2,7 +2,7 @@
 
 CardManager::CardManager()
 {
-	cardTxr = LoadTexture("Resources/DietyCard.png");
+	cardTxr = LoadTexture("Resources/Texture/DietyCard.png");
 
 	int randNum = (rand() % 19 + 2) * 5; // 2 to 20
 	buffAmount = static_cast<float>(randNum / 100.f);
@@ -63,8 +63,7 @@ void CardManager::Activate()
 {
 	active = true;
 	playerRef->SetInvincibility(true);
-	//playerRef->SetPlayerPauseMode(true);
-	// set button pos 
+	
 
 	
 }
@@ -73,7 +72,7 @@ void CardManager::DeActivate()
 {
 	active = false;
 	playerRef->SetInvincibility(false);
-	//playerRef->SetPlayerPauseMode(false);
+
 }
 
 void CardManager::Render()

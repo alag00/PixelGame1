@@ -9,9 +9,7 @@ public:
 	float width = 0.f;
 	float height = 0.f;
 	bool isColliding = false;
-	// HitBox detection
-	
-	// Texture
+
 	virtual void Render(){}
 	virtual void OnCollision(Entity* other) 
 	{ 

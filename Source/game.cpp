@@ -3,8 +3,9 @@
 Game::Game()
 {
 	InitWindow(config.screenWidth, config.screenHeight, "PttA");
+	//InitAudioDevice();
 	SetTargetFPS(config.fpsTarget);
-	Image icon = LoadImage("Resources/Necromancer.png");
+	Image icon = LoadImage("Resources/Texture/Necromancer.png");
 	SetWindowIcon(icon);
 	UnloadImage(icon);
 }

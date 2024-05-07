@@ -28,14 +28,14 @@ private:
 	Config config;
 	SIDE side = SIDE::UP;
 	Texture2D txr{};
-	//Vector2 originPoint{ 0.f, 0.f };
+
 public:
 	std::vector<Rectangle> collisionWalls{};
 	void Setup(EntryPoint src, Room* ownerOne, Room* ownerTwo, Texture2D newTxr);
 	void Render(Rectangle cam);
 	void FillContent();
-	void CollisionCheck(Entity* entity); // check if touching entity
-	void OnCollision(Entity* entity, Rectangle wall); // push entity back 
+	void CollisionCheck(Entity* entity); 
+	void OnCollision(Entity* entity, Rectangle wall); 
 	float GetX() { return x; }
 	float GetY() { return y; }
 	float GetWidth() { return width; }

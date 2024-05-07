@@ -13,7 +13,7 @@ void DungeonManager::GenerateDungeon()
 void DungeonManager::LoadTextures()
 {
 	// Hallway Txr
-	Image hallwayImg = LoadImage("Resources/VerticalHallway.png");
+	Image hallwayImg = LoadImage("Resources/Texture/VerticalHallway.png");
 	hallVertTxr = LoadTextureFromImage(hallwayImg);
 
 	ImageRotateCW(&hallwayImg);
@@ -23,7 +23,7 @@ void DungeonManager::LoadTextures()
 	UnloadImage(hallwayImg);
 
 	// Room Txr
-	Image roomImg = LoadImage("Resources/RoomFloor.png");
+	Image roomImg = LoadImage("Resources/Texture/RoomFloor.png");
 	roomHoriTxr = LoadTextureFromImage(roomImg);
 
 	ImageRotateCW(&roomImg);
@@ -32,8 +32,8 @@ void DungeonManager::LoadTextures()
 
 	UnloadImage(roomImg);
 
-	spawnTxr = LoadTexture("Resources/SpawnRoomFloor.png");
-	bossTxr = LoadTexture("Resources/BossRoomFloor.png");
+	spawnTxr = LoadTexture("Resources/Texture/SpawnRoomFloor.png");
+	bossTxr = LoadTexture("Resources/Texture/BossRoomFloor.png");
 }
 
 void DungeonManager::CreateRooms()

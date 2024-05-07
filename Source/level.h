@@ -33,14 +33,14 @@ public:
 	Level();
 	~Level();
 	void SetRandomTheme(GameInfo gameInfo);
-	void LoadScene(GameInfo gameInfo) override;// Generate Level
-	void LeaveScene(GameInfo& gameInfo) override;// Leave Level // Return to Level Manager
-	bool Update() override; // Update everything in the level // player, enemies, entities
+	void LoadScene(GameInfo gameInfo) override;
+	void LeaveScene(GameInfo& gameInfo) override;
+	bool Update() override; 
 	void UpdateEntities();
 	bool UpdateGameState();
-	void CollisionCheck(); // Call in Update
+	void CollisionCheck(); 
 	void UpdateCamera();
-	void Render() override; // Render everything in the level // player, enemies, entities
+	void Render() override; 
 	void RenderUI() override;
 	SCENE_TYPE GetNewScene() override { return nextScene; }
 	

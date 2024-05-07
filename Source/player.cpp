@@ -4,7 +4,6 @@
 Player::Player(GameInfo info, Camera2D& cam, std::vector<EnemyCorpse>& corpseList)
 {
 	_cam = &cam;
-	// Load Textures
 	switch (info.playerClass)
 	{
 	case 0:
@@ -31,15 +30,11 @@ Player::Player(GameInfo info, Camera2D& cam, std::vector<EnemyCorpse>& corpseLis
 	}
 	
 	SetTextureFilter(texture, TEXTURE_FILTER_POINT);
-		
-
-	//offsetTextureX = (playerTexture.width * config.PIXEL_SCALE) / 2.f;
-	//offsetTextureY = (playerTexture.height * config.PIXEL_SCALE) / 2.f;
 
 	width = texture.width * config.PIXEL_SCALE;
 	height = texture.height * config.PIXEL_SCALE;
 
-	// Set Cards
+
 	for (int i = 0; i < info.equippedCards.size(); i++)
 	{
 		for (int j = 0; j < MAX_SPELL_SLOTS; j++)
@@ -64,17 +59,11 @@ Player::~Player()
 	}
 	
 }
-/*
-void Player::SetStartPosition(Vector2 pos)
-{
-	x = pos.x;
-	y = pos.y;
-}
-*/
+
 
 void Player::Update(float deltaTime)
 {
-	//std::cout << "player Vel X: " << velX << std::endl << "player Vel Y: " << velY << std::endl;
+
 	if (isPause)
 	{
 		return;
@@ -90,7 +79,7 @@ void Player::Update(float deltaTime)
 
 void Player::OnCollision(Entity* other)
 {
-	// move away
+	
 	isColliding = true;
 	
 	float pushForce = 3.5f;
@@ -117,21 +106,10 @@ void Player::Render()
 		src = { 0.f, 0.f, static_cast<float>(-texture.width), static_cast<float>(texture.height) };
 	}
 	Vector2 origin = { 0.f, 0.f};
-	//Vector2 origin = { static_cast<float>((texture.width * config.PIXEL_SCALE) / 2.0f), static_cast<float>((texture.width * config.PIXEL_SCALE) / 2.0f) };
+	
 	float rotation = 0.0f;
 	DrawTexturePro(texture, src, dst, origin, rotation, WHITE);
-	/*
-	if (lookingDown)
-	{
-		DrawTexturePro(texture, src, dst, origin, rotation, WHITE);
-	}
-	else
-	{
-		DrawTexturePro(backTxr, src, dst, origin, rotation, WHITE);
-	}
-	*/
-	// CollisionBox
-	
+
 	Color hitboxColor = YELLOW;
 	if (isColliding)
 	{
@@ -175,21 +153,12 @@ void Player::UpdateTextureFacing()
 	
 	lookingRight = false;
 	
-
-	/*
-	if (mousePos.y >= GetCenter().y)
-	{
-		lookingDown = true;
-		return;
-	}
-	lookingDown = false;
-	*/
 }
 
 void Player::ClassSetupArcanist()
 {
-	texture = LoadTexture("Resources/Arcanist.png");
-	Texture2D basicTxr = LoadTexture("Resources/ArcaneBolt.png");
+	texture = LoadTexture("Resources/Texture/Arcanist.png");
+	Texture2D basicTxr = LoadTexture("Resources/Texture/ArcaneBolt.png");
 
 	RangedBasicAttack* basicAttack = new RangedBasicAttack();
 	basicAttack->SetCamera(*_cam);
@@ -205,7 +174,7 @@ void Player::ClassSetupArcanist()
 
 void Player::ClassSetupSummoner()
 {
-	texture = LoadTexture("Resources/Summoner.png");
+	texture = LoadTexture("Resources/Texture/Summoner.png");
 
 	SummonerSignature* signatureSpell = new SummonerSignature();
 	signatureSpell->SetCamera(*_cam);
@@ -217,9 +186,8 @@ void Player::ClassSetupSummoner()
 
 void Player::ClassSetupNecromancer(std::vector<EnemyCorpse>& corpseList)
 {
-	texture = LoadTexture("Resources/Necromancer.png");
-	//backTxr = LoadTexture("Resources/NecromancerBack.png");
-	Texture2D basicTxr = LoadTexture("Resources/FireBolt.png");
+	texture = LoadTexture("Resources/Texture/Necromancer.png");
+	Texture2D basicTxr = LoadTexture("Resources/Texture/FireBolt.png");
 
 	RangedBasicAttack* basicAttack = new RangedBasicAttack();
 	basicAttack->SetCamera(*_cam);
@@ -236,7 +204,7 @@ void Player::ClassSetupNecromancer(std::vector<EnemyCorpse>& corpseList)
 
 void Player::ClassSetupEnchanter()
 {
-	texture = LoadTexture("Resources/Enchanter.png");
+	texture = LoadTexture("Resources/Texture/Enchanter.png");
 
 	MeleeBasicAttack* basicAttack = new MeleeBasicAttack();
 	basicAttack->SetCamera(*_cam);
@@ -248,8 +216,8 @@ void Player::ClassSetupEnchanter()
 
 void Player::ClassSetupRogue()
 {
-	texture = LoadTexture("Resources/Rogue.png");
-	Texture2D swordTexture = LoadTexture("Resources/Sword.png");
+	texture = LoadTexture("Resources/Texture/Rogue.png");
+	Texture2D swordTexture = LoadTexture("Resources/Texture/Sword.png");
 
 	MeleeBasicAttack* basicAttack = new MeleeBasicAttack();
 	basicAttack->SetCamera(*_cam);
@@ -265,7 +233,7 @@ void Player::ClassSetupRogue()
 
 void Player::ClassSetupPaladin()
 {
-	texture = LoadTexture("Resources/Paladin.png");
+	texture = LoadTexture("Resources/Texture/Paladin.png");
 
 	MeleeBasicAttack* basicAttack = new MeleeBasicAttack();
 	basicAttack->SetCamera(*_cam);
@@ -307,17 +275,6 @@ void Player::Control(float deltaTime)
 		isRunning = true;
 	
 	}
-
-	/*
-	if (isRunning && speed <= maxSpeed)
-	{
-		speed += acceleration;
-	}
-	else if (!isRunning)
-	{
-		speed = startSpeed;
-	}
-	*/
 	
 	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) // Basic Attack
 	{
@@ -374,27 +331,7 @@ void Player::ReduceVelocity(float deltaTime)
 
 void Player::Movement(float deltaTime)
 {
-	/**
-	float length = static_cast<float>(sqrt((velX * velX) + (velY * velY)));
 
-	velX = (velX / length);
-	velY = (velY / length);
-
-	*/
-	
-	
-	
-	
-	if (velX != 0.f && velY != 0.f)
-	{
-		//float length = sqrt((velX * velX) + (velY * velY));
-
-		//x += (velX / length) * deltaTime * speed;
-		//y += (velY / length) * deltaTime * speed;
-		// moving diagonally
-		
-		
-	}
 	velX /= sqrt(2.f);
 	velY /= sqrt(2.f);
 
@@ -405,8 +342,6 @@ void Player::Movement(float deltaTime)
 
 void Player::UpdateSpellBook(float deltaTime)
 {
-	//spellbook[0]->Update(deltaTime);
-	//spellbook[1]->Update(deltaTime);
 	
 	for (int i = 0; i < MAX_SPELL_SLOTS; i++)
 	{

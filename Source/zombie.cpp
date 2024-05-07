@@ -29,26 +29,6 @@ void Zombie::Decide()
 	else		Target Closest Enemy to Zombie
 	*/
 	dec = ZOMBIE_DECISION::FOLLOW;
-	/*
-	if (distZtoE <= attackRange)
-	{
-		dec = ZOMBIE_DECISION::ATTACK;
-	}
-	else if (distZtoP <= followRange)
-	{
-		dec = ZOMBIE_DECISION::FOLLOW;
-	}
-	else if (distPtoE <= protectRange)
-	{
-		// Set Hunt on closest Enemy to player
-		dec = ZOMBIE_DECISION::HUNT;
-	}
-	else if (distZtoE <= huntRange)
-	{
-		// Set Hunt on closest Enemy to player
-		dec = ZOMBIE_DECISION::HUNT;
-	}
-	*/
 }
 
 void Zombie::Act(float deltaTime)
@@ -85,30 +65,10 @@ void Zombie::Render()
 	Rectangle src = { 0.f, 0.f, static_cast<float>(txr.width), static_cast<float>(txr.height) };
 	Rectangle dst = { x, y, static_cast<float>(txr.width * config.PIXEL_SCALE), static_cast<float>(txr.height * config.PIXEL_SCALE) };
 	Vector2 origin = { 0.f, 0.f };
-	//Vector2 origin = { static_cast<float>((texture.width * config.PIXEL_SCALE) / 2.0f), static_cast<float>((texture.width * config.PIXEL_SCALE) / 2.0f) };
+	
 	float rotation = 0.0f;
 
 	DrawTexturePro(txr, src, dst, origin, rotation, BLACK);
-
-	/*
-	Color color = YELLOW;
-	color.a = 50;
-
-	DrawCircle(static_cast<int>(playerRef->GetCenter().x), static_cast<int>(playerRef->GetCenter().y), protectRange, color);
-
-	color = GREEN;
-	color.a = 50;
-	DrawCircle(static_cast<int>(playerRef->GetCenter().x), static_cast<int>(playerRef->GetCenter().y), followRange, color);
-
-	color = RED;
-	color.a = 50;
-	DrawCircle(static_cast<int>(GetCenter().x), static_cast<int>(GetCenter().y), attackRange, color);
-
-	color = RED;
-	color.a = 50;
-	DrawCircle(static_cast<int>(playerRef->GetCenter().x), static_cast<int>(playerRef->GetCenter().y), huntRange, color);
-
-	*/
 }
 
 float Zombie::GetDistance(Vector2 vec1, Vector2 vec2)

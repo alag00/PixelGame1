@@ -7,8 +7,7 @@ void EnemyManager::SetPlayerRef(DynamicEntity* player)
 }
 void EnemyManager::CreateEnemies()
 {
-	// Randomize between all different enemies and have 2-3 be the only enemy types
-	Texture2D enemyTxr = LoadTexture("Resources/Imp.png");
+	Texture2D enemyTxr = LoadTexture("Resources/Texture/Imp.png");
 	int enemyAmount = 10;
 	for (int i = 0; i < enemyAmount; i++)
 	{
@@ -38,8 +37,6 @@ void EnemyManager::CreateBoss(int theme)
 }
 bool EnemyManager::Update(float deltaTime, Rectangle cam)
 {
-	// check if enemies are alive
-
 	if (enemyList.size() <= 0)
 	{
 		return false;

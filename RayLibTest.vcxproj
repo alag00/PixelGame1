@@ -34,9 +34,12 @@
     <ClCompile Include="Source\level.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\main_menu.cpp" />
+    <ClCompile Include="Source\pause_menu.cpp" />
     <ClCompile Include="Source\player.cpp" />
     <ClCompile Include="Source\room.cpp" />
     <ClCompile Include="Source\scene_manager.cpp" />
+    <ClCompile Include="Source\settings_menu.cpp" />
+    <ClCompile Include="Source\skill_tree_menu.cpp" />
     <ClCompile Include="Source\spell.cpp" />
     <ClCompile Include="Source\zombie.cpp" />
   </ItemGroup>
@@ -61,12 +64,17 @@
     <ClInclude Include="Source\level.h" />
     <ClInclude Include="Source\main_menu.h" />
     <ClInclude Include="Source\particle_system.h" />
+    <ClInclude Include="Source\pause_menu.h" />
+    <ClInclude Include="Source\screen_ui.h" />
     <ClInclude Include="Source\player.h" />
     <ClInclude Include="Source\dungeon_generation.h" />
     <ClInclude Include="Source\room.h" />
     <ClInclude Include="Source\scene.h" />
     <ClInclude Include="Source\scene_manager.h" />
     <ClInclude Include="Source\hub_level.h" />
+    <ClInclude Include="Source\settings_menu.h" />
+    <ClInclude Include="Source\skill_tree_menu.h" />
+    <ClInclude Include="Source\slider.h" />
     <ClInclude Include="Source\spell.h" />
     <ClInclude Include="Source\status.h" />
     <ClInclude Include="Source\zombie.h" />

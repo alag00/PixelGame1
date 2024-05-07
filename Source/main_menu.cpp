@@ -3,11 +3,7 @@
 void MainMenu::LoadScene(GameInfo gameInfo) 
 {
 	m_gameInfo = gameInfo;
-	// Setup Buttons
-	//playButton.Setup(100.f, config.screenHeight / 2.f, 200, 100, "Play");
 	hubButton.Setup((config.screenWidth / 2.f) - 100.f, config.screenHeight - 150.f, 200.f, 50.f, "PLAY");
-
-	//backgroundTxr = LoadTexture("Resources/MainMenuConcept.png");
 }
 bool MainMenu::Update() 
 {
@@ -16,13 +12,7 @@ bool MainMenu::Update()
 		TextureSetup();
 	}
 	Vector2 mousePos = GetMousePosition();
-	/*
-	if (playButton.Update(mousePos))
-	{
-		ChangeToPlay();
-		return true;
-	}
-	*/
+	
 	if (hubButton.Update(mousePos))
 	{
 		ChangeToHub();
@@ -36,14 +26,13 @@ void MainMenu::Render()
 	ClearBackground(BLACK);
 	DrawBackground();
 	
-	//DrawText("Main Menu", config.screenWidth / 2, config.screenHeight / 2, 10, BLACK);
-
+	
 	RenderUI();
 	EndDrawing();
 }
 void MainMenu::RenderUI()  
 {
-	//playButton.Render();
+
 	hubButton.Render();
 
 	
@@ -59,6 +48,6 @@ void MainMenu::DrawBackground()
 }
 void MainMenu::TextureSetup()
 {
-	backgroundTxr = LoadTexture("Resources/MainMenuConcept.png");
+	backgroundTxr = LoadTexture("Resources/Texture/MainMenuConcept.png");
 	hasLoadedTxr = true;
 }

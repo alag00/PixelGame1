@@ -2,15 +2,18 @@
 
 void Hub::LoadScene(GameInfo gameInfo)  {
 	m_gameInfo = gameInfo;
-	//mainButton.Setup(0.f, config.screenHeight / 2.f, 200.f, 100.f, "Main Menu");
-	//playButton.Setup((config.screenWidth / 2.f) + 200, config.screenHeight / 2.f, 200.f, 100.f, "Play");
 
 	camera.target.x = config.screenWidth / 2.f;
 	camera.target.y = config.screenHeight / 2.f;
 	camera.zoom = 1.f;
 
-	backgroundTxr = LoadTexture("Resources/Background.png");
+	backgroundTxr = LoadTexture("Resources/Texture/Background.png");
 	CreateWalls();
+
+	sound = LoadSound("Resources/Audio/BackgroundMusic.mp3");
+	PlaySound(sound);
+
+	pauseMenu.Setup(camera);
 
 	if (gameInfo.playerClass != 0)
 	{
@@ -19,72 +22,26 @@ void Hub::LoadScene(GameInfo gameInfo)  {
 		return;
 	}
 
-	buttonSize = config.screenWidth / 6.f;
-	float xPos = (config.screenWidth - buttonSize) / 10.f;
-	float yPos = (config.screenWidth - buttonSize) / 10.f;
-	for (int i = 0; i < 3; i++)
-	{
+	SetupShowClasses();
 
-		classButtons[i].Setup(xPos, yPos, buttonSize, buttonSize, "");
-		xPos += config.screenWidth / 3.f;
-	}
-	xPos = (config.screenWidth - buttonSize) / 10.f;
-	yPos += config.screenHeight / 2.f;
-	for (int i = 3; i < 6; i++)
-	{
-		classButtons[i].Setup(xPos, yPos, buttonSize, buttonSize, "");
-		xPos += config.screenWidth / 3.f;
-	}
-
-
-	// Textures
-	Texture2D frameTexture = LoadTexture("Resources/Frame.png"); // Button Texture
-	Texture2D classTexture = LoadTexture("Resources/Arcanist.png");
-	classButtons[0].SetupImage(frameTexture, classTexture);
-	classButtons[0].SetupToolTip(" Arcanist | Ranged | Has Damage Dealing Balls Rotating Around You ");
-
-	classTexture = LoadTexture("Resources/Summoner.png");
-	classButtons[1].SetupImage(frameTexture, classTexture);
-	classButtons[1].SetupToolTip(" Summoner | Can't Basic Attack | Can Summon Statues to Attack ");
-
-	classTexture = LoadTexture("Resources/Necromancer.png");
-	classButtons[2].SetupImage(frameTexture, classTexture);
-	classButtons[2].SetupToolTip(" Necromancer | Ranged | Can Resurrect Fallen Enemies as Allies ");
-
-	classTexture = LoadTexture("Resources/Enchanter.png");
-	classButtons[3].SetupImage(frameTexture, classTexture);
-	classButtons[3].SetupToolTip(" Enchanter | Melee, Versatile | Can Enchant Weapon ");
-
-	classTexture = LoadTexture("Resources/Rogue.png");
-	classButtons[4].SetupImage(frameTexture, classTexture);
-	classButtons[4].SetupToolTip(" Rogue | Melee, Mobile | Can Dash");
-
-	classTexture = LoadTexture("Resources/Paladin.png");
-	classButtons[5].SetupImage(frameTexture, classTexture);
-	classButtons[5].SetupToolTip(" Paladin | Melee, Slow, Healer, Tanky | Can Heal ");
-
-
-
-
-	
-	/*
-	room.Setup(0.f ,0.f, backgroundTxr);
-	room.width = static_cast<float>(config.screenWidth);
-	room.height = static_cast<float>(config.screenHeight);
-	room.FillContent();
-	*/
-	//Image testAtlas = LoadImage("Resources/Arcanist.png");
-	//Texture2D atlas = LoadTexture("Resources/SpriteSheet.png");
-	//anim.SetAnimation(atlas, 11, false);
-	//UnloadImage(testAtlas);
-
-	
-
-	
-	
 }
 
 bool Hub::Update() {
+	if (IsKeyPressed(KEY_P))
+	{
+		pauseMenu.Activate();
+		isPaused = true;
+	}
+	if (isPaused)
+	{
+		if (pauseMenu.Update())
+		{
+			isPaused = false;
+		}
+		return false;
+	}
+
+
 	Vector2 mousePos = GetMousePosition();
 	if (showClasses)
 	{
@@ -99,24 +56,11 @@ bool Hub::Update() {
 		}
 		return false;
 	}
-	/*
-	if (playButton.Update(mousePos))
-	{
-		ChangeToPlay();
-		return true;
-	}
-	if (mainButton.Update(mousePos))
-	{
-		ChangeToMain();
-		return true;
-	}
-	*/
 
 	float deltaTime = GetFrameTime();
 	player->Update(deltaTime);
 	levelEntrance.Update();
 	WallCollisionCheck();
-	//room.CollisionCheck(player);
 	if (levelEntrance.CheckActive())
 	{
 		ChangeToPlay();
@@ -127,10 +71,6 @@ bool Hub::Update() {
 
 void Hub::RenderBackground()
 {
-	//Rectangle camRect = { 0.f, 0.f, static_cast<float>(config.screenWidth), static_cast<float>(config.screenHeight) };
-	//room.Render(camRect);
-	
-	
 	float rotation = 0.0f;
 
 	Rectangle src = { 0.f, 0.f, static_cast<float>(backgroundTxr.width), static_cast<float>(backgroundTxr.height) };
@@ -138,22 +78,20 @@ void Hub::RenderBackground()
 	Vector2 origin = { 0.f, 0.f };
 
 	DrawTexturePro(backgroundTxr, src, dst, origin, rotation, WHITE);
-	/*
-	Color color = RED;
-//	color.a = 50;
-	for (int i = 0; i < 4; i++)
-	{
-		DrawRectangleRec(collisionWalls.at(i), color);
-	}
-	*/
 }
 
 void Hub::Render()  {
 	BeginDrawing();
-	ClearBackground(BROWN);
-	// Background
+	ClearBackground(BLACK);
+	if (isPaused)
+	{
+		pauseMenu.Render();
+		EndDrawing();
+		return;
+	}
+	
 	RenderBackground();
-	//DrawText("This is The Hub", config.screenWidth / 2, config.screenHeight / 2, 10, BLACK);
+
 	levelEntrance.Render();
 	if (!showClasses)
 	{
@@ -177,11 +115,6 @@ void Hub::RenderUI()  {
 		return;
 	}
 	levelEntrance.RenderUI();
-	//playButton.Render();
-	//mainButton.Render();
-
-	//Rectangle dest{ 0.f, 0.f, 32 * config.PIXEL_SCALE, 32 * config.PIXEL_SCALE };
-	//anim.DrawAnimationPro(dest, Vector2{ 0.f, 0.f }, 0, WHITE);
 }
 
 void Hub::SetPlayer()
@@ -242,3 +175,53 @@ void Hub::WallOnCollision(Rectangle wall)
 	}
 	player->x = wall.x - player->width;
 }
+
+void Hub::SetupShowClasses()
+{
+
+	buttonSize = config.screenWidth / 6.f;
+	float xPos = (config.screenWidth - buttonSize) / 10.f;
+	float yPos = (config.screenWidth - buttonSize) / 10.f;
+	for (int i = 0; i < 3; i++)
+	{
+
+		classButtons[i].Setup(xPos, yPos, buttonSize, buttonSize, "");
+		xPos += config.screenWidth / 3.f;
+	}
+	xPos = (config.screenWidth - buttonSize) / 10.f;
+	yPos += config.screenHeight / 2.f;
+	for (int i = 3; i < 6; i++)
+	{
+		classButtons[i].Setup(xPos, yPos, buttonSize, buttonSize, "");
+		xPos += config.screenWidth / 3.f;
+	}
+
+
+	Texture2D frameTexture = LoadTexture("Resources/Texture/Frame.png"); 
+	Texture2D classTexture = LoadTexture("Resources/Texture/Arcanist.png");
+	classButtons[0].SetupImage(frameTexture, classTexture);
+	classButtons[0].SetupToolTip(" Arcanist | Ranged | Has Damage Dealing Balls Rotating Around You ");
+
+	classTexture = LoadTexture("Resources/Texture/Summoner.png");
+	classButtons[1].SetupImage(frameTexture, classTexture);
+	classButtons[1].SetupToolTip(" Summoner | Can't Basic Attack | Can Summon Statues to Attack ");
+
+	classTexture = LoadTexture("Resources/Texture/Necromancer.png");
+	classButtons[2].SetupImage(frameTexture, classTexture);
+	classButtons[2].SetupToolTip(" Necromancer | Ranged | Can Resurrect Fallen Enemies as Allies ");
+
+	classTexture = LoadTexture("Resources/Texture/Enchanter.png");
+	classButtons[3].SetupImage(frameTexture, classTexture);
+	classButtons[3].SetupToolTip(" Enchanter | Melee, Versatile | Can Enchant Weapon ");
+
+	classTexture = LoadTexture("Resources/Texture/Rogue.png");
+	classButtons[4].SetupImage(frameTexture, classTexture);
+	classButtons[4].SetupToolTip(" Rogue | Melee, Mobile | Can Dash");
+
+	classTexture = LoadTexture("Resources/Texture/Paladin.png");
+	classButtons[5].SetupImage(frameTexture, classTexture);
+	classButtons[5].SetupToolTip(" Paladin | Melee, Slow, Healer, Tanky | Can Heal ");
+
+}
+
+

@@ -4,11 +4,11 @@
 
 Hud::Hud()
 {
-	healthBarTxr = LoadTexture("Resources/HealthBar.png");
+	healthBarTxr = LoadTexture("Resources/Texture/HealthBar.png");
 	hpW = healthBarTxr.width * config.PIXEL_SCALE;
 	hpH = healthBarTxr.height * config.PIXEL_SCALE;
 
-	miniMapTxr = LoadTexture("Resources/Frame.png");
+	miniMapTxr = LoadTexture("Resources/Texture/Frame.png");
 }
 
 void Hud::SetPlayerRef(Player* ref)
@@ -80,9 +80,6 @@ void Hud::RenderHud()
 	// Mouse Coords
 	DrawText(TextFormat("X: %i", mouseCoordX), static_cast<int>(mapX), static_cast<int>(mapY + 120), 25, BLACK);
 	DrawText(TextFormat("Y: %i", mouseCoordY), static_cast<int>(mapX), static_cast<int>(mapY) + 140, 25, BLACK);
-
-	// Seed
-	//DrawText(TextFormat("Seed: %i", rand()), static_cast<int>(mapX), static_cast<int>(mapY + 160), 25, BLACK);
 
 	// Fps
 	DrawFPS(static_cast<int>(mapX), static_cast<int>(mapY));

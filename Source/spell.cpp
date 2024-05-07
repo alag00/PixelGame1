@@ -392,7 +392,7 @@ ArcanistSignature::ArcanistSignature(DynamicEntity& caster)
 	rangeRadius = minRange;
 	cooldownMax = 10.f;
 	dmg = 1.f;
-	texture = LoadTexture("Resources/ArcanistBall.png");
+	texture = LoadTexture("Resources/Texture/ArcanistBall.png");
 	ballWidth = texture.width * config.PIXEL_SCALE;
 	ballHeight = texture.height * config.PIXEL_SCALE;
 	ballRadius = ballWidth / 2.f;
@@ -685,8 +685,8 @@ void Soldier::CollisionCheck(DynamicEntity* entity)
 
 SummonerSignature::SummonerSignature()
 {
-	soldierTxr = LoadTexture("Resources/SummonerStatue.png");
-	swordTxr = LoadTexture("Resources/Sword.png");
+	soldierTxr = LoadTexture("Resources/Texture/SummonerStatue.png");
+	swordTxr = LoadTexture("Resources/Texture/Sword.png");
 	cooldownMax = 2.5f;
 	dmg = 1.f;
 }

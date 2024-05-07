@@ -9,7 +9,7 @@
 #include <algorithm>
 #include "corpse.h"
 
-class Effect  // Ice, Fire, 
+class Effect  // Ice, Fire,  Poison
 {
 private:
 	Color color = WHITE;
@@ -72,8 +72,6 @@ public:
 class RangedBasicAttack : public Spell
 {
 private:
-	//const float MAX_COOLDOWN = 0.3f;
-	//float cooldown = 0.f;
 	int range = 10;
 
 	const static int MAX_BULLETS = 5;
@@ -101,13 +99,12 @@ public:
 
 class MeleeBasicAttack : public Spell{
 private:
-	//const float MAX_COOLDOWN = 0.2f;
+
 	float cooldown = 0.f;
 
 	Vector2 swordPos{ 0.f, 0.f };
 	float swordRadius = 0.f;
-	//float xPos = 0.f;
-	//float yPos = 0.f;
+
 
 	float rotation = 0.f;
 
@@ -134,13 +131,6 @@ public:
 	void CollisionCheck(DynamicEntity* entity) override;
 };
 
-// Signature Spells
-// Activates on Spacebar
-
-
-// Arcanist:
-// Passive: Balls rotating around player
-// Active: Temporarly Expand range on balls 
 class ArcanistSignature : public Spell
 {
 private:
@@ -148,14 +138,7 @@ private:
 
 	static const int ballCount = 3;
 	Vector2 balls[ballCount]{};
-	/*
-	float b1x = 0.f;
-	float b1y = 0.f;			 
-	float b2x = 0.f; 
-	float b2y = 0.f;
-	float b3x = 0.f; 
-	float b3y = 0.f;
-	*/
+	
 	float ballSize = 5.f;
 
 	float originX = 0.f;
@@ -189,10 +172,6 @@ public:
 };
 
 
-
-// Summoner:
-// Active: Summon Static Solder that uses Thrust attacks towards mousePos when player LeftClicks
-// Cooldown: 2.5f  // Soldier Duration: 5.f
 class Soldier : public DynamicEntity
 {
 private:
@@ -203,12 +182,10 @@ private:
 	float swordSize = 5.f;
 	Vector2 swordPos{0.f, 0.f};
 	float swordRadius = 0.f;
-	//float swordPosX = 0.f;
-	//float swordPosY = 0.f;
 	float swordSpeed = 5.f;
 	float range = 100.f;
 	float rotation = 0.f;
-	//bool attacking = false;
+
 	float srcX = 0.f;
 	float srcY = 0.f;
 	float dstX = 0.f;
@@ -245,13 +222,11 @@ public:
 };
 
 
-// Necromancer:
-// Passive: Revive killed enemies as allies
 class NecromancerSignature : public Spell
 {
 private:
 	float range = 100.f;
-	std::vector<Zombie> zombieList{}; // Zombie vector
+	std::vector<Zombie> zombieList{}; 
 	std::vector<EnemyCorpse>* deadEnemiesList{};
 	std::vector<DynamicEntity>* enemiesList{};
 public:
@@ -364,7 +339,7 @@ public:
 
 
 // Paladin:
-// Active: Heal Every Unit Around Player
+// Active: Heal Every Allied Unit Around Player
 class PaladinSignature : public Spell
 {
 private:

@@ -5,11 +5,11 @@ JesterBoss::JesterBoss(DynamicEntity& target)
 	m_target = &target;
 	SetHealth(100);
 	SetMaxHealth(100);
-	Texture2D tempTxr = LoadTexture("Resources/JesterBoss.png");
+	Texture2D tempTxr = LoadTexture("Resources/Texture/JesterBoss.png");
 	SetTexture(tempTxr);
-	walkAtlas = LoadTexture("Resources/JesterBossWalkAtlas.png");
-	spinAtlas = LoadTexture("Resources/JesterBossSpinAtlas.png");
-	jumpAtlas = LoadTexture("Resources/JesterBossJumpAtlas.png");
+	walkAtlas = LoadTexture("Resources/Texture/JesterBossWalkAtlas.png");
+	spinAtlas = LoadTexture("Resources/Texture/JesterBossSpinAtlas.png");
+	jumpAtlas = LoadTexture("Resources/Texture/JesterBossJumpAtlas.png");
 	anim.SetAnimation(texture, 1, false);
 
 	width = static_cast<float>(texture.width * config.PIXEL_SCALE);
@@ -21,8 +21,8 @@ JesterBoss::JesterBoss(DynamicEntity& target)
 		facingRight = false;
 	}
 
-	Texture2D jackTxr = LoadTexture("Resources/JackBoxAtlas.png");
-	Texture2D bulletTxr = LoadTexture("Resources/FireBolt.png");
+	Texture2D jackTxr = LoadTexture("Resources/Texture/JackBoxAtlas.png");
+	Texture2D bulletTxr = LoadTexture("Resources/Texture/FireBolt.png");
 	for (int i = 0; i < jackCount; i++)
 	{
 		jackBoxes[i].SetTextures(jackTxr, bulletTxr);
@@ -166,15 +166,7 @@ void JesterBoss::Render()
 		DrawLine(static_cast<int>(GetCenter().x), static_cast<int>(GetCenter().y), static_cast<int>(dashTargetPos.x), static_cast<int>(dashTargetPos.y), color);
 		break;
 	}
-	/*
-	if (dec == JESTER_DECISION::ATTACK || dec == JESTER_DECISION::JUMP)
-	{
-		dst.width = height;
-		dst.height = width;
-		DrawCircle(static_cast<int>(dashTargetPos.x), static_cast<int>(dashTargetPos.y), 2.f, RED);
-		DrawLine(static_cast<int>(GetCenter().x), static_cast<int>(GetCenter().y), static_cast<int>(dashTargetPos.x), static_cast<int>(dashTargetPos.y), RED);
-	}
-	*/
+	
 	anim.DrawAnimationPro(dst, origin, rotation, WHITE);
 
 
@@ -196,11 +188,8 @@ void JesterBoss::Render()
 void JesterBoss::NextPhase()
 {
 	baseSpeed *= 1.5f;
-	//chargeTime *= 0.5f;
-	//chargeCounter = chargeTime;
 	dashSpeed *= 1.5f;
 	PushPlayer();
-	//PushPlayer();
 	superDashesLeft = 5;
 	dec = JESTER_DECISION::TRANSFORMATION;
 	
@@ -215,7 +204,6 @@ void JesterBoss::PushPlayer()
 	force.x *= -pushPower;
 	force.y *= -pushPower;
 
-	//Vector2 force2 = {-vectorX, -vectorY};
 	m_target->PushEntity(force);
 
 	dec = JESTER_DECISION::IDLE;
@@ -253,25 +241,7 @@ void JesterBoss::SetDashPos()
 	float range = 300.f;
 	dashTargetPos.x = GetCenter().x - (dir.x * range);
 	dashTargetPos.y = GetCenter().y - (dir.y * range);
-	/*
-	bool redo = false;
-	float halfWidth = width / 2.f;
-	float halfHeight = height / 2.f;
-	do {
-		redo = true;
-		dashTargetPos.x = GetCenter().x - (dir.x * range);
-		dashTargetPos.y = GetCenter().y - (dir.y * range);
-
-		if (dashTargetPos.x >= room.x + halfWidth &&
-			dashTargetPos.x <= (room.x + room.width - halfWidth) &&
-			dashTargetPos.y >= room.y + halfHeight &&
-			dashTargetPos.y <= (room.y + room.height - halfHeight))
-		{
-			redo = false;
-		}
-		range -= 50.f;
-	} while (redo);
-	*/
+	
 	anim.SetAnimation(jumpAtlas, 6, false);
 	if (m_target->GetCenter().x < GetCenter().x && facingRight || m_target->GetCenter().x >= GetCenter().x && !facingRight)
 	{
@@ -282,7 +252,7 @@ void JesterBoss::SetDashPos()
 
 bool JesterBoss::Dash(float deltaTime)
 {
-	// Move towards target point
+	
 	Vector2 dir = GetNormalizedVectorTowardsPos(dashTargetPos.x, dashTargetPos.y);
 	x += -dir.x * deltaTime * (baseSpeed * dashSpeed);
 	y += -dir.y * deltaTime * (baseSpeed * dashSpeed);
@@ -323,7 +293,7 @@ void JesterBoss::Transformation(float deltaTime)
 	{
 		
 		attackCooldown = 0.f;
-		// Set jackbox pos and activation
+	
 		for (int i = 0; i < jackCount; i++)
 		{
 			jackBoxes[i].SetPosition(GetCenter());
